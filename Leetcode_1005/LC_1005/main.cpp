@@ -7,12 +7,14 @@
 #include "set"
 #include "map"
 #include "vector"
+#include "algorithm"
 using namespace std;
 
+bool sortAbs(int a, int b) {
+    return abs(a) > abs(b);
+}
 class Solution {
-    static bool sortAbs(int a, int b) {
-        return abs(a) > abs(b);
-    }
+   
 public:
     int largestSumAfterKNegations(vector<int>& nums, int k) {
         sort(nums.begin(), nums.end(), sortAbs);
@@ -32,4 +34,13 @@ public:
         return sum;
     }
 };
+int main()
+{
+    Solution sol;
+    vector<int> myNums = {1,2,4,7,34,12,56,234,23,31};
+    int sum = 0;
+    sum = sol.largestSumAfterKNegations(myNums, 0);
+    cout<<sum<<endl;
+    
+}
 
