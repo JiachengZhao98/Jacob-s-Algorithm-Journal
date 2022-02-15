@@ -20,7 +20,7 @@ public:
             for (int j = 1; j <= nums2.size(); j++) {
                 if (nums1[i - 1] == nums2[j - 1]) {
                     dp[i][j] = dp[i - 1][j - 1] + 1;
-                    dp[i][j + 1] = dp[i][j]; // line 23 is particularly for CSCE 629 HW4 Prob 5. Leetcode 718 does not need it.
+                    dp[i][j + 1] = dp[i][j]; // line 23 is particularly for my CSCE 629 HW4 Prob 5. Leetcode 718 does not need it.
                 }
                 if (dp[i][j] > res) {
                     res = dp[i][j];
