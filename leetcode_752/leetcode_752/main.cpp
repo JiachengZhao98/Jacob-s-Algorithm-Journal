@@ -35,14 +35,14 @@ public:
         }
         visited.insert("0000");
         int step = 0;
-        if (target == "0000") {
-            return step;
-        }
         queue<string> q;
         q.push("0000");
         
         while (!q.empty()) {
-            step += 1;
+            if (q.front() == target) {
+                return step;
+            }
+              step += 1;
             int size = q.size();
             for (int i = 0; i < size; i++) {
                 string cur = q.front();
