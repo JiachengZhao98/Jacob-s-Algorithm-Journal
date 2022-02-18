@@ -43,7 +43,7 @@ public:
         
         while (!q.empty()) {
             step += 1;
-            int size = q.size();7
+            int size = q.size();
             for (int i = 0; i < size; i++) {
                 string cur = q.front();
                 for (int digit = 0; digit < 4; digit++) {
