@@ -11,7 +11,6 @@
 #include "stack"
 #include "queue"
 using namespace std;
-using std::stack;
 
 class Solution {
 public:
