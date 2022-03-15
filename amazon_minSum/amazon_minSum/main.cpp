@@ -40,7 +40,7 @@ public:
 int main() {
     Solution sol;
     vector<int> nums = {7,3,6,1};
-    int k = 3;
+    int k = 1;
     int res;
     res = sol.minSum(nums, k);
     cout<<res<<endl;
