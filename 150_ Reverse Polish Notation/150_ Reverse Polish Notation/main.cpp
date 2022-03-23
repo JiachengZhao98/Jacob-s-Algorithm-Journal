@@ -23,20 +23,20 @@ public:
                 int temp2 = mySta.top();
                 mySta.pop();
                 char *operator1 = (char *)tokens[i].c_str();
-                switch (int(*operator1)) {
-                    case 42:
+                switch (*operator1) {
+                    case '*':
                         res = temp1 * temp2;
                         mySta.push(res);
                         break;
-                    case 43:
+                    case '+':
                         res = temp1 + temp2;
                         mySta.push(res);
                         break;
-                    case 45:
+                    case '-':
                         res = temp2 - temp1;
                         mySta.push(res);
                         break;
-                    case 47:
+                    case '/':
                         res = temp2 / temp1;
                         mySta.push(res);
                         break;
@@ -47,7 +47,6 @@ public:
         return mySta.top();
     }
 };
-
 int main() {
     // insert code here...
     
