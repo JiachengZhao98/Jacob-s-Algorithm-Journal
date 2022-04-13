@@ -4,6 +4,7 @@
 //
 //  Created by Jiacheng Zhao on 4/12/22.
 //
+//  All Rights Reserved
 
 //BELW ARE LEETCODE STOCK PRICES RELATED PROBLEMS
 
@@ -15,7 +16,7 @@
 
 using namespace std;
 
-// dynamic programming framework
+// dynamic programming framework for stock prices problems
 
 //base case：
 //dp[-1][...][0] = dp[...][0][0] = 0
@@ -30,7 +31,7 @@ using namespace std;
 
 
 
-// LC121 Best Time to Buy and Sell Stock : EASY
+// LC_121 Best Time to Buy and Sell Stock : EASY
 // greedy alg
 class Solution_121_1 {
 public:
@@ -68,7 +69,7 @@ public:
     }
 };
 
-// LC122 Best Time to Buy and Sell Stock II : MEDIUM
+// LC_122 Best Time to Buy and Sell Stock II : MEDIUM
 
 // greedy alg
 
@@ -105,7 +106,7 @@ public:
                 continue;
             }
             dp[i][0] = max(dp[i - 1][1] + prices[i], dp[i - 1][0]);
-            dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+            dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i]);   // in this scenario we simplify the formula because k = + infinity -> k = k - 1;
         }
         return dp[n - 1][0];
     }
@@ -123,7 +124,34 @@ public:
         int n = prices.size();
         vector<vector<vector<int>>> dp(n, vector<vector<int>>(3, vector<int>(2,0)));
         for (int i = 0; i < n; i++) {
-            for (int k = 2; k > 0; k--) {
+            for (int k = 1; k < 3; k++) {
+                if (i == 0) {
+                    dp[i][k][0] = 0;
+                    dp[i][k][1] = -prices[i];   // In this base case we need to define the specific number when k = 1 and k = 2
+                    continue;
+                }
+                dp[i][k][0] = max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i]);
+                dp[i][k][1] = max(dp[i - 1][k - 1][0] - prices[i], dp[i - 1][k][1]);
+            }
+        }
+        return dp[n - 1][2][0];
+    }
+};
+
+
+
+//LC_188  Best Time to Buy and Sell Stock IV : HARD
+
+class Solution_188 {
+public:
+    int maxProfit(int K, vector<int>& prices) {
+        int n = prices.size();
+        if (n == 0) {
+            return 0;
+        }
+        vector<vector<vector<int>>> dp(n, vector<vector<int>>(K + 1, vector<int>(2,0)));
+        for (int i = 0; i < n; i++) {
+            for (int k = 1; k < K + 1; k++) {
                 if (i == 0) {
                     dp[i][k][0] = 0;
                     dp[i][k][1] = -prices[i];
@@ -133,7 +161,7 @@ public:
                 dp[i][k][1] = max(dp[i - 1][k - 1][0] - prices[i], dp[i - 1][k][1]);
             }
         }
-        return dp[n - 1][2][0];
+        return dp[n - 1][K][0];
     }
 };
 
