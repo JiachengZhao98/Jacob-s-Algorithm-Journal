@@ -8,8 +8,8 @@
 
 //BELW ARE LEETCODE STOCK PRICES RELATED PROBLEMS
 
-//REFERENCE: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/discuss/108870/Most-consistent-ways-of-dealing-with-the-series-of-stock-problems
-
+//REFERENCE_1: https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/discuss/108870/Most-consistent-ways-of-dealing-with-the-series-of-stock-problems
+//REFERENCE_2: https://labuladong.github.io/algo/3/26/96/
 
 #include <iostream>
 #include "vector"
@@ -32,7 +32,9 @@ using namespace std;
 
 
 // LC_121 Best Time to Buy and Sell Stock : EASY
+
 // greedy alg
+
 class Solution_121_1 {
 public:
     int maxProfit(vector<int>& prices) {
@@ -48,6 +50,7 @@ public:
 
 // dynamic programming
 class Solution_121_2 {
+    
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
@@ -94,6 +97,7 @@ public:
 };
 
 // Dynamic programming
+
 class Solution_122_2 {
 public:
     int maxProfit(vector<int>& prices) {
@@ -142,6 +146,8 @@ public:
 
 //LC_188  Best Time to Buy and Sell Stock IV : HARD
 
+//dynamic programming
+
 class Solution_188 {
 public:
     int maxProfit(int K, vector<int>& prices) {
@@ -164,4 +170,62 @@ public:
         return dp[n - 1][K][0];
     }
 };
+
+
+// LC_309 Best Time to Buy and Sell Stock with Cooldown : MEDIUM
+
+//dynamic programming
+
+class Solution_309 {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        vector<vector<int>> dp(n,vector<int>(2,0));
+        if (n == 0) {
+            return 0;
+        }
+        for (int i = 0; i < n; i++) {
+            if (i == 0) {
+                dp[i][0] = 0;
+                dp[i][1] = -prices[i];
+                continue;
+            }
+            if (i == 1) {
+                dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+                dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+                continue;
+            }
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = max(dp[i - 1][1], dp[i - 2][0] - prices[i]);
+        }
+        return dp[n - 1][0];
+    }
+};
+
+// LC_714 Best Time to Buy and Sell Stock with Transaction Fee: MEDIUM
+
+//dynamic programming
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        int n = prices.size();
+        if (n == 0) {
+            return 0;
+        }
+        vector<vector<int>> dp(n, vector<int>(2,0));
+        for (int i = 0; i < n; i++) {
+            if (i == 0) {
+                dp[i][0] = 0;
+                dp[i][1] = -prices[i] - fee;
+                continue;
+            }
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i] - fee);
+        }
+        return dp[n - 1][0];
+    }
+};
+
+
 
