@@ -35,7 +35,7 @@ public:
             for (int i = 0; i < size; i++) {
                 TreeNode* node = que.front();
                 que.pop();
-                if (node->left == NULL && node->right == NULL) return res; // when we find a node which has neither lefr nor right child, then we can stop the alg                                                                   since this is the shortest path
+                if (node->left == NULL && node->right == NULL) return res; // when we find a node which has neither lefr nor right child, then we can stop the                                                         // alg since this is the shortest path
                 if (node->left) que.push(node->left);
                 if (node->right) que.push(node->right);
             }
