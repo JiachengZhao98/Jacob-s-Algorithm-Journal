@@ -33,6 +33,28 @@ public:
 class Solution {
 public:
     Node* connect(Node* root) {
-        
+        queue<Node*> que;
+        if (root != NULL) {
+            que.push(root);
+        }
+        while (!que.empty()) {
+            int size = que.size();
+            Node* node;
+            for (int i = 0; i < size; i++) {
+                node = que.front();
+                que.pop();
+                if (!que.empty()) {
+                    node->next = que.front();
+                }
+                if (node->left) {
+                    que.push(node->left);
+                }
+                if (node->right) {
+                    que.push(node->right);
+                }
+            }
+              node->next = NULL;
+        }
+        return root;
     }
 };
