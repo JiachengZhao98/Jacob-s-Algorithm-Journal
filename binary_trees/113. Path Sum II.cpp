@@ -23,7 +23,8 @@ public:
         stack<int> sum;
         stack<pair<TreeNode*, vector<int>>> treeSta;
         sum.push(root->val);
-        vector<int> temp;
+        vector<int> temp;               // that's one to push one int to the second part of a stack. If we just use push function to push int to the second part, 
+                                        //  this is not gonna work since the characteristic of the second part is vector, not int
         temp.push_back(root->val);
         treeSta.push(pair<TreeNode*, vector<int>>(root, temp));
         while (!treeSta.empty()) {
@@ -42,7 +43,7 @@ public:
             }
             if (nodeP.first->right) {
                 vector<int> temp = nodeP.second;
-                temp.push_back(nodeP.first->right->val);
+                temp.push_back(nodeP.first->right->val);  
                 treeSta.push(pair<TreeNode*, vector<int>>(nodeP.first->right, temp));
                 sum.push(tempSum + nodeP.first->right->val);
             }
