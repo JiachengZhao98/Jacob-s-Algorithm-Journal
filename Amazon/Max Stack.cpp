@@ -71,6 +71,5 @@ public:
         if (temp->next) temp->next->prev = temp->prev;
         if (cur == temp) cur = cur->prev;
         return Max;
-        
     }
 };
