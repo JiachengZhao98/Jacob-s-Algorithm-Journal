@@ -1,39 +1,39 @@
-#include "iostream"
-#include "stdio.h"
-#include "cmath"
 #include "string"
-#include "string.h"
-#include "array"
-#include "set"
-#include "map"
-#include "vector"
+#include "unordered_map"
+#include "iostream"
 using namespace std;
 
 class Solution {
 public:
     int SinT(string S, string T) {
-        map<char, int> strmap;
-        map<char, int>::iterator iter;
+        unordered_map<char, int> strmap_t;
+        unordered_map<char, int> strmap_s;
         for (int i = 0; i < T.size(); i++) {
-            strmap.insert(pair<char, int>(T[i], 0));
+            if (strmap_t.find(T[i]) == strmap_t.end()) {
+                strmap_t.insert(pair<char, int>(T[i], 1));
+            }
+            else strmap_t.find(T[i])->second++;
         }
         for (int i = 0; i < S.size(); i++) {
-            if (strmap.find(S[i]) != strmap.end()) {
-                strmap[S[i]]++;
+            if (strmap_s.find(S[i]) == strmap_s.end()) {
+                strmap_s.insert(pair<char, int>(T[i], 1));
             }
+            else strmap_s.find(S[i])->second++;
         }
-        vector<int> res;
-        for(iter = strmap.begin(); iter != strmap.end(); ++iter) {
-            res.push_back(iter->second);
+        int res = INT_MAX;
+        for (int i = 0; i < T.size(); i++) {
+            auto iter = strmap_t.find(T[i]);
+            auto iter_2 = strmap_s.find(T[i]);
+            int temp = iter_2->second / iter->second;
+            res = temp < res ? temp : res;
         }
-        sort(res.begin(), res.end());
-        return res[0];
+        return res;
     }
 };
 
 int main() {
-    string S = "ab";
-    string T = "bca";
+    string S = "abababab";
+    string T = "bba";
     Solution sol;
     int res = sol.SinT(S, T);
     cout<<res<<endl;

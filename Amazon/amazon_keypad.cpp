@@ -1,19 +1,12 @@
 #include "iostream"
-#include "stdio.h"
-#include "cmath"
-#include "string"
-#include "string.h"
-#include "array"
-#include "set"
-#include "map"
 #include "vector"
-#include "algorithm"
+#include "map"
 using namespace std;
 
 
 class Solution {
 public:
-    int keypadClickCount (string text) {
+    int keypadClickCount_1 (string text) {
         vector<char> letter(26, 0);
         vector<int> freq(26, 0);
         char input = 'a';
@@ -36,13 +29,38 @@ public:
         }
         return count;
     }
+    
+    int keypadClickCount_2 (string text) {
+        map<char, int> letterCount;
+        vector<int> count;
+        int res = 0;
+        for (int i = 0; i < text.size(); i++) {
+            if (letterCount.find(text[i]) == letterCount.end()) {
+                letterCount.insert(pair<char, int>(text[i], 1));
+            }
+            else {
+                letterCount.find(text[i])->second++;
+            }
+        }
+        int i = 0;
+        for (auto iter = letterCount.begin(); iter != letterCount.end(); iter++) {
+            count.push_back(iter->second);
+        }
+        sort(count.begin(), count.end());
+        reverse(count.begin(), count.end());
+        for (int i = 0; i < count.size(); i++) {
+            res += count[i] * (i / 9 + 1);
+        }
+        return res;
+    }
 };
+
 
 
 int main () {
     string text = "abacadefghibj";
     Solution sol;
-    int count = sol.keypadClickCount(text);
+    int count = sol.keypadClickCount_2(text);
     cout<<count<<endl;
     return 0;
 }
