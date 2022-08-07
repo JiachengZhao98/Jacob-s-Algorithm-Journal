@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "map": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "vector": "cpp"
     }
 }
