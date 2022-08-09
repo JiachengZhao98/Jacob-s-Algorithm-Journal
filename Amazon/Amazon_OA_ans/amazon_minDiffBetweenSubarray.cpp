@@ -5,26 +5,37 @@ using namespace std;
 
 class Solution {
 public:
-    int minNetStock(vector<int>& stock) {
-        int tempSum = 0;
-        int count;
-        int sum = 0;
-        int Min = INT_MAX;
-        for (auto a : stock) {
+    long int Min(long x, long y) {
+        if (x < y) return x;
+        else return y;
+    }
+    int minNetStock(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return 0;
+        }
+        long tempSum = 0;
+        long count;
+        long sum = 0;
+        long Minimum = INT_MAX;
+        for (auto a : nums) {
             tempSum += a;
         }
-        for (int i = 0; i < stock.size() - 1; i++) {
-            sum += stock[i];
-            tempSum -= stock[i];
-            int temp = sum / (i + 1) - tempSum / (stock.size() - i - 1);
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            tempSum -= nums[i];
+            int temp;
+            if (i < nums.size() - 1) {
+                temp = sum / (i + 1) - tempSum / (nums.size() - i - 1);
+            }
+            else temp = sum / (i + 1);
             temp = abs(temp);
-            int tempMin = min(Min, temp);
-            if (tempMin < Min) {
-                Min = tempMin;
+            long tempMin = Min(Minimum, temp);
+            if (tempMin < Minimum) {
+                Minimum = tempMin;
                 count = i + 1;
             }
         }
-        return count;
+        return count - 1;
     }
 };
 
