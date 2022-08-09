@@ -3,7 +3,13 @@
     "map": "cpp",
     "queue": "cpp",
     "vector": "cpp",
-    "set": "cpp"
+    "set": "cpp",
+    "stack": "cpp",
+    "deque": "cpp",
+    "functional": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "/usr/bin/gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
