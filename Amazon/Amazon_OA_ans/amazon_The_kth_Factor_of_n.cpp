@@ -7,7 +7,7 @@ class Solution {
 public:
     int kthFactor(int n, int k) {
         set<int> factors;
-         for (int i = 0; i <= sqrt(n); i++) {
+         for (int i = 1; i <= sqrt(n); i++) {
             if (n % i == 0) {
                 factors.insert(i);
                 factors.insert(n / i);

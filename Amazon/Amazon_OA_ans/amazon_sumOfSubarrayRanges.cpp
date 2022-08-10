@@ -65,3 +65,23 @@ public:
         return res;
     }
 };
+
+class Solution_3 {
+public:
+    long long subArrayRanges(vector<int>& nums) {
+        
+        long sum=0;
+        
+        for(int l=0; l<nums.size(); l++){
+            int minnum = nums[l];
+            int maxnum = nums[l];
+            for(int r=l; r<nums.size(); r++){
+                // key: min and max can be reuse!
+                maxnum = max(maxnum, nums[r]);
+                minnum = min(minnum, nums[r]);
+                sum += maxnum - minnum;
+            }
+        }
+        return sum;
+    }   
+};
