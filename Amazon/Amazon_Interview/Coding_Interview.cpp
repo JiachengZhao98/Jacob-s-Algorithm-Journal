@@ -137,6 +137,27 @@ public:
         return dp[0][0];
     }
 
+    //LC 78. Subsets
+
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res = {};
+        for (int num : nums) {
+            vector<vector<int>> temp = res;
+            if (temp.size() != 0) {
+                for (vector<int> r : temp) {
+                r.push_back(num);
+                res.push_back(r);
+                }
+            }
+            res.push_back({num});
+        }
+        res.push_back({});
+        return res;
+    }
+        /*      
+            Time complexity: O(N * 2^N) to generate all subsets and then copy them into output list.
+            Space complexity: O(N * 2^N) This is exactly the number of solutions for subsetscmultiplied by the number N of elements to keep for each subset.
+        */
 
 };
 

@@ -6,10 +6,10 @@ class Solution {
 public:
     int findHowManyWays(string A, string B, int N) {
         int count = 0;
-        for (int i = 0; i + B.size() * N < A.size(); i++) {  // 不能越界
+        for (int i = 0; i + (B.size() - 1) * N < A.size(); i++) {  // 不能越界
             map<char, int> myMap;
             int j = i;
-            while (j <= i + B.size() * N) {
+            while (j <= i + (B.size() - 1) * N) {
                 if (myMap.find(A[j]) == myMap.end()) {
                     myMap.insert(pair<char, int>(A[j], 1));   // 第一次插入
                 }
