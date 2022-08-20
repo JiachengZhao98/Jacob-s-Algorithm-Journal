@@ -19,7 +19,36 @@ using namespace::std;
       TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
       TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
   };
- 
+
+
+// 133. Clone Graph
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        
+    }
+};
+
+
 class Solution {
 public:
 
@@ -55,7 +84,7 @@ public:
         return res;
     }
     
-    // 242. Valid Anagram
+    // LC 242. Valid Anagram
     bool isAnagram(string s, string t) {
         unordered_map<char, int> myMap;
         for (int i = 0; i < s.size(); i++) {
@@ -156,8 +185,54 @@ public:
     }
         /*      
             Time complexity: O(N * 2^N) to generate all subsets and then copy them into output list.
-            Space complexity: O(N * 2^N) This is exactly the number of solutions for subsetscmultiplied by the number N of elements to keep for each subset.
+            Space complexity: O(N * 2^N) This is exactly the number of solutions for subsetscmultiplied by 
+            the number N of elements to keep for each subset.
         */
+
+    // LC 133. Clone Graph
+    // BFS approach
+    Node* cloneGraph_BFS(Node* node) {
+        if (node == NULL) {
+            return node;
+        }
+        unordered_map<Node*, Node*> myMap;
+        queue<Node*> myQ;
+        myQ.push(node);
+        myMap.insert(pair<Node*, Node*>(node, new Node(node->val)));
+        while (!myQ.empty()) {
+            Node* n = myQ.front();
+            myQ.pop();
+            for (auto neighbor : n->neighbors) {
+                if (myMap.find(neighbor) == myMap.end()) {
+                    myMap.insert(pair<Node*, Node*>(neighbor, new Node(neighbor->val)));
+                    myQ.push(neighbor);
+                }
+                myMap.find(n)->second->neighbors.push_back(myMap.find(neighbor)->second);
+            }
+        }
+        return myMap.find(node)->second;
+    }
+
+    // DFS approach
+
+    Node* cloneGraph_DFS(Node* node) {
+        if (node == NULL) {
+            return node;
+        }
+        if (visited_clone_graph_dfs.find(node) != visited_clone_graph_dfs.end()) {
+            return visited_clone_graph_dfs.find(node)->second;
+        }
+        visited_clone_graph_dfs.insert(pair<Node*, Node*>(node, new Node(node->val)));
+        for (auto neighbor : node->neighbors) {
+            visited_clone_graph_dfs.find(node)->second->neighbors.push_back(cloneGraph_DFS(neighbor));
+        }
+        return visited_clone_graph_dfs.find(node)->second;
+    }
+
+
+private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
+
+
 
 };
 
