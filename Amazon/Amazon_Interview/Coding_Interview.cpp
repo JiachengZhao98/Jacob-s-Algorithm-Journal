@@ -7,6 +7,7 @@
 #include "unordered_map"
 #include "unordered_set"
 #include "iostream"
+#include "deque"
 using namespace::std;
 
 
@@ -21,7 +22,7 @@ using namespace::std;
   };
 
 
-// 133. Clone Graph
+// LC 133. Clone Graph
 // Definition for a Node.
 class Node {
 public:
@@ -38,13 +39,6 @@ public:
     Node(int _val, vector<Node*> _neighbors) {
         val = _val;
         neighbors = _neighbors;
-    }
-};
-
-class Solution {
-public:
-    Node* cloneGraph(Node* node) {
-        
     }
 };
 
@@ -83,6 +77,7 @@ public:
         }
         return res;
     }
+    // time and space complexity: O(N), N is the number of nodes
     
     // LC 242. Valid Anagram
     bool isAnagram(string s, string t) {
@@ -102,11 +97,11 @@ public:
                 myMap.erase(t[i]);
             }
         }
-        if (myMap.empty()) {
-            return true;
-        }
-        else return false;
+        return myMap.empty();
     }
+    
+    
+    // for possible follow up: optimization
     
     bool isAnagram_2(string s, string t) {
         int record[26] = {0};
@@ -183,14 +178,15 @@ public:
         res.push_back({});
         return res;
     }
-        /*      
+        /*
             Time complexity: O(N * 2^N) to generate all subsets and then copy them into output list.
-            Space complexity: O(N * 2^N) This is exactly the number of solutions for subsetscmultiplied by 
+            Space complexity: O(N * 2^N) This is exactly the number of solutions for subsetscmultiplied by
             the number N of elements to keep for each subset.
         */
 
     // LC 133. Clone Graph
     // BFS approach
+
     Node* cloneGraph_BFS(Node* node) {
         if (node == NULL) {
             return node;
@@ -215,6 +211,8 @@ public:
 
     // DFS approach
 
+    // unordered_map<Node*, Node*> visited_clone_graph_dfs;
+
     Node* cloneGraph_DFS(Node* node) {
         if (node == NULL) {
             return node;
@@ -230,14 +228,265 @@ public:
     }
 
 
+    // LC 20. Valid Parentheses
+    bool isValid(string s) {
+        stack<char> otherHalf;
+        for (char s_part : s) {
+            if (s_part == '(') otherHalf.push(')');
+            else if (s_part == '[') otherHalf.push(']');
+            else if (s_part == '{') otherHalf.push('}');
+            else if (otherHalf.empty() || s_part != otherHalf.top()) return false;
+            else otherHalf.pop();
+        }
+        return otherHalf.empty();
+    }
+
+    // LC 236. Lowest Common Ancestor of a Binary Tree
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (p == root || q == root) {
+            return root;
+        }
+        unordered_map<TreeNode*, TreeNode*> child_parent;
+        child_parent.insert(pair<TreeNode*, TreeNode*>(root, nullptr));
+        queue<TreeNode*> myQ;
+        myQ.push(root);
+        while (child_parent.find(p) == child_parent.end() || child_parent.find(q) == child_parent.end()) {
+                TreeNode* temp = myQ.front();
+                myQ.pop();
+                if (temp->left) {
+                    myQ.push(temp->left);
+                    child_parent.insert(pair<TreeNode*, TreeNode*>(temp->left, temp));
+                }
+                if (temp->right) {
+                    myQ.push(temp->right);
+                    child_parent.insert(pair<TreeNode*, TreeNode*>(temp->right, temp));
+                }
+        }
+        set<TreeNode*> p_ancestors;
+        while (p != nullptr) {
+            p_ancestors.insert(p);
+            p = child_parent.find(p)->second;
+        }
+        while (p_ancestors.find(q) == p_ancestors.end()) {
+            q = child_parent.find(q)->second;
+        }
+        return q;
+    }
+    
+    // LC 347. Top K Frequent Elements
+    
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+            if (nums.size() == 1) return {nums[0]};
+            unordered_map<int,int> myMap;
+            for (auto a : nums) {
+                if (myMap.find(a) == myMap.end()) {
+                    myMap.insert(pair<int, int>(a, 1));
+                }
+                else myMap.find(a)->second++;
+            }
+            multimap<int, int> res1;
+            for (auto iter = myMap.begin(); iter != myMap.end(); iter++) {
+                 res1.insert(pair<int, int>(iter->second, iter->first));
+            }
+            vector<int> res;
+            int count = 0;
+            for (auto iter = res1.rbegin(); iter != res1.rend(); iter++) {
+                 if (count == k) break;
+                 res.push_back(iter->second);
+                 count++;
+            }
+            return res;
+        }
+    
+    // Lc 198. House Robber
+    // dynamic programming
+    int rob(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return nums[0];
+        }
+        int maxSum[nums.size() + 1];
+        maxSum[nums.size()] = 0;
+        maxSum[nums.size() - 1] = nums[nums.size() - 1];
+        for (int i = nums.size() - 2; i >= 0; i--) {
+            maxSum[i] = max(maxSum[i + 1], maxSum[i + 2] + nums[i]);
+        }
+        return maxSum[0];
+    }
+    // time complexity: O(N), space complexity: O(N)
+    
+    // For possible follow up:
+    // optimization for LC 198: discard the dp table and just use two variables to store the largest sum
+    int rob_optinization(vector<int>& nums) {
+            if (nums.size() == 1) {
+                return nums[0];
+            }
+            int maxSum_nums_size = 0;
+            int maxSum_nums_size_minus_1 = nums[nums.size() - 1];
+            for (int i = nums.size() - 2; i >= 0; i--) {
+                int res = max(maxSum_nums_size_minus_1, maxSum_nums_size + nums[i]);
+                maxSum_nums_size = maxSum_nums_size_minus_1;
+                maxSum_nums_size_minus_1 = res;
+            }
+            return maxSum_nums_size_minus_1;
+        }
+    // time complexity: O(N), space complexity: O(1)
+    
+    //LC 151. Reverse Words in a String
+    
+    string reverseWords(string s) {
+            reverse(s.begin(), s.end());
+            int i = 0;
+            string res;
+            while (s[i] == ' ') {  // remove space at the beginning
+                i++;
+            }
+            for (; i < s.size() - 1; i++) {
+                if (s[i] == ' ' && s[i + 1] == ' ' ) {   // remove the extra space in the middle of the string
+                    continue;
+                }
+                if (s[i] == ' ' && s[i + 1] != ' ') {   // add one ' ' in the middle of two adjacent words
+                    res += ' ';
+                    continue;
+                }
+                if (s[i] != ' ') {
+                    string temp;
+                    while (s[i] != ' ' && i <= s.size() - 1) {  // get one word, whose sequence is reversed
+                        temp += s[i];
+                        i++;
+                    }
+                    reverse(temp.begin(), temp.end());         // get the correct word
+                    res += temp;
+                    i--;
+                }
+            }
+            if (i == s.size() - 1) {
+                if (s[i] != ' ') {      // take care of the last char of string s
+                    res += s[i];
+                }
+            }
+            return res;
+        }
+        // time complexity: O(N), space cpmplexity: O(N)
+    
+    
+    
+    //LC 314. Binary Tree Vertical Order Traversal
+    
+    // BFS approach
+    vector<vector<int>> verticalOrder_BFS(TreeNode* root) {
+        vector<vector<int>> res;
+        if (root == NULL) {
+            return res;
+        }
+        map<int, vector<int>> columnTable;    
+        queue<pair<TreeNode*, int>> myQ;
+        myQ.push(pair<TreeNode*, int>(root, 0));
+        while (!myQ.empty()) {
+            auto temp = myQ.front().first;   // the node
+            int column = myQ.front().second;  // its column index
+            myQ.pop();
+            if (columnTable.find(column) == columnTable.end()) {
+                columnTable.insert(pair<int, vector<int>>(column, vector<int>()));
+            }
+            columnTable.find(column)->second.push_back(temp->val);         // group all the nodes with the same column index
+            if (temp->left) {
+                myQ.push(pair<TreeNode*, int>(temp->left, column - 1));    // column index minuses 1 if going to left
+            }
+            if (temp->right) {
+                myQ.push(pair<TreeNode*, int>(temp->right, column + 1));    // column index pluses 1 if going to right
+            }
+        }
+        for (auto iter = columnTable.begin(); iter != columnTable.end(); iter++) {
+            res.push_back(iter->second);
+        }
+        return res;
+    }
+    //  space complexity: O(N), time complexity: O(NlogN), N is the number of nodes in the tree.
+
+
+    // DFS approach
+    map<int, multimap<int, int>> columnTable;
+    void dfs_for_verticalOrder(TreeNode* root, int column, int row) {
+        if (root == nullptr) {
+            return;
+        }
+        if (columnTable.find(column) == columnTable.end()) {
+            columnTable.insert(pair<int, multimap<int, int>>(column, multimap<int, int>()));
+        }
+        columnTable.find(column)->second.insert(pair<int, int>(row, root->val));
+        dfs_for_verticalOrder(root->left, column - 1, row + 1);
+        dfs_for_verticalOrder(root->right, column + 1, row + 1);
+    }
+    vector<vector<int>> verticalOrder_DFS(TreeNode* root) {
+        vector<vector<int>> res;
+        if (root == NULL) {
+            return res;
+        }
+        dfs_for_verticalOrder(root, 0, 0);
+        for (auto iter = columnTable.begin(); iter != columnTable.end(); iter++) {
+            vector<int> temp;
+            for (auto a = iter->second.begin(); a != iter->second.end(); a++) {
+                temp.push_back(a->second);
+            }
+            res.push_back(temp);
+        }
+        return res;
+    }
+    // Time Complexity: O(W⋅HlogH)), where Wis the width of the binary tree (i.e. the number of columns in the result) 
+    // and H is the height of the tree.
+    // space complexity: O(N), where N is the number of all nodes
+
+    // LC 210. Course Schedule II
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> courseDependencies(numCourses, 0);
+        unordered_map<int, vector<int>> courseAdjList;
+        for (auto prereq : prerequisites) {
+            courseDependencies[prereq[0]]++;
+            if (courseAdjList.find(prereq[1]) == courseAdjList.end()) {
+                courseAdjList.insert(pair<int, vector<int>>(prereq[1], vector<int>()));
+            }
+             courseAdjList.find(prereq[1])->second.push_back(prereq[0]);
+        }
+        queue<int> q;
+        vector<int> res;
+        vector<bool> visited(numCourses, false);
+        for (int i = 0; i < numCourses; i++) {
+            if (courseDependencies[i] == 0) {
+                q.push(i);
+                visited[i] = true;
+            }
+        }
+        while (!q.empty()) {
+            int course = q.front();
+            q.pop();
+            res.push_back(course);
+            for (int i = 0; i < courseAdjList[course].size(); i++) {
+                int dependentCourse = courseAdjList.find(course)->second[i];
+                if (!visited[dependentCourse]) {
+                    courseDependencies[dependentCourse]--;
+                    if (courseDependencies[dependentCourse] == 0) {
+                        q.push(dependentCourse);
+                        visited[dependentCourse] = 1;
+                    }
+                }
+            }
+        }
+        for (auto visit : visited) {
+            if (visit == false) return {};
+        }
+        return res;
+    }
+
+
+
 private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
-
-
 
 };
 
 int main() {
     
 }
+
 
 

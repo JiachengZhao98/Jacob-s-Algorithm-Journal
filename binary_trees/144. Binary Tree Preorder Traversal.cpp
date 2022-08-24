@@ -19,7 +19,7 @@ public:
         if (root == NULL) {
             return;
         }
-        res.push_back(root -> val);  // mid
+        res.push_back(root->val);  // mid
         traversal(root->left, res);  // left
         traversal(root->right, res); // right
     }

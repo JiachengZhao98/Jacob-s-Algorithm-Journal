@@ -19,9 +19,9 @@ public:
         if (root == NULL) {
             return;
         }
-        traversal(root->left, res);
-        traversal(root->right, res);
-        res.push_back(root->val);
+        traversal(root->left, res);  // left
+        traversal(root->right, res);  // right
+        res.push_back(root->val);     // mid
     }
     
     vector<int> postorderTraversal(TreeNode* root) {
