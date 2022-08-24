@@ -584,8 +584,217 @@ If current character is '1', it can be the middle of "010" selection
 //     return 0;
 // }
 
+    int merge(vector<vector<int>>& intervals) {
+        int size = intervals.size();
+        vector<vector<int>> res;
+        sort(intervals.begin(), intervals.end());
+        for (int i = 0; i < intervals.size(); i++) {
+            if (i + 1 < intervals.size() && intervals[i + 1][0] <= intervals[i][1]) {
+                intervals[i + 1][0] = min(intervals[i + 1][0], intervals[i][0]);
+                intervals[i + 1][1] = max(intervals[i + 1][1], intervals[i][1]);
+            }
+            else
+                res.push_back({intervals[i][0], intervals[i][1]});
+            }
+        return size - res.size();
+        }
 
 
+    int minAfterMinusK(vector<int>& nums, int k) {
+        int sum = 0;
+        int partSum = 0;
+        for (int i = 0; i < k; i++) {
+            partSum += nums[i];
+        }
+        int Max = partSum;
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            if (i + k < nums.size()) {
+                partSum = partSum + nums[i + k] - nums[i];
+                Max = max(Max, partSum);
+            }  
+        }
+        return (sum - Max);
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> nums = {7,3,6,1};
+//     int res = sol.minAfterMinusK(nums, 2);
+//     cout<<res<<endl;
+//     return 0;
+// }
+
+
+    long int Min(long x, long y) {
+        if (x < y) return x;
+        else return y;
+    }
+    int minDiffBetweenSubarray(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return 0;
+        }
+        long tempSum = 0;
+        long count;
+        long sum = 0;
+        long Minimum = INT_MAX;
+        for (auto a : nums) {
+            tempSum += a;
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            tempSum -= nums[i];
+            int temp;
+            if (i < nums.size() - 1) {
+                temp = sum / (i + 1) - tempSum / (nums.size() - i - 1);
+            }
+            else temp = sum / (i + 1);
+            temp = abs(temp);
+            long tempMin = Min(Minimum, temp);
+            if (tempMin < Minimum) {
+                Minimum = tempMin;
+                count = i + 1;
+            }
+        }
+        return count - 1;
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> stock = {1,3,2,3};
+//     int res = sol.minDiffBetweenSubarray(stock);
+//     cout<<res<<endl;
+//     return 0;
+// }
+
+
+    long long minimumHealth(vector<int>& damage, int armor) {
+        int Max = INT_MIN;    
+        long sum = 0;
+        for (auto a : damage) {
+            sum += a;                    // sum all the damage
+            Max = a > Max ? a : Max;     // find the largest value in damage
+        }    
+        if (armor >= Max) {
+            return (sum + 1 - Max);      // use armor to defend
+        }
+        else return (sum + 1 - armor);   // add more health if the armor can NOT defend the largest damage
+    }
+
+
+
+    int minMove(vector<int>& nums) {
+        int count1 = 0, dis = 0;
+        for (auto a : nums) {
+            if (a == 1) count1++;
+            else dis += count1;
+        }
+        int count0 = nums.size() - count1;
+        return min(dis, count0 * count1 - dis);
+    }
+
+
+// int main() {
+//     vector<int> nums = {0, 1 ,0 , 1};
+//     Solution sol;
+//     int ans = sol.minMove(nums);
+//     cout<<ans<<endl;
+//     return 0;
+// }
+
+
+    int minSum(vector<int>& nums, int k) {
+        int sumAll = 0;
+        int sum = 0;
+        int count = 0;
+        int res = INT_MIN;
+        queue<int> q;
+
+        for(auto a : nums) {
+            count++;
+            q.push(a);
+            sum += a;
+            sumAll += a; // calculate the sum of all elements in nums
+            if (count > k) {
+                sum -= q.front(); // remove the first element of queue
+                q.pop();          // move the slide window to next position
+                count--;
+            }
+            res = sum > res ? sum : res;  // memorize the biggest sum of elements in the slide window
+        }
+        return sumAll - res;
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> nums = {7,3,6,1};
+//     int k = 1;
+//     int res;
+//     res = sol.minSum(nums, k);
+//     cout<<res<<endl;
+//     return 0;
+// }
+
+
+    vector<int> moveFromMoveTo(vector<int> locations, vector<int> moveFrom, vector<int> moveTo) {
+        set<int> temp;
+        vector<int> res;
+        for (auto loc : locations) {
+            temp.insert(loc);
+        }
+        for (int i = 0; i < moveFrom.size(); i++) {
+            auto iter = temp.find(moveFrom[i]);
+            temp.erase(iter);
+            temp.insert(moveTo[i]);
+        }
+        for (auto iter = temp.begin(); iter != temp.end(); iter++) {
+            res.push_back(*iter);
+        }
+        return res;
+    }
+
+// int main() {
+//     vector<int> res;
+//     Solution sol;
+//     std::vector<int> locations = {1,7,6,8};
+//     vector<int> moveFrom = {1,7,2};
+//     vector<int> moveTo = {2,9,5};
+//     res = sol.moveFromMoveTo(locations, moveFrom, moveTo);
+//     for (auto a : res) {
+//         cout<<a<<" ";
+//     }
+//     cout<<endl;
+//     return 0;
+// }
+
+
+
+
+    int movieReward(vector<int>& awards, int k) {
+        int i = 0, j = 0, count = 1;
+        sort(awards.begin(), awards.end());
+        while (j < awards.size()) {
+            if (awards[j] - awards[i] <= k){
+                j++;
+                continue;
+            }
+            else {
+                i = j;
+                j++;
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+// int main() {
+//     Solution sol;
+//     vector<int> awards = {1,5,4,6,8,9,2};
+//     int res = sol.movieReward(awards, 3);
+//     cout<<res<<endl;
+//     return 0;
+// }
 
 
 
