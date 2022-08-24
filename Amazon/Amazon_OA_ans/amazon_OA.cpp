@@ -284,5 +284,311 @@ If current character is '1', it can be the middle of "010" selection
     return 0;
     }*/
 
+
+
+
+    int keypadClickCount_1 (string text) {
+        vector<char> letter(26, 0);
+        vector<int> freq(26, 0);
+        char input = 'a';
+        for (int i = 0; i < 26; i++) {
+            letter[i] = input;
+            input++;
+        }
+        for (int i = 0; i < text.length(); i++) {
+            for (int j = 0; j < 26; j++) {
+                if (text[i] == letter[j]) {
+                    freq[j]++;
+                }
+            }
+        }
+        sort(freq.begin(), freq.end());
+        reverse(freq.begin(), freq.end());
+        int count = 0;
+        for (int i = 0; i < 26; i++) {
+            count += freq[i] * ((i / 9) + 1);
+        }
+        return count;
+    }
+    
+    int keypadClickCount_2 (string text) {
+        map<char, int> letterCount;
+        vector<int> count;
+        int res = 0;
+        for (int i = 0; i < text.size(); i++) {
+            if (letterCount.find(text[i]) == letterCount.end()) {
+                letterCount.insert(pair<char, int>(text[i], 1));
+            }
+            else {
+                letterCount.find(text[i])->second++;
+            }
+        }
+        int i = 0;
+        for (auto iter = letterCount.begin(); iter != letterCount.end(); iter++) {
+            count.push_back(iter->second);
+        }
+        sort(count.begin(), count.end());
+        reverse(count.begin(), count.end());
+        for (int i = 0; i < count.size(); i++) {
+            res += count[i] * (i / 9 + 1);
+        }
+        return res;
+    }
+
+    /*int main () {
+    string text = "abacadefghibj";
+    Solution sol;
+    int count = sol.keypadClickCount_2(text);
+    cout<<count<<endl;
+    return 0;
+    }*/
+
+
+
+    unordered_map<string, string> user;
+    unordered_map<string, string> login;
+
+    void Register(string username, string password) {
+        if (user.find(username) != user.end()) {
+            cout<<"Username already exists";
+        }
+        else {
+            user.insert(pair<string, string>(username, password));
+            cout<<"Registered Succcessfully";
+        }
+    }
+
+    void Login(string username, string password) {
+        auto iter = user.find(username);
+        if (iter == user.end() || iter->second != password) {    // users have not registered, or users enter their username incorrectly
+                                                                 // or users enter their password incorrectly
+            cout<<"Login Unsuccessful";
+            return;
+        }
+        else {
+            if (login.find(iter->first) != login.end()) {        // users have already logged in
+                cout<<"Login Unsuccessful";
+            }
+            else {
+                login.insert(pair<string, string>(username, password));
+                cout<<"Logged In Successfully";
+            }
+        }
+    }
+
+    void Logout(string username) {
+        auto iter = login.find(username);
+        if (iter == login.end()) {
+            cout<<"Logout Unsuccessful";
+        }
+        else {
+            login.erase(iter);
+            cout<<"Logged Out Successfully";
+        }
+    }
+
+
+// int main() {
+//     Solution sol;
+//     sol.Register("Jacobzhao98", "zjczjc666");
+//     cout<<endl;
+//     sol.Logout("Jacobzhao98");
+//     cout<<endl;
+//     sol.Login("Jacobzhao98", "zjczjc666");
+//     cout<<endl;
+//     sol.Login("Jacobzhao98", "zjczjc666");
+//     cout<<endl;
+// }
+
+
+
+
+    vector<int> longestOnes(vector<int>& nums, int k) {
+        vector<int> pos;
+        vector<int> pos_res;
+        queue<int> subArray;
+        int count = 0;
+        int res = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == 0) {
+                count++;
+                pos.push_back(i);
+            }
+            subArray.push(nums[i]); // push elements of nums into queue
+            if (count > k) {
+                while (subArray.front() == 1) {
+                    subArray.pop(); // the number of zeros is greater than K, so we need to pop out one zero. It is possible that the first a few elements of                       queue are ones, in this case we need to pop out the first a few ones.
+                }
+                subArray.pop(); // pop out one 0
+                pos.erase(pos.begin());
+                count--;  // the number of zeros minus one
+            }
+            if(res < subArray.size()) {
+                res = subArray.size(); // record the biggest length of queue
+                pos_res.clear();
+                for (auto iter = pos.begin(); iter != pos.end(); ++iter) {
+                    pos_res.push_back(*iter);
+                }
+            }
+        }
+        return pos_res;
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> nums = {0, 0, 0, 1};
+//     int k = 4;
+//     vector<int> res;
+//     res = sol.longestOnes(nums, k);
+//     for (auto a : res) {
+//         cout<<a<<" ";
+//     }
+//     cout<<endl;
+//     return 0;
+// }
+
+
+
+
+
+    int amazon_maxAZAfterInserting(string s) {
+        int countA = 0, countZ = 0, res = 0;
+        vector<int> record;
+        for (int i = s.size() - 1; i >= 0; i--) {
+            if (s[i] == 'Z') countZ++;
+            if (s[i] == 'A') {
+                countA++;
+                res += countZ;
+            }
+        } 
+        return (res + max(countA, countZ));
+    }
+
+
+// int main() {
+//     Solution sol;
+//     string s = "Z";
+//     int ans = sol.amazon_maxAZAfterInserting(s);
+//     cout<<ans<<endl;
+//     return 0;
+// }
+
+
+
+    vector<int> maxConsecutiveNumber(vector<int>& nums, int k) {
+        vector<int> res;
+        if (nums.size() == 0 || k == 0) {
+            return res;
+        }
+        int maxLength = 0;
+        queue<int> recordSubarrayLength;
+        set<int> recordIndex;
+        int j = 0;
+        int count = 0;
+        for (; j < nums.size(); j++) {
+                recordSubarrayLength.push(nums[j]);
+                if (nums[j] == 0) {
+                    count++;
+                    recordIndex.insert(j);
+                }
+                if (count > k) {
+                    while (recordSubarrayLength.front() == 1) {
+                    recordSubarrayLength.pop();
+                    }
+                    recordSubarrayLength.pop();
+                    recordIndex.erase(recordIndex.begin());
+                    count--;
+                }
+                if (maxLength < recordSubarrayLength.size()) {
+                res.clear();
+                for (auto iter = recordIndex.begin(); iter != recordIndex.end(); iter++) {
+                    res.push_back(*iter);
+                }
+                maxLength = recordSubarrayLength.size();
+                }
+            }
+        return res;
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> nums = {0,0,0,1};
+//     vector<int> res;
+//     res = sol.maxConsecutiveNumber(nums, 4);
+//     for (auto a : res) {
+//         cout<<a<<" ";
+//     }
+//     cout<<endl;
+//     return 0;
+// }
+
+
+
+    int maxSubarrrayWithK(vector<int>& nums, int k) {
+        int res = INT_MIN;
+        for (int i = 0; i < nums.size() - k; i++) {
+            int j = i;
+            int temp = 0;
+            set<int> mySet;
+            while (j < i + k) {
+                mySet.insert(nums[j]);
+                temp += nums[j];
+                j++;
+            }
+            if (mySet.size() == k) {
+                res = res < temp ? temp : res;
+            }
+        }
+        return res;
+    }
+
+    int maxSubarrrayWithK_2(vector<int>& nums, int k) {
+        unordered_map<int, int> myMap;
+        int res = INT_MIN, sum = 0;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+            if (myMap.find(nums[i]) == myMap.end()) {
+                myMap.insert(pair<int, int>(nums[i], 1));
+            }
+            else {
+                myMap.find(nums[i])->second++;
+            }
+        }
+        if (myMap.size() == k) {
+            res = sum;
+        }
+        for (int i = k; i < nums.size(); i++) {
+            sum = sum + nums[i] - nums[i - k];
+            if (myMap.find(nums[i]) == myMap.end()) {
+                myMap.insert(pair<int, int>(nums[i], 1));
+            }
+            else if (myMap.find(nums[i]) != myMap.end()) {
+                myMap.find(nums[i])->second++;
+            }
+            myMap.find(nums[i - k])->second--;
+            if (myMap.find(nums[i - k])->second == 0) {
+                myMap.erase(myMap.find(nums[i - k]));
+            }
+            if (myMap.size() == k) {
+                res = res < sum ? sum : res;
+            }
+        }
+        return res;
+    }
+
+// int main() {
+//     Solution_2 sol;
+//     vector<int> nums = {1,2,7,7,4,3,6};
+//     int ans = sol.maxSubarrrayWithK(nums, 3);
+//     cout<<ans<<endl;
+//     return 0;
+// }
+
+
+
+
+
+
+
 };
 
