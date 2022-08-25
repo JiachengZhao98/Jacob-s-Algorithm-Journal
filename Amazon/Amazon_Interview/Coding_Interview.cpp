@@ -21,6 +21,16 @@ using namespace::std;
       TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
   };
 
+  
+ // Definition for singly-linked list.
+  struct ListNode {
+      int val;
+      ListNode *next;
+      ListNode() : val(0), next(nullptr) {}
+      ListNode(int x) : val(x), next(nullptr) {}
+      ListNode(int x, ListNode *next) : val(x), next(next) {}
+  };
+
 
 // LC 133. Clone Graph
 // Definition for a Node.
@@ -477,8 +487,178 @@ public:
         }
         return res;
     }
+
+    // time and space complexity: O(N)
+
+
+    // 92. Reverse Linked List II
+
+    // first approach
+    ListNode* reverseBetween_1(ListNode* head, int left, int right) {
+        ListNode* begin = head;
+        ListNode* end = head;
+        ListNode* after;
+        ListNode* pre;
+        int count = 1;
+        if (left == 1) {
+            pre = nullptr;
+        }
+        else if (left > 1) {
+            while (count != left - 1) {
+                begin = begin->next;
+                count++;
+            }
+            pre = begin;
+            begin = begin->next;
+        }
+        count = 1;
+        if (right == 1) {
+            return head;
+        }
+        else if (right > 1) {
+            while (count != right) {
+                end = end->next;
+                count++;
+            }
+            after = end->next;
+        }
+        ListNode* cur = begin->next;
+        ListNode* temp;
+        ListNode* prev = begin;
+        while (prev != end) {
+            temp = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = temp;
+        }
+        if(pre) pre->next = end;
+        begin->next = cur;
+        if (left == 1) {
+            return end;
+        }
+        else return head;
+    }
+
+        // use stack 
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode* newHead = head;
+        ListNode* resHead = head;
+        int pos = 1;
+        stack<int> mySta;
+        while (head) {
+            if (pos <= right && pos >= left) {
+                mySta.push(head->val);
+            }
+            head = head->next;
+            pos++;
+        }
+        pos = 1;
+        while (newHead) {
+            if (pos <= right && pos >= left) {
+                newHead->val = mySta.top();
+                mySta.pop();
+            }
+            newHead = newHead->next;
+            pos++;
+        }
+        return resHead;
+    }
+    // time and space complexity are both O(N). 
+    // We do not need to change the 'next' pointer in order to reverse the linked list. We can just change the corresponding
+    // nodes' values to achieve this goal. 
     
 
+    //LC 200. Number of Islands
+    // DFS approach
+    void dfs_for_numIslands(vector<vector<char>>& grid, int i, int j, vector<vector<bool>>& visited) {
+        if (i >= grid.size() || j >= grid[0].size() || i < 0 || j < 0) {
+            return;
+        }
+        if (visited[i][j]) return;
+        if (grid[i][j] == '0') return;  
+        visited[i][j] = true;
+        dfs_for_numIslands(grid, i + 1, j, visited);
+        dfs_for_numIslands(grid, i, j+ 1, visited);
+        dfs_for_numIslands(grid, i - 1, j, visited);
+        dfs_for_numIslands(grid, i, j - 1, visited);
+    }
+    int numIslands_DFS(vector<vector<char>>& grid) {
+        int count = 0;
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == '1' && (!visited[i][j])) {
+                    dfs_for_numIslands(grid, i, j, visited);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    // time and space complexity are both O(M * N);
+
+    // BFS approach
+    int numIslands(vector<vector<char>>& grid) {
+        int count = 0;
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == '1' && (!visited[i][j])) {
+                    queue<pair<int, int>> q;
+                    q.push(pair<int, int>(i, j));
+                    while (!q.empty()) {
+                        auto temp = q.front();
+                        q.pop();
+                        visited[temp.first][temp.second] = true;
+                        if (temp.first + 1 < grid.size() && grid[temp.first + 1][temp.second] == '1' && !visited[temp.first + 1][temp.second]) {
+                            q.push(pair<int, int>(temp.first + 1, temp.second));
+                        }
+                        if (temp.second + 1 < grid[0].size() && grid[temp.first][temp.second + 1] == '1' && !visited[temp.first][temp.second + 1]) {
+                            q.push(pair<int,int>(temp.first, temp.second + 1));
+                        }
+                        if (temp.first - 1 >= 0 && grid[temp.first - 1][temp.second] == '1' && !visited[temp.first - 1][temp.second]) {
+                            q.push(pair<int, int>(temp.first - 1, temp.second));
+                        }
+                       if (temp.second - 1 >= 0 && grid[temp.first][temp.second - 1] == '1' && !visited[temp.first][temp.second - 1]) {
+                            q.push(pair<int, int>(temp.first, temp.second - 1));
+                        }
+                    }
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    //LC 109 Convert Sorted List to Binary Search Tree
+
+    ListNode* findMidNode(ListNode* head) {
+        ListNode* Next;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast && fast->next) {
+            Next = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        if (Next) {
+            Next->next = nullptr;
+        }
+        return slow;
+    }    
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (head == nullptr) {
+            return nullptr;
+        }
+        ListNode* mid = findMidNode(head);
+        TreeNode* root = new TreeNode(mid->val);
+        if (head == mid) {
+            return root;
+        }
+        root->left = sortedListToBST(head);
+        root->right = sortedListToBST(mid->next);
+        return root;
+    }
 
 
 private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
