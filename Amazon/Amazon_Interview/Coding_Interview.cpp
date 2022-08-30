@@ -661,6 +661,61 @@ public:
     }
 
 
+    //LC 22. Generate Parentheses
+    void allPossibleParentheses(string curr, int open, int close, int n, vector<string>& ans) {
+        if (open == n & close == n) {
+            ans.push_back(curr);
+            return;
+        }
+        if (open < n) {
+            allPossibleParentheses(curr + '(', open + 1, close, n, ans);
+        }
+        if (close < open) {
+            allPossibleParentheses(curr + ')', open, close + 1, n, ans);
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        allPossibleParentheses("", 0, 0, n, ans);
+        return ans;
+    }
+
+    // LC 105. Construct Binary Tree from Preorder and Inorder Traversal
+    TreeNode* traversal(vector<int>& preorder, vector<int>& inorder) {
+        if (preorder.size() == 0) {
+            return nullptr;
+        }
+        int rootVal = preorder[0];
+        TreeNode* root = new TreeNode(rootVal);
+        if (preorder.size() == 1) {
+            return root;
+        }
+        int delimiter;
+        for (int i = 0; i < inorder.size(); i++) {
+            if (inorder[i] == rootVal) {
+                delimiter = i;
+            }
+        }
+        vector<int> leftInorder(inorder.begin(), inorder.begin() + delimiter);
+        vector<int> rightInorder(inorder.begin() + delimiter + 1, inorder.end());
+
+        for (int i = 0; i < preorder.size() - 1; i++) {
+            preorder[i] = preorder[i + 1];
+        }
+        preorder.pop_back();
+        vector<int> leftPreorder(preorder.begin(), preorder.begin() + leftInorder.size());
+        vector<int> rightPreorder(preorder.begin() + leftInorder.size(), preorder.end());
+        root->left = traversal(leftPreorder, leftInorder);
+        root->right = traversal(rightPreorder, rightInorder);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        TreeNode* root = traversal(preorder, inorder);
+        return root;    
+    }
+
+
+
 
 private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
 
