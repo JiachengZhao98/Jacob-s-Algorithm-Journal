@@ -21,7 +21,7 @@ using namespace::std;
 
 //made by Jacob Zhao
 
-// suggestions of improvement are strongly recommended
+// suggestions of improvement are strongly recommended and
 
  // Definition for a binary tree node.
   struct TreeNode {
@@ -507,5 +507,140 @@ public:
         return count;
     }
 
+    // Linked List
+    //206. Reverse Linked List
+    ListNode* reverseList(ListNode* head) {
+        if (head == nullptr) {
+            return head;
+        }
+        stack<int> s;
+        ListNode* dummy = head;
+        while (dummy != nullptr) {
+            s.push(dummy->val);
+            dummy = dummy->next;
+        }
+        dummy = head;
+        while (!s.empty()) {
+            dummy->val = s.top();
+            s.pop();
+            dummy = dummy->next;
+        }
+        return head;
+    }
 
+    // LC 141. Linked List Cycle
+    // initutive approach: hash table 
+    // pass
+
+    // O(1) space approach
+    bool hasCycle(ListNode *head) {
+        if (head == nullptr) 
+            return false;
+        if (head->next == head) 
+            return true;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast)
+                return true;
+        }
+        return false;
+    }
+
+    // LC 21. Merge Two Sorted Lists
+    void compare(ListNode* list1, ListNode* list2, ListNode* dummy) {
+        if (list1 == nullptr) {
+            dummy->next = list2;
+            return;
+        }
+        if (list2 == nullptr) {
+            dummy->next = list1;
+            return;
+        }
+        if (list1->val <= list2->val) {
+            dummy->next = list1;
+            dummy = dummy->next;
+            compare(list1->next, list2, dummy);
+        }
+        else {
+            dummy->next = list2;
+            dummy = dummy->next;
+            compare(list1, list2->next, dummy);
+        }
+    }
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (list1 == nullptr) {
+            return list2;
+        }
+        if (list2 == nullptr) {
+            return list1;
+        }
+        ListNode* dummy = new ListNode();
+        compare(list1, list2, dummy);
+        return dummy->next;
+
+    }
+
+    // LC 19. Remove Nth Node From End of List
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if (head->next == nullptr) {
+            return nullptr;
+        }
+        stack<ListNode*> s;
+        ListNode* fakeHead = new ListNode();
+        fakeHead->next = head;                 // use a dummy to replace the real head, in order to avoid the situation that n = linkedList's size
+        ListNode* dummy = fakeHead;
+        while (dummy != nullptr) {
+            s.push(dummy);
+            dummy = dummy->next;
+        }
+        int count = 0;
+        while (!s.empty()) {
+            count++;
+            if (count == n + 1) {
+                s.top()->next = s.top()->next->next;
+                break;
+            }
+            s.pop();
+        }
+        return fakeHead->next;
+    }
+
+    // LC 143. Reorder List
+    void reorderList(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return;
+        }
+        queue<ListNode*> q;         //regular sequence
+        stack<ListNode*> s;          // reverse sequence
+        ListNode* dul = head;
+        ListNode* dummyHead = head;
+        while (dul != nullptr) {
+            q.push(dul);
+            s.push(dul);
+            dul = dul->next;
+        }
+        int length = s.size();          // the size of this linked list
+        q.pop();                     // remove the first one in queue, which is head
+        int count = 1;           
+        while (count < length) {       // break the loop when we get the whole list
+            if (count % 2) {
+                s.top()->next = nullptr;   // make each s.top()->next = nullptr to avoid possible circle
+                dummyHead->next = s.top();
+                dummyHead = dummyHead->next;
+                s.pop();
+                count++;
+            }
+            else {
+                q.front()->next = nullptr;         // same as before. To avoid possible circle
+                dummyHead->next = q.front();
+                dummyHead = dummyHead->next;
+                q.pop();
+                count++;   
+            }
+        }
+        return;
+    }
 };
