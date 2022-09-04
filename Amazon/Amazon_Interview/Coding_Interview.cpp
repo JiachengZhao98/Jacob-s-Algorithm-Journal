@@ -416,8 +416,7 @@ public:
 
 
     // DFS approach
-    map<int, multimap<int, int>> columnTable;
-    void dfs_for_verticalOrder(TreeNode* root, int column, int row) {
+    void dfs_for_verticalOrder(TreeNode* root, int column, int row, map<int, multimap<int, int>>& columnTable) {
         if (root == nullptr) {
             return;
         }
@@ -425,15 +424,16 @@ public:
             columnTable.insert(pair<int, multimap<int, int>>(column, multimap<int, int>()));
         }
         columnTable.find(column)->second.insert(pair<int, int>(row, root->val));
-        dfs_for_verticalOrder(root->left, column - 1, row + 1);
-        dfs_for_verticalOrder(root->right, column + 1, row + 1);
+        dfs_for_verticalOrder(root->left, column - 1, row + 1, columnTable);
+        dfs_for_verticalOrder(root->right, column + 1, row + 1, columnTable);
     }
-    vector<vector<int>> verticalOrder_DFS(TreeNode* root) {
+    vector<vector<int>> verticalOrder(TreeNode* root) {
         vector<vector<int>> res;
         if (root == NULL) {
             return res;
         }
-        dfs_for_verticalOrder(root, 0, 0);
+        map<int, multimap<int, int>> columnTable;
+        dfs_for_verticalOrder(root, 0, 0, columnTable);
         for (auto iter = columnTable.begin(); iter != columnTable.end(); iter++) {
             vector<int> temp;
             for (auto a = iter->second.begin(); a != iter->second.end(); a++) {
@@ -642,7 +642,7 @@ public:
             fast = fast->next->next;
         }
         if (Next) {
-            Next->next = nullptr;
+            Next->next = nullptr;         // Handling the case when slowPtr was equal to head.
         }
         return slow;
     }    
@@ -663,7 +663,7 @@ public:
 
     //LC 22. Generate Parentheses
     void allPossibleParentheses(string curr, int open, int close, int n, vector<string>& ans) {
-        if (open == n & close == n) {
+        if (open == n && close == n) {
             ans.push_back(curr);
             return;
         }
@@ -715,6 +715,38 @@ public:
     }
 
 
+    // LC 79. Word Search
+    bool dfsForWorldSearch(vector<vector<char>>& board, int i, int j, string word, vector<vector<bool>>& visited, int count) {
+    if (count == word.size()) return true;
+    if (i < 0 || j < 0 || i >= board.size() || j >= board[0].size() || visited[i][j]) {
+        return 0;
+    }
+    if (board[i][j] != word[count]) {
+        return 0;
+    }
+    visited[i][j] = 1;
+    bool b1 = dfsForWorldSearch(board, i + 1, j, word, visited, count + 1);
+    bool b2 = dfsForWorldSearch(board, i - 1, j, word, visited, count + 1);
+    bool b3 = dfsForWorldSearch(board, i, j + 1, word, visited, count + 1);
+    bool b4 = dfsForWorldSearch(board, i, j - 1, word, visited, count + 1);
+    if (b1 || b2 || b3 || b4) return true;
+    visited[i][j] = 0;
+    return false;
+    
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        vector<vector<bool>> visited(board.size(), vector<bool>(board[0].size(), 0));
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board[0].size(); j++) {
+                if (board[i][j] == word[0]) {
+                    if (dfsForWorldSearch(board, i, j, word, visited, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 
 private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
