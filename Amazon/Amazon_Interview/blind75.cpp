@@ -643,4 +643,51 @@ public:
         }
         return;
     }
+
+    // LC 104. Maximum Depth of Binary Tree
+    void dfsFOrMaxDepth(TreeNode* root, int count, int& depth) {
+        if (root == nullptr) {
+            return;
+        }
+        count++;
+        depth = max(depth, count);
+        dfsFOrMaxDepth(root->left, count, depth);
+        dfsFOrMaxDepth(root->right, count, depth);
+    }
+    int maxDepth(TreeNode* root) {
+        int depth = 0;
+        dfsFOrMaxDepth(root, 0, depth);
+        return depth;
+    }
+
+
+    // LC 100. Same Tree
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        queue<TreeNode*> que;
+        queue<TreeNode*> que2; 
+        if (p == NULL && q == NULL)
+        {
+            return true;
+        }   
+        que.push(p);
+        que2.push(q);
+        while (!que.empty())
+        {
+                TreeNode* node = que.front();
+                que.pop();
+                TreeNode* node2 = que2.front();
+                que2.pop();
+                if (node == NULL && node2 == NULL) continue;
+                if ( (node == NULL && node2 != NULL) || (node != NULL && node2 == NULL) || (node->val != node2->val))
+                {
+                    return false;
+                }
+                    que.push(node->left);
+                    que2.push(node2->left);
+
+                    que.push(node->right);
+                    que2.push(node2->right);
+        }
+        return true;
+    }
 };
