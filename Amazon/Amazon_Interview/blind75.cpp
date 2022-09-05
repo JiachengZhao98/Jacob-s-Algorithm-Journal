@@ -678,8 +678,7 @@ public:
                 TreeNode* node2 = que2.front();
                 que2.pop();
                 if (node == NULL && node2 == NULL) continue;
-                if ( (node == NULL && node2 != NULL) || (node != NULL && node2 == NULL) || (node->val != node2->val))
-                {
+                if ( (node == NULL && node2 != NULL) || (node != NULL && node2 == NULL) || (node->val != node2->val)) {
                     return false;
                 }
                     que.push(node->left);
@@ -690,4 +689,97 @@ public:
         }
         return true;
     }
+
+    // LC 226. Invert Binary Tree
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == nullptr) return root;
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            TreeNode* temp = q.front();
+            q.pop();
+            if (temp->left) q.push(temp->left);
+            if (temp->right) q.push(temp->right);
+
+            TreeNode* temporary =  temp->left;
+            temp->left = temp->right;
+            temp->right = temporary;
+        }
+        return root;
+    }
+
+
+    // LC 105 Construct Binary Tree from Preorder and Inorder Traversal
+
+    TreeNode* traversal(vector<int>& preorder, vector<int>& inorder) {
+        if (preorder.size() == 0) {
+            return nullptr;
+        }
+        int rootVal = preorder[0];
+        int delimiter = -1;
+        for (int i = 0; i < inorder.size(); i++) {
+            if (inorder[i] == rootVal) {
+                delimiter = i; 
+            }
+        }
+        vector<int> leftInorder(inorder.begin(), inorder.begin() + delimiter);
+        vector<int> rightInorder(inorder.begin() + delimiter + 1, inorder.end());
+        for (int i = 0; i < preorder.size() - 1; i++) {
+            preorder[i] = preorder[i + 1];
+        }
+        preorder.pop_back();
+        vector<int> leftPreorder(preorder.begin(), preorder.begin() + leftInorder.size());
+        vector<int> rightPreorder(preorder.begin() + leftInorder.size(), preorder.end());
+        TreeNode* root = new TreeNode(rootVal);
+        root->left = traversal(leftPreorder, leftInorder);
+        root->right = traversal(rightPreorder, rightInorder);
+        return root;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        auto root = traversal(preorder, inorder);
+        return root;
+    }
+
+
+    // LC 98. Validate Binary Search Tree
+    
+    // we use inorder traversal since the sequence of inorder is "left, node, right" 
+	 //  In this case when we get the whole sequence number of inorder traversal, 
+	 // each number should be smaller than the next one if it is a BST
+	 
+    void inorder(TreeNode* root, bool& isValid, vector<int>& rec) {
+        if (root == nullptr) return;
+        inorder(root->left, isValid, rec);
+        rec.push_back(root->val);
+        if (rec.size() >= 2) {
+            if (rec[rec.size() - 1] <= rec[rec.size() - 2]) {
+                isValid = 0;                     // change isValid to false if we find one number is greater than or equal to the next one 
+            }
+        }
+        inorder(root->right, isValid, rec);
+    }
+    
+    bool isValidBST(TreeNode* root) {
+        if (root == nullptr) {
+            return 1;
+        }
+        vector<int> rec;
+        inorder(root, isValid, rec);
+        return isValid;
+    }
+
+    // LC 235. Lowest Common Ancestor of a Binary Search Tree
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (p == root || q == root) {
+            return root;
+        } 
+        
+
+    }
+
+
+private:
+    bool isValid = 1;
 };
+
+
