@@ -1,5 +1,4 @@
 //
-//  main.cpp
 //  Blind 75
 //
 //  Created by Jiacheng Zhao on 8/27/22.
@@ -21,7 +20,7 @@ using namespace::std;
 
 //made by Jacob Zhao
 
-// suggestions of improvement are strongly recommended and
+// suggestions of improvement are strongly recommended and welcomed
 
  // Definition for a binary tree node.
   struct TreeNode {
@@ -773,8 +772,31 @@ public:
         if (p == root || q == root) {
             return root;
         } 
-        
-
+        unordered_map<TreeNode*, TreeNode*> child_parent;
+        child_parent.insert(pair<TreeNode*, TreeNode*>(root, nullptr));
+        queue<TreeNode*> que;
+        que.push(root);
+        while (child_parent.find(p) != child_parent.end() || child_parent.find(q) != child_parent.end()) {
+            TreeNode* curr = que.front();
+            que.pop();
+            if (curr->left) {
+                que.push(curr->left);
+                child_parent.insert(pair<TreeNode*, TreeNode*>(curr->left, curr));
+            }
+            if (curr->right) {
+                que.push(curr->right);
+                child_parent.insert(pair<TreeNode*, TreeNode*>(curr->right, curr));
+            }
+        }
+        unordered_set<TreeNode*> mySet;
+        while (p != nullptr) {
+            mySet.insert(p);
+            p = child_parent.find(p)->second;
+        }
+        while (mySet.find(q) == mySet.end()) {
+            q = child_parent.find(q)->second;
+        }
+        return q;
     }
 
 
