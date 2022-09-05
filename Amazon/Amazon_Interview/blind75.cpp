@@ -800,6 +800,21 @@ public:
     }
 
 
+    // LC 230. Kth Smallest Element in a BST
+    void inorderForK(TreeNode* root, vector<int>& record) {
+        if (root == nullptr) {
+            return;
+        }
+        inorderForK(root->left, record);
+        record.push_back(root->val);
+        inorderForK(root->right, record);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        vector<int> record;
+        inorderForK(root, record);
+        return record[k - 1];
+    }
+
 private:
     bool isValid = 1;
 };

@@ -52,6 +52,78 @@ public:
     }
 };
 
+struct Node_trie{
+        Node_trie* links[26];
+        bool flag;
+
+        bool containsKey(char ch) {
+            return links[ch - 'a'] != nullptr;
+        }
+
+        void put(char ch, Node_trie* node_trie) {
+            links[ch - 'a'] = node_trie;
+        }
+
+        Node_trie* get(char ch) {
+            return links[ch - 'a'];
+        }
+
+        void setEnd() {
+            flag = 1;
+        }
+
+        bool isEnd() {
+            return flag;
+        }
+    };
+
+class Trie{
+private:
+    Node_trie* root;
+
+public:
+    Trie() {
+        root = new Node_trie();
+    }
+
+    void insert(string word) {
+        Node_trie* node = root;
+        for (int i = 0; i < word.size(); i++) {
+            if (!node->containsKey(word[i])) {
+                node->put(word[i], new Node_trie());
+            }
+            node = node->get(word[i]);
+        }
+        node->setEnd();
+    }
+
+    bool search(string word) {
+        Node_trie* node = root;
+        for (int i = 0; i < word.size(); i++) {
+            if (!node->containsKey(word[i])) {
+                return false;
+            }
+            node = node->get(word[i]);
+        }
+        return node->isEnd();
+    }
+
+     bool startsWith(string prefix) {
+        
+        Node_trie* node = root;
+        for(int i=0;i<prefix.length();i++)
+        {
+            if(!node->containsKey(prefix[i]))
+            {
+                return false;
+            }
+            node=node->get(prefix[i]);
+        }
+        return true;
+        
+    }
+};
+
 
 class Solution {
 public:
@@ -717,7 +789,7 @@ public:
 
     // LC 79. Word Search
     bool dfsForWorldSearch(vector<vector<char>>& board, int i, int j, string word, vector<vector<bool>>& visited, int count) {
-    if (count == word.size()) return true;
+    if (count == word.size()) return 1;
     if (i < 0 || j < 0 || i >= board.size() || j >= board[0].size() || visited[i][j]) {
         return 0;
     }
@@ -747,6 +819,8 @@ public:
         }
         return false;
     }
+
+
 
 
 private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
