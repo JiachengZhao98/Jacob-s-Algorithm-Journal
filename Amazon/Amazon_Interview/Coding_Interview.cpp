@@ -820,10 +820,78 @@ public:
         return false;
     }
 
+    // LC 62. Unique Paths
+
+    // DFS approach
+
+    void dfs_uniquePath(vector<vector<int>> grid, int i, int j) {
+        if (i >= grid.size() || j >= grid[0].size()) {
+            return;
+        }
+        if (grid[i][j] == 2) {
+            path_count++;
+            return;
+        }
+        dfs_uniquePath(grid, i + 1, j);
+        dfs_uniquePath(grid, i, j + 1);
+    }
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> grid(m, vector<int>(n, 1));
+        grid[m - 1][n - 1] = 2;
+        dfs_uniquePath(grid, 0, 0);
+        return path_count;
+    }
+
+
+    // DP approach
+    int uniquePaths_DP(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        for (int i = 0; i < m; i++) {
+            dp[i][n - 1]  = 1;
+        }
+        for (int i = 0; i < n; i++) {
+            dp[m - 1][i] = 1;
+        }
+        for (int i = m - 2; i >= 0; i--) {
+            for (int j = n - 2; j >= 0; j--) {
+                dp[i][j] = dp[i + 1][j] + dp[i][j + 1];
+            }
+        }
+        return dp[0][0];
+    }
+
+    // LC 322. Coin Change
+    int coinChange(vector<int>& coins, int amount) {
+        if (amount == 0) return 0;
+        vector<int> dp(amount + 1, amount + 1);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            for (int j = 0; j < coins.size(); j++) {
+                if (coins[j] <= i) {
+                    dp[i] = min(dp[i], dp[i - coins[j]] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    // LC 518. Coin Change 2
+    int change(int amount, vector<int>& coins) {
+        vector<int> rec(amount + 1, 0);
+        rec[0] = 1;
+        for (auto coin : coins) {
+            for (int i = coin; i <= amount; i++) {
+                rec[i] += rec[i - coin];
+            }
+        }
+        return rec[amount];
+    }
 
 
 
-private: unordered_map<Node*, Node*> visited_clone_graph_dfs;
+private: 
+    unordered_map<Node*, Node*> visited_clone_graph_dfs;
+    int path_count = 0;
 
 };
 
