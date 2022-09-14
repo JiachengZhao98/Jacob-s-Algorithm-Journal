@@ -21,7 +21,7 @@ using namespace::std;
       TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
   };
 
-  
+
  // Definition for singly-linked list.
   struct ListNode {
       int val;
@@ -109,7 +109,7 @@ public:
     }
 
      bool startsWith(string prefix) {
-        
+
         Node_trie* node = root;
         for(int i=0;i<prefix.length();i++)
         {
@@ -120,7 +120,7 @@ public:
             node=node->get(prefix[i]);
         }
         return true;
-        
+
     }
 };
 
@@ -160,7 +160,7 @@ public:
         return res;
     }
     // time and space complexity: O(N), N is the number of nodes
-    
+
     // LC 242. Valid Anagram
     bool isAnagram(string s, string t) {
         unordered_map<char, int> myMap;
@@ -181,13 +181,13 @@ public:
         }
         return myMap.empty();
     }
-    
-    
+
+
     // for possible follow up: optimization
-    
+
     bool isAnagram_2(string s, string t) {
         int record[26] = {0};
-        
+
         for (int i =0; i < s.size(); i++) {
             record[s[i] - 'a']++;
         }
@@ -201,7 +201,7 @@ public:
         }
         return true;
     }
-    
+
     //LC 64 Min Path Sum
     // DFS exceeds time limit
     int res = INT_MAX;
@@ -217,7 +217,7 @@ public:
         dfs(grid, i + 1, j, sum);
         dfs(grid, i, j + 1, sum);
     }
-    
+
     int minPathSum_notPass(vector<vector<int>>& grid) {
         dfs(grid, 0, 0, 0);
         return res;
@@ -355,9 +355,9 @@ public:
         }
         return q;
     }
-    
+
     // LC 347. Top K Frequent Elements
-    
+
     vector<int> topKFrequent(vector<int>& nums, int k) {
             if (nums.size() == 1) return {nums[0]};
             unordered_map<int,int> myMap;
@@ -380,7 +380,7 @@ public:
             }
             return res;
         }
-    
+
     // Lc 198. House Robber
     // dynamic programming
     int rob(vector<int>& nums) {
@@ -396,7 +396,7 @@ public:
         return maxSum[0];
     }
     // time complexity: O(N), space complexity: O(N)
-    
+
     // For possible follow up:
     // optimization for LC 198: discard the dp table and just use two variables to store the largest sum
     int rob_optinization(vector<int>& nums) {
@@ -413,9 +413,9 @@ public:
             return maxSum_nums_size_minus_1;
         }
     // time complexity: O(N), space complexity: O(1)
-    
+
     //LC 151. Reverse Words in a String
-    
+
     string reverseWords(string s) {
             reverse(s.begin(), s.end());
             int i = 0;
@@ -450,18 +450,18 @@ public:
             return res;
         }
         // time complexity: O(N), space cpmplexity: O(N)
-    
-    
-    
+
+
+
     //LC 314. Binary Tree Vertical Order Traversal
-    
+
     // BFS approach
     vector<vector<int>> verticalOrder_BFS(TreeNode* root) {
         vector<vector<int>> res;
         if (root == NULL) {
             return res;
         }
-        map<int, vector<int>> columnTable;    
+        map<int, vector<int>> columnTable;
         queue<pair<TreeNode*, int>> myQ;
         myQ.push(pair<TreeNode*, int>(root, 0));
         while (!myQ.empty()) {
@@ -515,7 +515,7 @@ public:
         }
         return res;
     }
-    // Time Complexity: O(W⋅HlogH)), where Wis the width of the binary tree (i.e. the number of columns in the result) 
+    // Time Complexity: O(W⋅HlogH)), where Wis the width of the binary tree (i.e. the number of columns in the result)
     // and H is the height of the tree.
     // space complexity: O(N), where N is the number of all nodes
 
@@ -611,7 +611,7 @@ public:
         else return head;
     }
 
-        // use stack 
+        // use stack
     ListNode* reverseBetween(ListNode* head, int left, int right) {
         ListNode* newHead = head;
         ListNode* resHead = head;
@@ -635,10 +635,10 @@ public:
         }
         return resHead;
     }
-    // time and space complexity are both O(N). 
+    // time and space complexity are both O(N).
     // We do not need to change the 'next' pointer in order to reverse the linked list. We can just change the corresponding
-    // nodes' values to achieve this goal. 
-    
+    // nodes' values to achieve this goal.
+
 
     //LC 200. Number of Islands
     // DFS approach
@@ -647,7 +647,7 @@ public:
             return;
         }
         if (visited[i][j]) return;
-        if (grid[i][j] == '0') return;  
+        if (grid[i][j] == '0') return;
         visited[i][j] = true;
         dfs_for_numIslands(grid, i + 1, j, visited);
         dfs_for_numIslands(grid, i, j+ 1, visited);
@@ -717,7 +717,7 @@ public:
             Next->next = nullptr;         // Handling the case when slowPtr was equal to head.
         }
         return slow;
-    }    
+    }
     TreeNode* sortedListToBST(ListNode* head) {
         if (head == nullptr) {
             return nullptr;
@@ -783,7 +783,7 @@ public:
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
         TreeNode* root = traversal(preorder, inorder);
-        return root;    
+        return root;
     }
 
 
@@ -804,7 +804,7 @@ public:
     if (b1 || b2 || b3 || b4) return true;
     visited[i][j] = 0;
     return false;
-    
+
     }
     bool exist(vector<vector<char>>& board, string word) {
         vector<vector<bool>> visited(board.size(), vector<bool>(board[0].size(), 0));
@@ -887,16 +887,81 @@ public:
         return rec[amount];
     }
 
+    //LC 1696. Jump Game VI
+    int maxResult(vector<int>& nums, int k) {
+        if (k == 0) return 0;
+
+    }
 
 
-private: 
+    // LC 55. Jump Game
+    bool canJump(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return true;
+        }
+        int cover = nums[0];
+        for (int i = 1; i <= cover; i++) {
+            if (cover >= (nums.size() - 1)) {
+                return true;
+            }
+            cover =  max(cover, i +nums[i]);
+        }
+        return false;
+    }
+
+
+    // LC 23. Merge k Sorted Lists
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.size() == 0 or (lists.size() == 1 and lists[0] == nullptr)) {
+            return nullptr;
+        }
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for (auto list : lists) {
+            while (list != nullptr) {
+                pq.push(list->val);
+                list = list->next;
+            }
+        }
+        ListNode* head = new ListNode();
+        ListNode* head2 = head;
+        while (!pq.empty()) {
+            ListNode* temp = new ListNode(pq.top());
+            pq.pop();
+            head->next = temp;
+            head = head->next;
+        }
+        return head2->next;
+
+    }
+
+    // LC 1151. Minimum Swaps to Group All 1's Together
+    int minSwaps(vector<int>& data) {
+        int ones = 0;
+        for (auto a : data) {
+            ones += a;
+        }
+        int left = 0, right = 0, sum = 0, res = 0;
+        while (right < data.size()) {
+            sum += data[right];
+            right++;
+            if (right - left > ones) {
+                sum -= data[left];
+                left++;
+            }
+            res = max(res, sum);
+        }
+        return ones - res;
+    }
+
+
+private:
     unordered_map<Node*, Node*> visited_clone_graph_dfs;
     int path_count = 0;
 
 };
 
 int main() {
-    
+
 }
 
 

@@ -3,7 +3,6 @@
 //
 //  Created by Jiacheng Zhao on 8/27/22.
 //
-
 #include "vector"
 #include "queue"
 #include "climits"
@@ -31,7 +30,7 @@ using namespace::std;
       TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
       TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
   };
-  
+
  // Definition for singly-linked list.
   struct ListNode {
       int val;
@@ -206,7 +205,7 @@ public:
         }
     }
     // the problem requires me to use a O(logn) method, in this case I choose to use binary search
-    
+
     // LC 33. Search in Rotated Sorted Array
     int search(vector<int>& nums, int target) {
         if (nums.size() == 1) {
@@ -387,13 +386,13 @@ public:
      void dfsForSea(int i, int j, vector<vector<bool>>& visited, vector<vector<int>>& heights, int prev) {
         if (i < 0 || i >= heights.size() || j < 0 || j >= heights[0].size() || visited[i][j] || prev > heights[i][j])
             return;
-        
+
         visited[i][j]=true;
         dfsForSea(i+1,j,visited,heights,heights[i][j]);
         dfsForSea(i-1,j,visited,heights,heights[i][j]);
         dfsForSea(i,j+1,visited,heights,heights[i][j]);
         dfsForSea(i,j-1,visited,heights,heights[i][j]);
-        
+
     }
     vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
         vector<vector<int>> ans;
@@ -430,7 +429,7 @@ public:
         set<int> s;
         for (auto a : nums) {
             s.insert(a);
-        }    
+        }
         int prev = *s.begin();
         int cont = 1;
         for (auto iter = next(s.begin()); iter != s.end(); iter++) {
@@ -528,14 +527,14 @@ public:
     }
 
     // LC 141. Linked List Cycle
-    // initutive approach: hash table 
+    // initutive approach: hash table
     // pass
 
     // O(1) space approach
     bool hasCycle(ListNode *head) {
-        if (head == nullptr) 
+        if (head == nullptr)
             return false;
-        if (head->next == head) 
+        if (head->next == head)
             return true;
         ListNode* slow = head;
         ListNode* fast = head;
@@ -549,26 +548,6 @@ public:
     }
 
     // LC 21. Merge Two Sorted Lists
-    void compare(ListNode* list1, ListNode* list2, ListNode* dummy) {
-        if (list1 == nullptr) {
-            dummy->next = list2;
-            return;
-        }
-        if (list2 == nullptr) {
-            dummy->next = list1;
-            return;
-        }
-        if (list1->val <= list2->val) {
-            dummy->next = list1;
-            dummy = dummy->next;
-            compare(list1->next, list2, dummy);
-        }
-        else {
-            dummy->next = list2;
-            dummy = dummy->next;
-            compare(list1, list2->next, dummy);
-        }
-    }
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
         if (list1 == nullptr) {
             return list2;
@@ -576,10 +555,14 @@ public:
         if (list2 == nullptr) {
             return list1;
         }
-        ListNode* dummy = new ListNode();
-        compare(list1, list2, dummy);
-        return dummy->next;
-
+        if (list1->val <= list2->val) {
+            list1->next = mergeTwoLists(list1->next, list2);
+            return list1;
+        }
+        else {
+            list2->next = mergeTwoLists(list1, list2->next);
+            return list2;
+        }
     }
 
     // LC 19. Remove Nth Node From End of List
@@ -623,7 +606,7 @@ public:
         }
         int length = s.size();          // the size of this linked list
         q.pop();                     // remove the first one in queue, which is head
-        int count = 1;           
+        int count = 1;
         while (count < length) {       // break the loop when we get the whole list
             if (count % 2) {
                 s.top()->next = nullptr;   // make each s.top()->next = nullptr to avoid possible circle
@@ -637,7 +620,7 @@ public:
                 dummyHead->next = q.front();
                 dummyHead = dummyHead->next;
                 q.pop();
-                count++;   
+                count++;
             }
         }
         return;
@@ -663,11 +646,11 @@ public:
     // LC 100. Same Tree
     bool isSameTree(TreeNode* p, TreeNode* q) {
         queue<TreeNode*> que;
-        queue<TreeNode*> que2; 
+        queue<TreeNode*> que2;
         if (p == NULL && q == NULL)
         {
             return true;
-        }   
+        }
         que.push(p);
         que2.push(q);
         while (!que.empty())
@@ -718,7 +701,7 @@ public:
         int delimiter = -1;
         for (int i = 0; i < inorder.size(); i++) {
             if (inorder[i] == rootVal) {
-                delimiter = i; 
+                delimiter = i;
             }
         }
         vector<int> leftInorder(inorder.begin(), inorder.begin() + delimiter);
@@ -741,23 +724,23 @@ public:
 
 
     // LC 98. Validate Binary Search Tree
-    
-    // we use inorder traversal since the sequence of inorder is "left, node, right" 
-	 //  In this case when we get the whole sequence number of inorder traversal, 
+
+    // we use inorder traversal since the sequence of inorder is "left, node, right"
+	 //  In this case when we get the whole sequence number of inorder traversal,
 	 // each number should be smaller than the next one if it is a BST
-	 
+
     void inorder(TreeNode* root, bool& isValid, vector<int>& rec) {
         if (root == nullptr) return;
         inorder(root->left, isValid, rec);
         rec.push_back(root->val);
         if (rec.size() >= 2) {
             if (rec[rec.size() - 1] <= rec[rec.size() - 2]) {
-                isValid = 0;                     // change isValid to false if we find one number is greater than or equal to the next one 
+                isValid = 0;                     // change isValid to false if we find one number is greater than or equal to the next one
             }
         }
         inorder(root->right, isValid, rec);
     }
-    
+
     bool isValidBST(TreeNode* root) {
         if (root == nullptr) {
             return 1;
@@ -771,7 +754,7 @@ public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         if (p == root || q == root) {
             return root;
-        } 
+        }
         unordered_map<TreeNode*, TreeNode*> child_parent;
         child_parent.insert(pair<TreeNode*, TreeNode*>(root, nullptr));
         queue<TreeNode*> que;
@@ -814,6 +797,60 @@ public:
         inorderForK(root, record);
         return record[k - 1];
     }
+
+
+
+    // LC 70. Climbing Stairs
+     int climbStairs(int n) {
+        if (n == 2 or n == 1) {
+            return n;
+        }
+        vector<int> dp(n + 1, 0);
+        dp[2] = 2;
+        dp[1] = 1;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+
+    // 213. House Robber II
+    int rob_1(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return nums[0];
+        }
+        int maxSum[nums.size() + 1];
+        maxSum[nums.size()] = 0;
+        maxSum[nums.size() - 1] = nums[nums.size() - 1];
+        for (int i = nums.size() - 2; i >= 0; i--) {
+            maxSum[i] = max(maxSum[i + 1], maxSum[i + 2] + nums[i]);
+        }
+        return maxSum[0];
+    }
+
+    int rob(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return nums[0];
+        }
+        if (nums.size() == 2) {
+            return max(nums[0], nums[1]);
+        }
+        if (nums.size() == 3) {
+            return max(max(nums[0], nums[1]), nums[2]);
+        }
+        vector<int> nums_2 = nums;
+        nums_2.pop_back();
+        vector<int> temp1 = nums_2;
+        nums_2 = nums;
+        nums_2.erase(nums_2.begin());
+        vector<int> temp2 = nums_2;
+        return max(rob_1(temp1), rob_1(temp2));
+    }
+
+
+
+
 
 private:
     bool isValid = 1;
