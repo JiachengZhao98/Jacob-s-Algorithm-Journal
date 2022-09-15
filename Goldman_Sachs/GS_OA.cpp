@@ -76,7 +76,49 @@ public:
         return record.rbegin()->second;
     }
 
+    // football games
+    int findIndex(vector<int>& teamA, int a) {
+        int left = 0, right = teamA.size() - 1;
+        while (right - left > 1) {
+            int middle = (right + left) / 2;
+            if (a >= teamA[middle]) {
+                left = middle;
+                continue;
+            }
+            else {
+                right = middle;
+                continue;
+            }
+        }
+        return right;
+    }
+    vector<int> footballGames(vector<int>& teamA, vector<int>& teamB) {
+        sort(teamA.begin(), teamA.end());
+        vector<int> ans;
+        for (auto a : teamB) {
+            if (a >= teamA[teamA.size() - 1]) {
+                ans.push_back(teamA.size());
+                continue;
+            }
+            int num = findIndex(teamA, a);
+            ans.push_back(num);
+        }
+        return ans;
+    }
+
 
 private:
 
 };
+
+int main () {
+    Solution sol;
+    // vector<int> teamA = {1,2,3};
+    // vector<int> teamB = {2,3};
+    // vector<int> ans = sol.footballGames(teamA, teamB);
+    // for (auto a : ans) {
+    //     cout<<a<<endl;
+    // }
+    cout<<sol.lotteryCoupons(12)<<endl;
+    return 0;
+}
