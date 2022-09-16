@@ -227,8 +227,29 @@ public:
 
     // LC 1836. Remove Duplicates From an Unsorted Linked List
     ListNode* deleteDuplicatesUnsorted(ListNode* head) {
-
+        ListNode* dummyHead = new ListNode();
+        dummyHead->next = head;
+        unordered_map<int, int> myMap;
+        while (head != nullptr) {
+            if (myMap.find(head->val) == myMap.end()) {
+                myMap.insert(pair<int, int> (head->val, 1));
+            }
+            else myMap[head->val]++;
+            head = head->next;
+        }
+        head = dummyHead;
+        while (head->next != nullptr) {
+            if (myMap.find(head->next->val)->second >= 2) {
+                head->next = head->next->next;
+                continue;
+            }
+            head = head->next;
+        }
+        return dummyHead->next;
     }
+
+
+
 private:
 
 };
