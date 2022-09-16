@@ -8,7 +8,17 @@
 #include "unordered_set"
 #include "iostream"
 #include "deque"
+#include "sstream"
 using namespace::std;
+
+
+struct ListNode {
+      int val;
+      ListNode *next;
+      ListNode() : val(0), next(nullptr) {}
+      ListNode(int x) : val(x), next(nullptr) {}
+      ListNode(int x, ListNode *next) : val(x), next(next) {}
+  };
 
 class Solution {
 public:
@@ -106,7 +116,119 @@ public:
         return ans;
     }
 
+    // How Many Sentences
 
+    vector<int> howManySentences(vector<string>& wordSet, vector<string>& sentences) {
+        unordered_map<string, vector<string>> myMap;
+        vector<int> ans;
+        for (auto word : wordSet) {
+            string sortedWord = word;
+            sort(sortedWord.begin(), sortedWord.end());
+            myMap[sortedWord].push_back(word);
+        }
+        for (int i = 0; i < sentences.size(); i++) {
+            stringstream ss(sentences[i]);
+            string word;
+            int sum = 1;
+            while (ss >> word) {
+                sort(word.begin(), word.end());
+                if (myMap.find(word) != myMap.end()) {
+                    sum *= myMap[word].size();
+                }
+            }
+            ans.push_back(sum);
+        }
+        return ans;
+    }
+
+
+    // Remove All Adjacent Duplicates in String II / Word Compression
+
+    // exceed time limit
+    string removeDuplicates(string s, int k) {
+        if (s.size() < k) {
+            return s;
+        }
+        string s1 = s;
+        while (s1 == s) {
+            s1 = "";
+            int count = 1;
+            for (int i = 1; i < s.size(); i++) {
+                if (s[i] != s[i - 1]) {
+                    count = count % k;
+                    string temp(count, s[i - 1]);
+                    s1 += temp;
+                    count = 1;
+                }
+                else {
+                    count++;
+                }
+            }
+            count %= k;
+            string temp(count, s[s.size() - 1]);
+            s1 += temp;
+            if (s1 == s) {
+                break;
+            }
+            s = s1;
+        }
+        return s;
+    }
+
+    string removeDuplicates_2(string s, int k) {
+        int n = s.size(), i = 0, j = 0;
+        vector<int> count(n, 0);
+        for(; i < n; i++, j++) {
+            s[j] = s[i];
+            if(j > 0 && s[j] == s[j - 1]) {
+                count[j] = count[j - 1] + 1;
+            }
+            else count[j] = 1;
+            if(count[j] == k) j -= k;
+        }
+        return s.substr(0, j);
+    }
+
+
+
+    // LC 1328. Break a Palindrome
+    string breakPalindrome(string palindrome) {
+        string dul = palindrome;   // dulplicate string, INTACT
+        if (palindrome.size() == 1) {
+            return "";       // we can not break it if the length of this palindrome is 1
+        }
+        vector<int> record(26, 0);
+        for (int i = 0; i <= palindrome.size() / 2; i++) {
+            record[palindrome[i] - 'a']++;     // see if this string contains letter 'a'
+        }
+        if (record[0] == 0 || palindrome[0] != 'a') {   // if this string does NOT contain 'a' or the first letter is NOT 'a'
+            palindrome[0] = 'a';    // just change the fitst one to 'a', that's enough to break this palindrome
+            return palindrome;
+        }
+        else {
+            for (int i = 0; i < palindrome.size(); i++) {  // if this string contains 'a' and the first one is 'a'
+                if (palindrome[i] != 'a') {             // find the first letter that is NOT 'a' and change it to 'a'
+                    palindrome[i] = 'a';
+                    break;
+                }
+            }
+            string rev = palindrome;
+            reverse(rev.begin(), rev.end());
+            if (rev == palindrome) {   // two possible special situations: 1. like "aa", we can not find a letter that is not 'a';
+			//2. like "aba", when we change 'b' to 'a', we get "aaa", which is a parlindrome again! We do NOT break it !
+			//We check it if it's still a parlindrome by reverse it
+                dul[dul.size() - 1] = 'b';  // for these two situations, we simply change the last letter to 'b', that's enough
+                return dul;
+            }
+            else return palindrome;
+        }
+    }
+
+
+    // LC 1836. Remove Duplicates From an Unsorted Linked List
+    ListNode* deleteDuplicatesUnsorted(ListNode* head) {
+
+    }
 private:
 
 };
@@ -119,6 +241,13 @@ int main () {
     // for (auto a : ans) {
     //     cout<<a<<endl;
     // }
-    cout<<sol.lotteryCoupons(12)<<endl;
+    // cout<<sol.lotteryCoupons(12)<<endl;
+
+    vector<string> wordSet = {"the", "bats", "tabs", "in", "cat", "act"};
+    vector<string> sentences = {"cat the bats", "in the act", "act tabs in"};
+    vector<int> ans = sol.howManySentences(wordSet, sentences);
+    for (auto a : ans) {
+        cout<<a<<endl;
+    }
     return 0;
 }
