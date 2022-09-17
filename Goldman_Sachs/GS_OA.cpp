@@ -9,6 +9,7 @@
 #include "iostream"
 #include "deque"
 #include "sstream"
+#include "bitset"
 using namespace::std;
 
 
@@ -22,6 +23,13 @@ struct ListNode {
 
 class Solution {
 public:
+
+    // LC 780. Reaching Points
+
+    // isPossible
+
+    // recursive approach
+
     bool dfs(int sx, int sy, int tx, int ty) {
         if (sx >tx or sy > ty) {
             return 0;
@@ -33,12 +41,6 @@ public:
         bool temp2 = dfs(sx + sy, sy, tx, ty);
         return temp1 || temp2;
     }
-
-    // LC 780. Reaching Points
-
-    // isPossible
-
-    // recursive approach
     bool reachingPoints_recursive(int sx, int sy, int tx, int ty) {
        return dfs(sx, sy, tx, ty);
     }
@@ -70,7 +72,19 @@ public:
     int lotteryCoupons(int n) {
         unordered_map<int, int> myMap;
         for (int i = 1; i <= n; i++) {
-            int sumDigits = i / 10 + i % 10;
+            int sumDigits;
+            if (i == 10000) {
+                sumDigits = 1;
+            }
+            else {
+                int thousands = i / 1000;
+                i %= 1000;
+                int hundreds = i / 100;
+                i %= 100;
+                int tens = i / 10;
+                int ones = i % 10;
+                sumDigits = thousands + hundreds + tens + ones;
+            }
             if (myMap.find(sumDigits) == myMap.end()) {
                 myMap.insert(pair<int, int>(sumDigits, 1));
             }
@@ -143,6 +157,8 @@ public:
 
 
     // Remove All Adjacent Duplicates in String II / Word Compression
+
+    // LC 1209
 
     // exceed time limit
     string removeDuplicates(string s, int k) {
@@ -318,6 +334,40 @@ public:
         return ans;
     }
 
+
+    // Lc 1356. Sort Integers by The Number of 1 Bits
+    vector<int> sortByBits(vector<int>& arr) {
+        vector<vector<int>> a;
+		for(int i=0;i<arr.size();i++) {
+			int x=arr[i],c=0;
+			while(x) {
+				if(x&1) c++;
+				x>>=1;
+			}
+			a.push_back({c,arr[i]});
+		}
+		sort(a.begin(),a.end());
+		for(int i=0;i<a.size();i++) {
+			arr[i]=a[i][1];
+		}
+		return arr;
+    }
+
+    // the perfect team
+    int thePerfectTeam(string skills) {
+        map<char, int> myMap;
+        for (auto skill : skills) {
+            myMap[skill]++;
+        }
+        return myMap.begin()->second;
+    }
+
+
+    //  Cutting Metal Surplus
+    int  CuttingMetalSurplus() {
+
+    }
+
 private:
 
 };
@@ -332,11 +382,16 @@ int main () {
     // }
     // cout<<sol.lotteryCoupons(12)<<endl;
 
-    vector<string> wordSet = {"the", "bats", "tabs", "in", "cat", "act"};
-    vector<string> sentences = {"cat the bats", "in the act", "act tabs in"};
-    vector<int> ans = sol.howManySentences(wordSet, sentences);
-    for (auto a : ans) {
-        cout<<a<<endl;
-    }
+    // vector<string> wordSet = {"the", "bats", "tabs", "in", "cat", "act"};
+    // vector<string> sentences = {"cat the bats", "in the act", "act tabs in"};
+    // vector<int> ans = sol.howManySentences(wordSet, sentences);
+    // for (auto a : ans) {
+    //     cout<<a<<endl;
+    // }
+
+
+    string skills = "pcmbzpcmbz";
+    int ans = sol.thePerfectTeam(skills);
+    cout<<ans<<endl;
     return 0;
 }
