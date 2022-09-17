@@ -296,6 +296,28 @@ public:
         return ans;
     }
 
+
+    // LC 1010. Pairs of Songs With Total Durations Divisible by 60
+    // Whole Minute Dilemma
+
+    // within 15 lines of code
+
+    int numPairsDivisibleBy60(vector<int>& time) {
+        int ans = 0;
+        unordered_map<int, int> myMap;
+        for (int i = 0; i < time.size(); i++) {
+            int mod = time[i] % 60;
+            if (mod == 0) {
+                ans += myMap[mod];
+                myMap[mod]++;
+                continue;
+            }
+            ans += myMap[60 - mod];
+            myMap[mod]++;
+        }
+        return ans;
+    }
+
 private:
 
 };
