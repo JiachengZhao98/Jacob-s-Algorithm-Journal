@@ -273,10 +273,27 @@ public:
 
 
 
-
     // LC 696. Count Binary Substrings
+    int countStrings(string s, int lo, int hi) {
+        int ans = 0;
+        while (lo >= 0 && hi < s.size()) {
+            ans++;
+            lo--;
+            hi++;
+            if (lo < 0 || hi > s.size() - 1 || s[lo] != s[lo + 1] || s[hi] != s[hi - 1]) {
+                break;
+            }
+        }
+        return ans;
+    }
     int countBinarySubstrings(string s) {
-
+        int ans = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] != s[i + 1]) {
+                ans += countStrings(s, i, i + 1);
+            }
+        }
+        return ans;
     }
 
 private:
