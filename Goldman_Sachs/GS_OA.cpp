@@ -10,6 +10,7 @@
 #include "deque"
 #include "sstream"
 #include "bitset"
+#include "cmath"
 using namespace::std;
 
 
@@ -364,9 +365,56 @@ public:
 
 
     //  Cutting Metal Surplus
-    int  CuttingMetalSurplus() {
-
+    int  CuttingMetalSurplus(int costPerCut, int salePrice, vector<int>& lengths) {
+        int maxProfit = 0;
+        int maxLength = INT_MIN;
+        for (auto length : lengths) {
+            maxLength = max(length, maxLength);
+        }
+        for (int i = 1; i <= maxLength; i++) {
+            int sale_price_per_rod = salePrice * i;
+            int profit = 0;
+            for (auto length : lengths) {
+                int uniform_rods = length / i;
+                if (uniform_rods > 0) {
+                    int extra_cut;
+                    if (length % i > 0) {
+                        extra_cut = 1;
+                    }
+                    else extra_cut = 0;
+                    int total_cuts = uniform_rods - 1 + extra_cut;
+                    int costs = total_cuts * costPerCut;
+                    int revenues = uniform_rods * sale_price_per_rod;
+                    if (revenues > costs)
+                        profit += revenues - costs;
+                }
+            }
+            maxProfit = max(profit, maxProfit);
+        }
+        return maxProfit;
     }
+
+
+    // good array
+    vector<int> goodArray(int N, vector<vector<int>>& queries) {
+        deque<int> goodArray;
+        vector<int> ans;
+        while (N) {
+            int power = log2(N);
+            goodArray.push_front(pow(2, power));
+            N -= pow(2, power);
+        }
+        for (auto query : queries) {
+                int temp = 1;
+                for (int i = query[0] - 1; i <= query[1] - 1; i++) {
+                    temp *= goodArray[i];
+                }
+                ans.push_back(temp % query[2]);
+        }
+        return ans;
+    }
+
+
 
 private:
 
@@ -390,8 +438,18 @@ int main () {
     // }
 
 
-    string skills = "pcmbzpcmbz";
-    int ans = sol.thePerfectTeam(skills);
-    cout<<ans<<endl;
+    // string skills = "pcmbzpcmbz";
+    // int ans = sol.thePerfectTeam(skills);
+    // cout<<ans<<endl;
+
+    // vector<int> lengths = {26, 103, 59};
+    // int ans = sol.CuttingMetalSurplus(1, 10, lengths);
+    // cout<<ans<<endl;
+
+    vector<vector<int>> queries = {{1,2,4},{2,2,8}, {1,1,4}};
+    vector<int> ans = sol.goodArray(6, queries);
+    for (auto a : ans) {
+        cout<<a<<endl;
+    }
     return 0;
 }
