@@ -337,6 +337,7 @@ public:
 
 
     // Lc 1356. Sort Integers by The Number of 1 Bits
+    // Cardinality Sorting
     vector<int> sortByBits(vector<int>& arr) {
         vector<vector<int>> a;
 		for(int i=0;i<arr.size();i++) {
@@ -416,6 +417,34 @@ public:
 
 
 
+    // Palindrome Subsequences
+    long PalindromeSubsequences(string s) {
+        long ans = 0;
+        int len = s.size();
+        vector<vector<int>> dp(len, vector<int>(len, 0));
+
+      for(int i = len - 2;i >= 0; --i){
+        for(int j = i + 2; j < len; ++j){
+          dp[i][j] = dp[i][j-1] + (dp[i + 1][j] == dp[i + 1][j-1] ? 0 : dp[i + 1][j] - dp[i + 1][j - 1]);
+          if(s[i] == s[j]){
+            dp[i][j] += j - i - 1;
+          }
+        }
+      }
+
+      for(int i = 0; i < len; ++i){
+        for(int j = i + 4; j < len; ++j){
+          if(s[i] == s[j]){
+            ans += dp[i + 1][j - 1];
+          }
+        }
+      }
+      ans = ans % (1000000000 + 7);
+
+      return ans;
+    }
+
+
 private:
 
 };
@@ -446,10 +475,12 @@ int main () {
     // int ans = sol.CuttingMetalSurplus(1, 10, lengths);
     // cout<<ans<<endl;
 
-    vector<vector<int>> queries = {{1,2,4},{2,2,8}, {1,1,4}};
-    vector<int> ans = sol.goodArray(6, queries);
-    for (auto a : ans) {
-        cout<<a<<endl;
-    }
+    // vector<vector<int>> queries = {{1,2,84},{2,2,3}};
+    // vector<int> ans = sol.goodArray(12, queries);
+    // for (auto a : ans) {
+    //     cout<<a<<endl;
+    // }
+
+    cout<<sol.PalindromeSubsequences("11111")<<endl;
     return 0;
 }

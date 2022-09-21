@@ -9,7 +9,8 @@
     "functional": "cpp",
     "string": "cpp",
     "unordered_map": "cpp",
-    "unordered_set": "cpp"
+    "unordered_set": "cpp",
+    "cont_frame_pool.C": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "/usr/bin/gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
