@@ -636,8 +636,8 @@ public:
         return resHead;
     }
     // time and space complexity are both O(N).
-    // We do not need to change the 'next' pointer in order to reverse the linked list. We can just change the corresponding
-    // nodes' values to achieve this goal.
+    // We do not need to change the 'next' pointer in order to reverse the linked list. We can just change the
+    //corresponding nodes' values to achieve this goal.
 
 
     //LC 200. Number of Islands
@@ -804,8 +804,8 @@ public:
     if (b1 || b2 || b3 || b4) return true;
     visited[i][j] = 0;
     return false;
-
     }
+
     bool exist(vector<vector<char>>& board, string word) {
         vector<vector<bool>> visited(board.size(), vector<bool>(board[0].size(), 0));
         for (int i = 0; i < board.size(); i++) {
@@ -928,6 +928,26 @@ public:
             ListNode* temp = new ListNode(pq.top());
             pq.pop();
             head->next = temp;
+            head = head->next;
+        }
+        return head2->next;
+    }
+
+    ListNode* mergeKLists_2(vector<ListNode*>& lists) {
+        if (lists.size() == 0 or (lists.size() == 1 and lists[0] == nullptr)) {
+            return nullptr;
+        }
+        multiset<int> ms;
+        for (auto list : lists) {
+            while (list != nullptr) {
+                ms.insert(list->val);
+                list = list->next;
+            }
+        }
+        ListNode* head = new ListNode();
+        ListNode* head2 = head;
+        for (auto iter = ms.begin(); iter != ms.end(); iter++) {
+            head->next = new ListNode(*iter);
             head = head->next;
         }
         return head2->next;
