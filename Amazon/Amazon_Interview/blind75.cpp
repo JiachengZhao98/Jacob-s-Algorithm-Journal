@@ -364,7 +364,7 @@ public:
             int temp = q.front();
             q.pop();
             for (int i = 0; i < courseAdjList[temp].size(); i++) {   //  pay attention to this. use "courseAdjList[temp].size()"
-                                                                     //  to avoid some temp does not a vector. DO NOT use
+                                                                     //  to avoid some temp does not have a vector. DO NOT use
                                                                      //  "courseAdjList.find(temp)->second.size()" !!!
                 int temp2 = courseAdjList.find(temp)->second[i];
                 if (!visited[temp2]) {
