@@ -1,1 +1,0 @@
-1. Remember to use hash tables, like unordered_set, unordered_map, when we met some problems which require us to search some values within a container, like vector. (TWO SUM)
