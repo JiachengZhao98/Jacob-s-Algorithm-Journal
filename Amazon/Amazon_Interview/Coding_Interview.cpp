@@ -34,31 +34,31 @@ using namespace::std;
 
 // LC 133. Clone Graph
 // Definition for a Node.
-// class Node {
-// public:
-//     int val;
-//     vector<Node*> neighbors;
-//     Node() {
-//         val = 0;
-//         neighbors = vector<Node*>();
-//     }
-//     Node(int _val) {
-//         val = _val;
-//         neighbors = vector<Node*>();
-//     }
-//     Node(int _val, vector<Node*> _neighbors) {
-//         val = _val;
-//         neighbors = _neighbors;
-//     }
-// };
-
 class Node {
 public:
     int val;
-    Node* next;
-    Node* random;
-
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
     Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+
+class Node_2 {
+public:
+    int val;
+    Node_2* next;
+    Node_2* random;
+
+    Node_2(int _val) {
         val = _val;
         next = NULL;
         random = NULL;
@@ -1016,55 +1016,55 @@ public:
 
 
     // LC 138. Copy List with Random Pointer
-    Node* copyRandomList(Node* head) {
-        if (head == nullptr) return nullptr;
-        unordered_map<Node*, int> original_list;
-        unordered_map<int, int> random_map;
-        int i = 1;
-        Node* head_dul = head;
-        while (head != nullptr) {
-            original_list[head] = i;
-            head = head->next;
-            i++;
-        }
-        head = head_dul;
-        i = 1;
-        while (head != nullptr) {
-            if (head->random == nullptr) {
-                random_map[i] = 0;
-            }
-            else {
-                random_map[i] = original_list.find(head->random)->second;
-            }
-            head = head->next;
-            i++;
-        }
-        i = 1;
-        Node* dummhead = new Node(-1);
-        Node* dummhead_dul = dummhead;
-        unordered_map<int, Node*> copyList;
-        head = head_dul;
-        while (head != nullptr) {
-            dummhead->next = new Node(head->val);
-            copyList[i] = dummhead->next;
-            i++;
-            dummhead = dummhead->next;
-            head = head->next;
-        }
-        dummhead = dummhead_dul->next;
-        i = 1;
-        while (dummhead != nullptr) {
-            if (random_map[i] == 0) {
-                dummhead->random = nullptr;
-            }
-            else {
-                dummhead->random = copyList[random_map[i]];
-            }
-            dummhead = dummhead->next;
-            i++;
-        }
-        return dummhead_dul->next;
-    }
+    // Node* copyRandomList(Node_2* head) {
+    //     if (head == nullptr) return nullptr;
+    //     unordered_map<Node*, int> original_list;
+    //     unordered_map<int, int> random_map;
+    //     int i = 1;
+    //     Node_2* head_dul = head;
+    //     while (head != nullptr) {
+    //         original_list[head] = i;
+    //         head = head->next;
+    //         i++;
+    //     }
+    //     head = head_dul;
+    //     i = 1;
+    //     while (head != nullptr) {
+    //         if (head->random == nullptr) {
+    //             random_map[i] = 0;
+    //         }
+    //         else {
+    //             random_map[i] = original_list.find(head->random)->second;
+    //         }
+    //         head = head->next;
+    //         i++;
+    //     }
+    //     i = 1;
+    //     Node* dummhead = new Node(-1);
+    //     Node* dummhead_dul = dummhead;
+    //     unordered_map<int, Node*> copyList;
+    //     head = head_dul;
+    //     while (head != nullptr) {
+    //         dummhead->next = new Node(head->val);
+    //         copyList[i] = dummhead->next;
+    //         i++;
+    //         dummhead = dummhead->next;
+    //         head = head->next;
+    //     }
+    //     dummhead = dummhead_dul->next;
+    //     i = 1;
+    //     while (dummhead != nullptr) {
+    //         if (random_map[i] == 0) {
+    //             dummhead->random = nullptr;
+    //         }
+    //         else {
+    //             dummhead->random = copyList[random_map[i]];
+    //         }
+    //         dummhead = dummhead->next;
+    //         i++;
+    //     }
+    //     return dummhead_dul->next;
+    // }
 
 private:
     unordered_map<Node*, Node*> visited_clone_graph_dfs;

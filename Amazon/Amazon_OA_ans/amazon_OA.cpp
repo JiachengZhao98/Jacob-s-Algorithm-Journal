@@ -88,7 +88,7 @@ public:
                 count = 0; continue;
             }
                 res.push_back(0);
-            }   
+            }
             return res;
         }
     /*int main() {
@@ -166,7 +166,7 @@ public:
     return 0;
 }*/
 
-    
+
     long findEarliestMonth(vector<int>& stock) {
         long leftSum = 0, rightSum = 0, res = LONG_MAX;
         int index;
@@ -310,7 +310,7 @@ If current character is '1', it can be the middle of "010" selection
         }
         return count;
     }
-    
+
     int keypadClickCount_2 (string text) {
         map<char, int> letterCount;
         vector<int> count;
@@ -460,7 +460,7 @@ If current character is '1', it can be the middle of "010" selection
                 countA++;
                 res += countZ;
             }
-        } 
+        }
         return (res + max(countA, countZ));
     }
 
@@ -612,7 +612,7 @@ If current character is '1', it can be the middle of "010" selection
             if (i + k < nums.size()) {
                 partSum = partSum + nums[i + k] - nums[i];
                 Max = max(Max, partSum);
-            }  
+            }
         }
         return (sum - Max);
     }
@@ -669,12 +669,12 @@ If current character is '1', it can be the middle of "010" selection
 
 
     long long minimumHealth(vector<int>& damage, int armor) {
-        int Max = INT_MIN;    
+        int Max = INT_MIN;
         long sum = 0;
         for (auto a : damage) {
             sum += a;                    // sum all the damage
             Max = a > Max ? a : Max;     // find the largest value in damage
-        }    
+        }
         if (armor >= Max) {
             return (sum + 1 - Max);      // use armor to defend
         }
@@ -796,8 +796,491 @@ If current character is '1', it can be the middle of "010" selection
 //     return 0;
 // }
 
+// amazon password
+// https://www.1point3acres.com/bbs/thread-844628-1-1.html
 
 
+
+// amazon_router
+int router(vector<int> buildingCount, vector<int> routerLoc, vector<int> routerRange) {
+        int count = 0;
+        for (int i = 0; i < routerLoc.size(); i++) {
+            int begin = routerLoc[i] - 1 - routerRange[i];
+            if (begin < 0) begin = 0;
+            int end = routerLoc[i] - 1 + routerRange[i];
+            if (end >= buildingCount.size()) end = buildingCount.size() - 1;
+            while (begin <= end) {
+                buildingCount[begin]--;
+                begin++;
+            }
+        }
+        for (auto a : buildingCount) {
+            if (a <= 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+//     int main() {
+//     vector<int> bldgCount = {1,2,1,2,2};
+//     vector<int> routerLoc = {3,1};
+//     vector<int> routerRange = {1,2};
+//     Solution sol;
+//     int ans = sol.router(bldgCount, routerLoc, routerRange);
+//     cout<<ans<<endl;
+// }
+
+
+// amazon_sContainT
+
+    int SinT(string S, string T) {
+        unordered_map<char, int> strmap_t;
+        unordered_map<char, int> strmap_s;
+        for (int i = 0; i < T.size(); i++) {
+            if (strmap_t.find(T[i]) == strmap_t.end()) {
+                strmap_t.insert(pair<char, int>(T[i], 1));
+            }
+            else strmap_t.find(T[i])->second++;
+        }
+        for (int i = 0; i < S.size(); i++) {
+            if (strmap_s.find(S[i]) == strmap_s.end()) {
+                strmap_s.insert(pair<char, int>(T[i], 1));
+            }
+            else strmap_s.find(S[i])->second++;
+        }
+        int res = INT_MAX;
+        for (int i = 0; i < T.size(); i++) {
+            auto iter = strmap_t.find(T[i]);
+            auto iter_2 = strmap_s.find(T[i]);
+            int temp = iter_2->second / iter->second;
+            res = temp < res ? temp : res;
+        }
+        return res;
+    }
+
+//     int main() {
+//     string S = "abababab";
+//     string T = "bba";
+//     Solution sol;
+//     int res = sol.SinT(S, T);
+//     cout<<res<<endl;
+//     return 0;
+// }
+
+
+
+    // amazon_searchWord
+    int searchWordResultword(string searchWord, string resultWord) {
+        int i = 0, j = 0;
+        int remain = -1;
+        int count = 0;
+        for (; j < searchWord.size(); j++) {
+            if (searchWord[j] == resultWord[i]) {
+                i++;
+                count++;
+            }
+        }
+        remain = resultWord.size() - count;
+        return remain;
+    }
+
+    // int main() {
+//     Solution sol;
+//     string search = "aghgmhghghgahzghghghghghgh";
+//     string result = "amazon";
+//     int res = -1;
+//     res = sol.searchWordResultword(search, result);
+//     cout<<res<<endl;
+//     return 0;
+// }
+
+
+    // amazon_server
+    vector<int> moveServer (vector<int>& locations, vector<int>& moveFrom, vector<int>& moveTo) {
+        set<int> newLocations;
+        set<int>::iterator iter;
+        vector<int> newlocations;
+        int j = 0;
+        for (int i = 0; i < locations.size(); i++) {
+            newLocations.insert(locations[i]);
+        }
+        for (int i = 0; i < moveFrom.size(); i++) {
+            newLocations.erase(moveFrom[i]);
+            newLocations.insert(moveTo[i]);
+        }
+        for(iter = newLocations.begin(); iter != newLocations.end(); ++iter) {
+            newlocations.push_back(*iter);
+        }
+        return newlocations;
+    }
+
+// int main() {
+//     vector<int> locations = {1,7,6,8};
+//     vector<int> moveFrom = {1,7,2};
+//     vector<int> moveTo = {2,9,5};
+//     Solution sol;
+//     vector<int> res = sol.moveServer(locations, moveFrom, moveTo);
+//     for (auto a : res) {
+//         cout<<a<<" ";
+//     }
+//     return 0;
+// }
+
+    // amazon_serverPower
+
+    int findMaximumSustainableClusterSize(vector<int> processingPower, vector<int> bootingPower, long powerMax) {
+        int len = processingPower.size();
+        if(len == 0 || bootingPower.size() == 0) return 0;
+        int ans = 0;
+        for(int i=0;i<len;i++){
+            int count = 1, maxCount=1, sum =0, mul;
+            int Max = INT_MIN;
+            for(int j=i;j<len;j++){
+                sum += processingPower[j];
+                mul = sum * count;
+                count++;
+
+                Max = max(Max,bootingPower[j]);
+                long tempPower = mul + Max;
+                if(tempPower <= powerMax){
+                   // System.out.println(tempPower);
+                    ans = max(maxCount, ans);
+                    maxCount++;
+                }else break;
+            }
+        }
+        return ans;
+}
+
+// int main() {
+//     vector<int> process = {3,6,1,3,4};
+//     vector<int> boot = {2,1,3,4,5};
+//     int ans  = findMaximumSustainableClusterSize(process, boot, 27);
+//     cout<<ans<<endl;
+//     return 0;
+// }
+
+
+    // amazon_shortestPath
+
+    int res = 0;
+    void dfs(vector<vector<int>>& lot, int i, int j, vector<vector<bool>>& visited, int step) {
+        int m = lot.size(), n = lot[0].size();
+        if (i < 0 || j < 0 || i >= m || j >= n) {
+            return ;
+        }
+        if (lot[i][j] == 0) {
+            return;
+        }
+        if (visited[i][j]) {
+            return ;
+        }
+        visited[i][j] = true;
+        step++;
+        if (lot[i][j] == 9) {
+            res = step;
+            return;
+        }
+        dfs(lot, i - 1, j, visited, step);
+        dfs(lot, i + 1, j, visited, step);
+        dfs(lot, i, j - 1, visited, step);
+        dfs(lot, i, j + 1, visited, step);
+    }
+
+    int shortestPath(vector<vector<int>>& lot) {
+        vector<vector<bool>> visited(lot.size(), vector<bool>(lot[0].size(), false));
+        dfs(lot, 0, 0, visited, 0);
+        return res - 1;
+    }
+
+// int main() {
+//     Solution sol;
+//     int ans;
+//     vector<vector<int>> lot {{1,0,0}, {1,0,0}, {1,9,1}};
+//     ans = sol.shortestPath(lot);
+//     cout<<ans<<endl;
+// }
+
+
+
+    // amazon_slidingWindow
+
+    int slidingWindow(vector<int>& memory, int k) {
+        int maxSum = 0, allSum = 0;
+        for (int i = 0; i < k; i++) {
+            maxSum += memory[i];
+            allSum += memory[i];
+        }
+        int max = maxSum;
+        for (int i = k; i < memory.size(); i++) {
+            allSum += memory[i];
+            maxSum = maxSum - memory[i - k] + memory[i];
+            max = max < maxSum ? maxSum : max;
+        }
+        return (allSum - max);
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> memory = {1,4,4,6,9,4};
+//     int ans = sol.slidingWindow(memory, 2);
+//     cout<<ans<<endl;
+//     return 0;
+// }
+
+
+    // amazon_slidingWindowPackages
+    int slidingWindowPackage(vector<int>& packages) {
+        int res = packages[packages.size() - 1];
+        for (int i = packages.size() - 1; i >= 1; i--) {
+            if (packages[i] > packages[i - 1]) {
+                packages[i - 1] = packages[i] + packages[i - 1];
+            }
+            res = res < packages[i - 1] ? packages[i - 1] : res;
+        }
+        return res;
+    }
+
+// int main() {
+//     Solution sol;
+//     vector<int> packages = {2,9,10,3,7};
+//     int ans = sol.slidingWindowPackage(packages);
+//     cout<<ans<<endl;
+//     return 0;
+// }
+
+
+
+    // amazon_stockPrice
+    int stockPrice(vector<int>& month, int k){
+        int sum = 0;
+        int res = 0;
+        set<int>::iterator iter;
+        set<int> rem;
+        if (month.size() < k) {
+            return -1;
+        }
+        for (int i = 0; i <= month.size() - k; i++) {
+            for (int j = i; j < i + k; j++) {
+                rem.insert(month[j]);
+            }
+            if (rem.size() == k) {
+                for ( iter = rem.begin(); iter != rem.end(); ++iter) {
+                    sum += *iter;
+                }
+                if (sum > res) {
+                    res = sum;
+                }
+            }
+            rem.clear();
+            sum = 0;
+        }
+        if (res == 0) {
+            return -1;
+        } else return res;
+    }
+
+
+// int main() {
+//     Solution sol;
+//     int k = 4;
+//     vector<int> month = {1,2,7,7,4,3,6};
+//     int sum = sol.stockPrice(month, k);
+//     cout<<sum<<endl;
+
+//     return 0;
+// }
+
+
+    // amazon_sumOfPower
+    int totalStrength(vector<int>& strength) {
+		int n = strength.size(), mod = 1e9 + 7;
+
+		vector<long long> rightPref(n), rightPrefSum(n);
+		vector<long long> leftPref(n), leftPrefSum(n);
+
+		rightPref[0] = strength[0];
+		rightPrefSum[0] = strength[0];
+		for(auto i = 1; i < n; i++){
+			rightPref[i] = rightPref[i - 1] + strength[i];
+			rightPrefSum[i] = rightPrefSum[i - 1] + rightPref[i];
+		}
+
+		leftPref[n - 1] = strength[n - 1];
+		leftPrefSum[n - 1] = strength[n - 1];
+		for(auto i = n - 2; i >= 0; i--){
+			leftPref[i] = leftPref[i + 1] + strength[i];
+			leftPrefSum[i] = leftPrefSum[i + 1] + leftPref[i];
+		}
+
+		stack<int> st;
+		vector<int> rightIndex(n); //right lowest index the current
+		st.push(n);
+		for(auto i = n - 1; i >= 0; i--){
+			while(st.top() != n && strength[st.top()] >= strength[i]) st.pop();
+
+			rightIndex[i] = st.top() - 1;
+			st.push(i);
+		}
+
+		stack<int> lst;
+		lst.push(-1);
+		long long totalStrength = 0;
+
+		for(auto i = 0; i < n; i++){
+			while(lst.size() > 1 && strength[lst.top()] > strength[i]) lst.pop();
+
+			int left = lst.top() + 1;
+			lst.push(i);
+			int right = rightIndex[i];
+			int lsize = i - left + 1;
+			int rsize = right - i + 1;
+
+			long long rightSum = rightPrefSum[right] - (i > 0 ? rightPrefSum[i - 1] + rightPref[i - 1] * rsize : 0) % mod;
+			long long leftSum = leftPrefSum[left] - (i < n - 1 ? leftPrefSum[i + 1] + leftPref[i + 1] * lsize : 0) % mod;
+
+			long long totalSum = (rightSum % mod * lsize) % mod + (leftSum % mod * rsize) % mod - ((long long)strength[i] * lsize * rsize) % mod;
+
+			totalStrength = (totalStrength + (totalSum % mod * strength[i]) % mod) % mod;
+		}
+
+		return totalStrength;
+	}
+
+
+    // amazon_sumOfSubarrayRanges
+
+    long long subArrayRanges(vector<int>& nums) {
+        stack<int> st;
+        int n = nums.size();
+        long long ans = 0;
+        nums.push_back(INT_MAX);
+        for(int i = 0; i <= n; i++){
+            while(!st.empty() && nums[i] > nums[st.top()]) {
+                int x = st.top();
+                st.pop();
+                int res = st.empty()? -1 : st.top();
+                ans += (long long)nums[x]*(i-x)*(x-res);
+            }
+            st.push(i);
+        }
+        st.pop();
+        nums[n]=INT_MIN;
+        for(int i=0;i<=n;i++){
+            while(!st.empty() && nums[i]<nums[st.top()]){
+                int x=st.top();
+                st.pop();
+                int res=st.empty()?-1:st.top();
+                ans-=(long long)nums[x]*(i-x)*(x-res);
+            }
+            st.push(i);
+        }
+        return ans;
+    }
+
+
+    // reference https://leetcode.com/problems/sum-of-subarray-ranges/discuss/1624222/JavaC++Python-O(n)-solution-detailed-explanation
+    long long subArrayRanges_2(vector<int>& A) {
+        long res = 0, n = A.size(), j, k;
+        stack<int> s;
+        for (int i = 0; i <= n; ++i) {
+            while (!s.empty() && A[s.top()] > (i == n ? -2e9 : A[i])) {
+                j = s.top(), s.pop();
+                k = s.empty() ? -1 : s.top();
+                res -= (long)A[j] * (i - j) * (j - k);
+            }
+            s.push(i);
+        }
+        s = stack<int>();
+        for (int i = 0; i <= n; ++i) {
+            while (!s.empty() && A[s.top()] < (i == n ? 2e9 : A[i])) {
+                j = s.top(), s.pop();
+                k = s.empty() ? -1 : s.top();
+                res += (long)A[j] * (i - j) * (j - k);
+            }
+            s.push(i);
+        }
+        return res;
+    }
+
+    long long subArrayRanges_3(vector<int>& nums) {
+
+        long sum=0;
+
+        for(int l=0; l<nums.size(); l++){
+            int minnum = nums[l];
+            int maxnum = nums[l];
+            for(int r=l; r<nums.size(); r++){
+                // key: min and max can be reuse!
+                maxnum = max(maxnum, nums[r]);
+                minnum = min(minnum, nums[r]);
+                sum += maxnum - minnum;
+            }
+        }
+        return sum;
+    }
+
+
+    // amazon_temperature
+
+    int temperature(vector<int> weather) {
+        int i = 0;
+        int sumftb = 0, sumbtf = 0;
+        int res = INT_MIN;
+        for (; i < weather.size(); i++) {
+            sumftb += weather[i];
+            sumbtf += weather[weather.size() - 1 - i];
+            res = Max(sumbtf, sumftb, res);
+        }
+        return res;
+    }
+
+    int Max(int a, int b, int c){
+        int temp = max(a, b);
+        temp = max(temp, c);
+        return temp;
+    }
+
+// int main() {
+//     vector<int> temp = {-1,2,3};
+//     Solution sol;
+//     int res = sol.temperature(temp);
+//     cout<<res<<endl;
+//     return 0;
+// }
+
+
+    // amazon_The_kth_Factor_of_n
+
+int kthFactor(int n, int k) {
+        set<int> factors;
+         for (int i = 1; i <= sqrt(n); i++) {
+            if (n % i == 0) {
+                factors.insert(i);
+                factors.insert(n / i);
+            }
+         }
+         if (factors.size() < k) return -1;
+         else {
+            auto iter = factors.begin();
+            advance(iter, k);
+            return *iter;
+         }
+    }
+
+    // another thought
+    int kthFactor_2(int n, int k) {
+
+        for(int i=1;i<=n;i++){
+            if(n%i==0)
+                k--;
+            if(k==0)
+                return i;
+
+        }
+        return -1;
+    }
 
 };
 
