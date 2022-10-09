@@ -1,6 +1,22 @@
 from inspect import stack
 from sys import flags
 import string
+from typing import List
+
+
+# LC 690. Employee Importance
+# Definition for Employee.
+class Employee:
+    def __init__(self, id: int, importance: int, subordinates: List[int]):
+        self.id = id
+        self.importance = importance
+        self.subordinates = subordinates
+
+    def getImportance(self, employees: List['Employee'], id: int) -> int:
+        employee_map = {employee.id: employee for employee in employees}
+
+
+
 
 class Solution:
     # LC 202. Happy Number
