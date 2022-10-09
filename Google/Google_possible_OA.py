@@ -47,6 +47,6 @@ class Solution:
 
 # main function
 
-# sol = Solution()
-# ans = sol.isHappy(19)
-# print(ans)
+sol = Solution()
+ans = sol.decodeString("2[fa]")
+print(ans)
