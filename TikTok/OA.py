@@ -1,5 +1,6 @@
 from functools import lru_cache
 from mmap import mmap
+import string
 from typing import List
 import numpy as np
 
@@ -44,22 +45,37 @@ class Solution:
         return dp(K - 1, 0, 0)
 
     # boring array
-    def boringArray(self, A: List[int], B: List[int]) -> bool:
+    def boringArray(self, A: string, B: string, k: int) -> bool:
         myMap = {}
         for i in range(len(B)):
-            if B[i] in myMap.keys():
-                myMap[B[i]] += 1
+            if int(B[i]) in myMap.keys():
+                myMap[int(B[i])] += 1
             else:
-                myMap.update({B[i]:1})
-        for index in range(len(A)):
-            temp = A[index] + 1
-            if temp in myMap.keys():
+                myMap.update({int(B[i]):1})
+        a = []
+        count = 0
+        A = list(A)
+        A.sort()
+        print(A)
+        for i in range(len(A)):
+            a.append(int(A[i]))
+            index = i
+            temp = a[index] + 1
+            if  a[index] in myMap.keys():
+                myMap[a[index]] -= 1
+                count += 1
+                if myMap[a[index]] == 0:
+                    myMap.pop(a[index])
+            elif  temp in myMap.keys():
                 myMap[temp] -= 1
+                count += 1
                 if myMap[temp] == 0:
                     myMap.pop(temp)
-        return (len(myMap) == 0)
+            if count >= k:
+                break
+        return len(myMap) == 0
 
 sol = Solution()
-B = [1,2,3,4,5,6,7,8,9,10]
-A = [2,3,4,5]
-print(sol.boringArray(B, A))
+A = "42340"
+B = "12345"
+print(sol.boringArray(A, B, 5))
