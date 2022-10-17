@@ -21,12 +21,12 @@ class Solution:
             return dp[-1]
 
     # LC 1444. Number of Ways of Cutting a Pizza
-    def ways(self, pizza: List[str], K: int) -> int:
-        m, n, MOD = len(pizza), len(pizza[0]), 10 ** 9 + 7
+    def ways(self, forest: List[int], num: int) -> int:
+        m, n, MOD = len(forest), len(forest[0]), 10 ** 9 + 7
         presum = np.zeros((m + 1, n + 1))
         for r in range(m-1, -1, -1):
             for c in range(n-1, -1, -1):
-                presum[r][c] = presum[r][c + 1] + presum[r + 1][c] - presum[r + 1][c + 1] + (pizza[r][c] == 'A')
+                presum[r][c] = presum[r][c + 1] + presum[r + 1][c] - presum[r + 1][c + 1] + (forest[r][c] == 2)
 
         @lru_cache(None)
         def dp(k, r, c) -> int:
@@ -42,7 +42,7 @@ class Solution:
                 if presum[r][c] > presum[r][nc]:
                     ans = (ans + dp(k - 1, r, nc)) % MOD
             return ans
-        return dp(K - 1, 0, 0)
+        return dp(num - 1, 0, 0)
 
     # boring array
     def boringArray(self, A: string, B: string, k: int) -> bool:
@@ -70,4 +70,4 @@ class Solution:
 sol = Solution()
 A = "23401"
 B = "2453"
-print(sol.coinChange([4,5], 5))
+print(sol.ways([[1, 2, 3], [2, 1, 2], [3, 1, 1]], 3))
