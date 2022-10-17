@@ -10,7 +10,18 @@
     "string": "cpp",
     "unordered_map": "cpp",
     "unordered_set": "cpp",
-    "cont_frame_pool.C": "cpp"
+    "cont_frame_pool.C": "cpp",
+    "__hash_table": "cpp",
+    "__split_buffer": "cpp",
+    "__tree": "cpp",
+    "array": "cpp",
+    "bitset": "cpp",
+    "initializer_list": "cpp",
+    "list": "cpp",
+    "random": "cpp",
+    "regex": "cpp",
+    "string_view": "cpp",
+    "valarray": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "/usr/bin/gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
@@ -42,5 +53,6 @@
     "**/.*/**",
     "**/.vscode",
     "**/.vscode/**"
-  ]
+  ],
+  "C_Cpp.errorSquiggles": "Disabled"
 }

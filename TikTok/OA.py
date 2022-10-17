@@ -5,8 +5,8 @@ from typing import List
 import numpy as np
 
 class Solution:
-    # LC 322. Coin Change
-    def coinChange(self, size: List[int], requirement: int) -> int:
+    # original: LC 322. Coin Change
+    def umbrella(self, size: List[int], requirement: int) -> int:
         if requirement == 0:
             return 0
         dp = [requirement + 1] * (requirement + 1)
@@ -20,7 +20,7 @@ class Solution:
         else:
             return dp[-1]
 
-    # LC 1444. Number of Ways of Cutting a Pizza
+    # origianl: LC 1444. Number of Ways of Cutting a Pizza
     def ways(self, forest: List[int], num: int) -> int:
         m, n, MOD = len(forest), len(forest[0]), 10 ** 9 + 7
         presum = np.zeros((m + 1, n + 1))
@@ -35,9 +35,11 @@ class Solution:
             if k == 0:
                 return 1
             ans = 0
+            # cut horizontally
             for nr in range(r + 1, m):
                 if presum[r][c] > presum[nr][c]:
                     ans = (ans + dp(k - 1, nr, c)) % MOD
+            # cut vertically
             for nc in range(c + 1, n) :
                 if presum[r][c] > presum[r][nc]:
                     ans = (ans + dp(k - 1, r, nc)) % MOD

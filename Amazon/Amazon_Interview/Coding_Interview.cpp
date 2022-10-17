@@ -1,13 +1,4 @@
-#include "vector"
-#include "queue"
-#include "climits"
-#include "stack"
-#include "set"
-#include "map"
-#include "unordered_map"
-#include "unordered_set"
-#include "iostream"
-#include "deque"
+#include  "../stdc++.h"
 using namespace::std;
 
 

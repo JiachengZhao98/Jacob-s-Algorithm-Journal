@@ -1,5 +1,4 @@
-#include "string"
-#include "map"
+#include  "../stdc++.h"
 using namespace std;
 
 class Solution {
