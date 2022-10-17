@@ -46,36 +46,28 @@ class Solution:
 
     # boring array
     def boringArray(self, A: string, B: string, k: int) -> bool:
-        myMap = {}
-        for i in range(len(B)):
-            if int(B[i]) in myMap.keys():
-                myMap[int(B[i])] += 1
-            else:
-                myMap.update({int(B[i]):1})
+        B = list(B)
         a = []
         count = 0
-        A = list(A)
-        A.sort()
-        print(A)
         for i in range(len(A)):
             a.append(int(A[i]))
+        a.sort()
+        #print(a)
+        for i in range(len(a)):
             index = i
             temp = a[index] + 1
-            if  a[index] in myMap.keys():
-                myMap[a[index]] -= 1
+            if str(a[index]) in B:
+                B.remove(str(a[index]))
                 count += 1
-                if myMap[a[index]] == 0:
-                    myMap.pop(a[index])
-            elif  temp in myMap.keys():
-                myMap[temp] -= 1
+            elif str(temp) in B:
+                B.remove(str(temp))
+                #print(B)
                 count += 1
-                if myMap[temp] == 0:
-                    myMap.pop(temp)
             if count >= k:
                 break
-        return len(myMap) == 0
+        return len(B) == 0
 
 sol = Solution()
-A = "42340"
-B = "12345"
-print(sol.boringArray(A, B, 5))
+A = "23401"
+B = "2453"
+print(sol.boringArray(A, B, 4))
