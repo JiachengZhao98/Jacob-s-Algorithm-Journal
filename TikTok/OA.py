@@ -6,16 +6,16 @@ import numpy as np
 
 class Solution:
     # LC 322. Coin Change
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        if amount == 0:
+    def coinChange(self, size: List[int], requirement: int) -> int:
+        if requirement == 0:
             return 0
-        dp = [amount + 1] * (amount + 1)
+        dp = [requirement + 1] * (requirement + 1)
         dp[0] = 0
-        for i in range(amount + 1):
-            for j in range(len(coins)):
-                if coins[j] <= i:
-                    dp[i] = min(dp[i], dp[i - coins[j]] + 1)
-        if (dp[-1] > amount):
+        for i in range(requirement + 1):
+            for j in range(len(size)):
+                if size[j] <= i:
+                    dp[i] = min(dp[i], dp[i - size[j]] + 1)
+        if (dp[-1] > requirement):
             return -1
         else:
             return dp[-1]
@@ -70,4 +70,4 @@ class Solution:
 sol = Solution()
 A = "23401"
 B = "2453"
-print(sol.boringArray(A, B, 4))
+print(sol.coinChange([4,5], 5))
