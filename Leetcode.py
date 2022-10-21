@@ -1,4 +1,10 @@
+from functools import lru_cache
+from importlib.resources import path
+from mmap import mmap
+from os import pathsep
+import string
 from typing import List
+import numpy as np
 
 
 class Solution:
@@ -38,3 +44,46 @@ class Solution:
             if len(s2) > len(ans):
                 ans = s2
         return ans
+
+    # LC 63. Unique Paths II
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        pathSum = [[0] * len(obstacleGrid[0]) for _ in range(len(obstacleGrid))]
+        for i in range(len(obstacleGrid) - 1, -1, -1):
+            if obstacleGrid[i][len(obstacleGrid[0]) - 1]:
+                break
+            pathSum[i][len(obstacleGrid[0]) - 1] = 1      # change the value on the border(bottom), the value shoudl be
+                                                          # 1 if there is no obstacle ahead
+        for i in range(len(obstacleGrid[0]) - 1, -1, -1):
+            if obstacleGrid[len(obstacleGrid) - 1][i]:
+                break
+            pathSum[len(obstacleGrid) - 1][i] = 1         # change the value on the right border, the value shoudl be
+                                                          # 1 if there is no obstacle ahead
+        for i in range(len(obstacleGrid) - 2, -1, -1):
+            for j in range(len(obstacleGrid[0]) - 2, -1, -1):
+                if obstacleGrid[i][j]:
+                    pathSum[i][j] = 0
+                    continue
+                pathSum[i][j] = pathSum[i + 1][j] + pathSum[i][j + 1]
+        return pathSum[0][0]
+
+    # LC 323. Number of Connected Components in an Undirected Graph
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        count = 0
+        visited = [False] * n
+        adj = {x:[] for x in range(n)}
+        for x, y in edges:
+            adj[x].append(y)
+            adj[y].append(x)
+
+        def dfs(adj, visited: List[bool], i: int) -> None:
+            if visited[i]:
+                return
+            visited[i] = True
+            for index in adj[i]:
+                dfs(adj, visited, index)
+
+        for i in range(n):
+            if not visited[i]:
+                dfs(adj, visited, i)
+                count += 1
+        return count

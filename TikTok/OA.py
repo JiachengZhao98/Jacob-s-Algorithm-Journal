@@ -1,10 +1,14 @@
 from functools import lru_cache
+import imp
 from importlib.resources import path
 from mmap import mmap
+from operator import imod
 from os import pathsep
 import string
 from typing import List
 import numpy as np
+import sys
+import imp
 
 class Solution:
     # original: LC 322. Coin Change
@@ -99,10 +103,39 @@ class Solution:
                 pathSum[i][j] = pathSum[i + 1][j] + pathSum[i][j + 1]
         return str(pathSum[0][0])
 
-    # LC 323. Number of Connected Components in an Undirected Graph
-    def countComponents(self, n: int, edges: List[List[int]]) -> int:
-        count = 0
-        sdasd
+    # OA for Oct 17, 2022, which originates from LC 323
+    def socialNetwork(self, n: int, edges: List[List[int]]) -> int:
+        record = count = ans = 0
+        visited = [False] * n
+        adj = {x:[] for x in range(n)}
+        for x, y in edges:
+            adj[x].append(y)
+            adj[y].append(x)
+
+        def dfs(adj, visited: List[bool], i: int) -> int:
+            count = 0
+            if visited[i]:
+                return count
+            visited[i] = True
+            count += 1
+            for index in adj[i]:
+                count += dfs(adj, visited, index)
+            return count
+
+        for i in range(n):
+            if not visited[i]:
+                count += 1
+                temp = dfs(adj, visited, i)
+                print(temp)
+                if temp > record:
+                    record = temp
+                    ans = count
+        return ans
+
+
+
+
+
 
 
 
@@ -112,4 +145,5 @@ sol = Solution()
 A = "23401"
 B = "2453"
 #print(sol.minIncrementForUnique_sum([3,2,1,2,7]))
-print(sol.uniquePaths('2','2'))
+#print(sol.uniquePaths('2','2'))
+print(sol.socialNetwork(6, [[0,1],[1,2],[2,3],[5,4]]))
