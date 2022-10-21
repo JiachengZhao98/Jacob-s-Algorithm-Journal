@@ -1,5 +1,7 @@
 from functools import lru_cache
+from importlib.resources import path
 from mmap import mmap
+from os import pathsep
 import string
 from typing import List
 import numpy as np
@@ -23,7 +25,7 @@ class Solution:
     # origianl: LC 1444. Number of Ways of Cutting a Pizza
     def ways(self, forest: List[int], num: int) -> int:
         m, n, MOD = len(forest), len(forest[0]), 10 ** 9 + 7
-        presum = np.zeros((m + 1, n + 1))
+        presum = [[0] * (n + 1) for i in range(m + 1)]
         for r in range(m-1, -1, -1):
             for c in range(n-1, -1, -1):
                 presum[r][c] = presum[r][c + 1] + presum[r + 1][c] - presum[r + 1][c + 1] + (forest[r][c] == 2)
@@ -69,7 +71,45 @@ class Solution:
                 break
         return len(B) == 0
 
+    # LC 945. Minimum Increment to Make Array Unique
+    def minIncrementForUnique(self, nums: List[int]) -> int:
+        res = need = 0
+        nums.sort()
+        for i in nums:
+            res += max(need - i, 0)
+            need = max(i + 1, need +1)
+        return res
+
+    # tiktok OA for Oct 17, 2022
+    def minIncrementForUnique_sum(self, nums: List[int]) -> int:
+        need = 0
+        nums.sort()
+        ans = 0
+        for i in nums:
+            ans += max(i, need)
+            #print(max(i, need))
+            need = max(i + 1, need +1)
+        return ans
+
+    # LC 62. Unique Path
+    def uniquePaths(self, m: string, n: string) -> string:
+        pathSum = [[1] * (int(n) + 1)] * (int(m) + 1)
+        for i in range(int(m) - 1, -1, -1):
+            for j in range(int(n) - 1, -1, -1):
+                pathSum[i][j] = pathSum[i + 1][j] + pathSum[i][j + 1]
+        return str(pathSum[0][0])
+
+    # LC 323. Number of Connected Components in an Undirected Graph
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        count = 0
+        
+
+
+
+
+
 sol = Solution()
 A = "23401"
 B = "2453"
-print(sol.ways([[1, 2, 3], [2, 1, 2], [3, 1, 1]], 3))
+#print(sol.minIncrementForUnique_sum([3,2,1,2,7]))
+print(sol.uniquePaths('2','2'))
