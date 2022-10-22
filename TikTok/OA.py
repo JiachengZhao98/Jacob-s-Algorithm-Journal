@@ -146,4 +146,4 @@ A = "23401"
 B = "2453"
 #print(sol.minIncrementForUnique_sum([3,2,1,2,7]))
 #print(sol.uniquePaths('2','2'))
-print(sol.socialNetwork(6, [[0,1],[1,2],[2,3],[5,4]]))
+print(sol.socialNetwork(8, [[0,1],[1,2],[2,3],[5,4],[7,6]]))
