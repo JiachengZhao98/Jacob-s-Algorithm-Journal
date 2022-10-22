@@ -30,6 +30,7 @@
 
 ## Data Encryption:
 - https://github.com/dcodeIO/bcrypt.js
+- https://stackoverflow.com/questions/6951867/nodejs-bcrypt-vs-native-crypto
 ## Survey Creator / Form Builder Overview:
 - https://surveyjs.io/survey-creator/documentation/overview
 ## List of Recommender Systems:
