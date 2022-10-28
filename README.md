@@ -1,4 +1,33 @@
-# Notes from learning how to code
+         /*
+                           _ooOoo_
+                          o8888888o
+                          88" . "88
+                          (| -_- |)
+                          O\  =  /O
+                       ____/`---'\____
+                     .'  \\|     |//  `.
+                    /  \\|||  :  |||//  \
+                   /  _||||| -:- |||||-  \
+                   |   | \\\  -  /// |   |
+                   | \_|  ''\---/''  |   |
+                   \  .-\__  `-`  ___/-. /
+                 ___`. .'  /--.--\  `. . __
+              ."" '<  `.___\_<|>_/___.'  >'"".
+             | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+             \  \ `-.   \_ __\ /__ _/   .-` /  /
+        ======`-.____`-.___\_____/___.-`____.-'======
+                           `=---='
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 Buddha bless         NO BUG
+        */
+  
+# Some of my answers and thoughts when solving LeetCode and other interview problems.
+
+- Suggestions of improvement are strongly welcomed.
+
+- Including some problems from Amazon Online Assessment and Virtual Onsite Interview
+
+# Programming language tips from learning how to solve leetcode problems
 
 ## CPP
 ### Vector
