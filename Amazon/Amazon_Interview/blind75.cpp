@@ -3,7 +3,7 @@
 //
 //  Created by Jiacheng Zhao on 8/27/22.
 //
-#include  "../stdc++.h"
+#include  "stdc++.h"
 using namespace::std;
 
 // this is for blind 75

@@ -1,4 +1,12 @@
-#include  "../stdc++.h"
+#include "vector"
+#include "string"
+#include "map"
+#include "unordered_map"
+#include "set"
+#include "unordered_set"
+#include "iostream"
+#include "queue"
+#include "stack"
 using namespace::std;
 
 
@@ -890,7 +898,6 @@ public:
         }
         return rec[amount];
     }
-
     //LC 1696. Jump Game VI
     int maxResult(vector<int>& nums, int k) {
         if (k == 0) return 0;
