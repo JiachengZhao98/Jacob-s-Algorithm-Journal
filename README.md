@@ -2,7 +2,7 @@
 
 ## CPP
 ### Vector
-+ The usage of a 2-D vector ➡️ [click here] (https://www.digitalocean.com/community/tutorials/2d-vectors-in-c-plus-plus) 
++ The usage of a 2-D vector ➡️ [click here](https://www.digitalocean.com/community/tutorials/2d-vectors-in-c-plus-plus) 
 
 + About built-in sorting function for vector:```vector.sort()```:
 	- The C++ standard specifies that the worst-case runtime of std::sort() is in O(n log n)
