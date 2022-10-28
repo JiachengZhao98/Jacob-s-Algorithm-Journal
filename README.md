@@ -31,8 +31,16 @@
 
 # Programming language tips from learning how to solve leetcode problems
 
-## CPP
-### Vector
+## Content
+
+1. [CPP](#CPP)
+2. [Java](#Java)
+3. [Python](#Python)
+
+---
+
+### CPP <a name="CPP"></a>
+#### Vector
 + The usage of a 2-D vector ➡️ [click here](https://www.digitalocean.com/community/tutorials/2d-vectors-in-c-plus-plus) 
 
 + About built-in sorting function for vector:```vector.sort()```:
@@ -146,5 +154,10 @@ vector<int> F[N]
 In the first case you are creating a dynamic array of dynamic arrays (vector of vectors). The size of each vector could be changed at the run-time and all objects will be allocated on the heap.
 In the second case you are creating a fixed-size array of vectors. You have to define N at compile-time, and all vectors will be placed on the stack†, however, each vector will allocate elements on the heap.
 
-## Java
-## Python
+
+### Java <a name="Java"></a>
+
+asd
+asdsad
+
+### Python <a name="Python"></a>
