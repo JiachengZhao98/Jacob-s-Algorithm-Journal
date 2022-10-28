@@ -121,10 +121,10 @@ In the second case we are creating a fixed-size array of vectors. You have to de
 
 #### ```deque```<a name="deque"></a>:
 
-[check here](https://blog.csdn.net/sevenjoin/article/details/88530962) 
+➡️ [check here](https://blog.csdn.net/sevenjoin/article/details/88530962) 
 
 #### ```priority_queue```<a name="priority_queue"></a>:
-[check here](https://www.geeksforgeeks.org/priority-queue-in-cpp-stl/)
+➡️ [check here](https://www.geeksforgeeks.org/priority-queue-in-cpp-stl/)
 
 + two examples:
 
