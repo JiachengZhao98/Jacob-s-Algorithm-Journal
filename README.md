@@ -41,8 +41,11 @@
 
 ### CPP <a name="CPP"></a>
 
++ [vector](#vector)
++ [deque](#deque)
++ [priority_queue](#priority_queue)
 
-#### ```vector```
+#### ```vector```<a name="vector"></a>:
 + The usage of a 2-D ```vector``` ➡️ [click here](https://www.digitalocean.com/community/tutorials/2d-vectors-in-c-plus-plus) 
 
 + About built-in sorting function for ```vector```:```vector.sort()```:
@@ -115,7 +118,21 @@ vector::pop_back()
 In the first case we are creating a dynamic array of dynamic arrays (vector of vectors). The size of each vector could be changed at the run-time and all objects will be allocated on the heap.
 In the second case we are creating a fixed-size array of vectors. You have to define N at compile-time, and all vectors will be placed on the stack†, however, each vector will allocate elements on the heap.
 
----
+
+#### ```deque```<a name="deque"></a>:
+
+[check here](https://blog.csdn.net/sevenjoin/article/details/88530962) 
+
+#### ```priority_queue```<a name="priority_queue"></a>:
+[check here](https://www.geeksforgeeks.org/priority-queue-in-cpp-stl/)
+
++ two examples:
+
+```
+priority_queue<int> pq; // High to low
+
+priority_queue<int, vector<int>, greater<int>> pq; // Low to High
+```
 
 ### Java <a name="Java"></a>
 
