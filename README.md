@@ -37,6 +37,7 @@
 + [Java](#Java)
 + [Python](#Python)
 
+
 ---
 
 ### CPP <a name="CPP"></a>
@@ -44,6 +45,7 @@
 + [vector](#vector)
 + [deque](#deque)
 + [priority_queue](#priority_queue)
++ [string](#string)
 
 #### ```vector```<a name="vector"></a>:
 + The usage of a 2-D ```vector``` ➡️ [click here](https://www.digitalocean.com/community/tutorials/2d-vectors-in-c-plus-plus) 
@@ -63,7 +65,7 @@
 	+ ```int size_row = vec.size();  //acquire the number of row ```
 	+ ``` int size_col = vec[0].size();  //acquire the number of column```
 	
-+ how to round the output into two digits ( just remember the code below is enough...):
++ how to round the output into two digits ( just remembering the code below is enough...):
 
 ``` 
 #include<iomanip>  //header file
@@ -85,7 +87,7 @@ vector<int> ilist3  = ilist1; // third
 
 vector<int> ilist = {1,2,3.0,4,5,6,7};
 vector<int> ilist {1,2,3.0,4,5,6,7};
-If met some values that are not int, this func will automatically change the value type. 
+// If met some values that are not int, this func will automatically change the value type. 
 
  vector<int> ilist3(ilist.begin()+2,ilist.end()-1); //e.g. ilist3 = {3, 4, 5, 6} 
 // the vector only copies to the front value of the second value input
@@ -116,7 +118,7 @@ vector::pop_back()
 
 + The difference between ```vector<vector<int>> vec``` and ```vector<int> F[N]```: 
 In the first case we are creating a dynamic array of dynamic arrays (vector of vectors). The size of each vector could be changed at the run-time and all objects will be allocated on the heap.
-In the second case we are creating a fixed-size array of vectors. You have to define N at compile-time, and all vectors will be placed on the stack†, however, each vector will allocate elements on the heap.
+In the second case we are creating a fixed-size array of vectors. You have to define N at compile-time, and all vectors will be placed on the stack, however, each vector will allocate elements on the heap.
 
 
 #### ```deque```<a name="deque"></a>:
@@ -133,6 +135,32 @@ priority_queue<int> pq; // High to low
 
 priority_queue<int, vector<int>, greater<int>> pq; // Low to High
 ```
+
+#### ```string```<a name="string"></a>:
+
++ ```string``` DOES have a ```push_back``` function
+
++ We can convert ```string``` to ```int``` in multiple ways. The easiest way to do this is by using the ```std::stoi()``` function introduced in C++11; The differences between ```atoi()``` and ```stoi()```: ➡️ [check here](https://stackoverflow.com/questions/20583945/what-is-the-difference-between-stdatoi-and-stdstoi)
+
++ convert ```string``` to ```char```:
+
+```
+string str="adcd";
+char *p=(char*)str.c_str();
+```
+
++ convert ```string``` to ```int```:
+
+```
+ std::string str = "123";
+    int num;
+	// using stoi() to store the value of str1 to x
+    num = stoi(str);
+```
+
++ ```stringstream```: [check here](https://www.geeksforgeeks.org/stringstream-c-applications/). We should use ```stringstream``` to eliminate the space between words in a sentence, which is a ```string```.
+
+---
 
 ### Java <a name="Java"></a>
 
