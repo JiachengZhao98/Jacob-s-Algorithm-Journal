@@ -46,6 +46,7 @@
 + [deque](#deque)
 + [priority_queue](#priority_queue)
 + [string](#string)
++ [hash_table](#hashtable)
 
 #### ```vector```<a name="vector"></a>:
 + The usage of a 2-D ```vector``` ➡️ [click here](https://www.digitalocean.com/community/tutorials/2d-vectors-in-c-plus-plus) 
@@ -123,7 +124,7 @@ In the second case we are creating a fixed-size array of vectors. You have to de
 
 #### ```deque```<a name="deque"></a>:
 
-➡️ [check here](https://blog.csdn.net/sevenjoin/article/details/88530962) 
+➡️ [check here](https://www.geeksforgeeks.org/deque-cpp-stl/) 
 
 #### ```priority_queue```<a name="priority_queue"></a>:
 ➡️ [check here](https://www.geeksforgeeks.org/priority-queue-in-cpp-stl/)
@@ -158,10 +159,70 @@ char *p=(char*)str.c_str();
     num = stoi(str);
 ```
 
-+ ```stringstream```: [check here](https://www.geeksforgeeks.org/stringstream-c-applications/). We should use ```stringstream``` to eliminate the space between words in a sentence, which is a ```string```.
++ ```stringstream```: ➡️ [check here](https://www.geeksforgeeks.org/stringstream-c-applications/). We should use ```stringstream``` to eliminate the space between words in a sentence, which is a ```string```.
+
+#### ```Hash Table```<a name="hashtable"></a>:
+
+###### ```set```:
++ ```set``` does NOT allow duplicate elements and elements in ```set``` are ordered (ascending). 
+
++ ```unordered_set```does NOT allow duplicate elements and elements in ```set``` are NOT ordered. 
+
++ methods in ```set```:
+	+ ```begin()```	Returns an iterator to the first element in the set.
+	
+	+ ```end()``` 	Returns an iterator to the theoretical element that follows the last element in the set.
+
+	+ ```rbegin()``` 	Returns a reverse iterator pointing to the last element in the container.
+
+	+ ```rend()```	Returns a reverse iterator pointing to the theoretical element right before the first element in the set container.
+	+ ```crbegin()```	Returns a constant iterator pointing to the last element in the container.
+	+ ```crend()```	Returns a constant iterator pointing to the position just before the first element in the container.
+	+ ```cbegin()```	Returns a constant iterator pointing to the first element in the container.
+	+ ```cend()```	Returns a constant iterator pointing to the position past the last element in the container.
+	+ ```size()```	Returns the number of elements in the set.
+max_size()	Returns the maximum number of elements that the set can hold.
+	+ ```empty()```	Returns whether the set is empty.
+	+ ```insert(const g)``` 	Adds a new element ‘g’ to the set.
+	+ ```iterator insert (iterator position, const g)``` Adds a new element ‘g’ at the position pointed by the iterator.
+	+ ```erase(iterator position)``` 	Removes the element at the position pointed by the iterator.
+	+ ```erase(const g)```	Removes the value ‘g’ from the set.
+	+ ```clear()``` 	Removes all the elements from the set.
+	+ ```key_comp() / value_comp()``` 	Returns the object that determines how the elements in the set are ordered (‘<‘ by default).
+	+ ```find(const g)```	Returns an iterator to the element ‘g’ in the set if found, else returns the iterator to end.
+	+ ```count(const g)```	Returns 1 or 0 based on whether the element ‘g’ is present in the set or not.
+	+ ```lower_bound(const g)```	Returns an iterator to the first element that is equivalent to ‘g’ or definitely will not go before the element ‘g’ in the set.
+	+ ```upper_bound(const g)```	Returns an iterator to the first element that will go after the element ‘g’ in the set.
+
+###### ```map```:
+
++ The ```key``` of ```map``` are sorted ascending by default. 
+
++ When we use ```map.find(KEY)``` function, we can only search for the ```key``` part. We can NOT search the ```value``` part. 
++ Two ways to make iterator point to the second element of map:
+	1. ```it = ++map.begin();``` 
+	2. ```it = next(map.begin());```
 
 ---
 
 ### Java <a name="Java"></a>
 
+---
+
 ### Python <a name="Python"></a>
+
++ [string](#string)
++ [List](#List)
+
+##### ```string``` <a name="string"></a>:
++ use ```rstrip()``` to ensure that there is NO space at the end of a ```string```
+
+##### ```List``` <a name="List"></a>:
+
++ use ```List_name[-1]``` to access the last element within a ```List```  
+
++ Python lambda function:➡️ [check here](https://www.w3schools.com/python/python_lambda.asp)
+
++ Python ```List_name.sort()``` Method: ➡️ [check here](https://www.w3schools.com/python/ref_list_sort.asp)
+
++ Python ```List``` methods: ➡️ [check here](https://www.w3schools.com/python/python_ref_list.asp) , pay attention to the difference between the ```.append()``` and ```.extend()```. 
