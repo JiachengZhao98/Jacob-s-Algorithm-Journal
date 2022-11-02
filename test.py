@@ -15,3 +15,7 @@ from collections import deque
 a = deque([1])
 a.appendleft(2)
 print(a[1])
+
+
+def uniquePaths(n: int) -> int:
+    

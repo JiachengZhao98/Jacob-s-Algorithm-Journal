@@ -40,6 +40,7 @@ vector<int> getMaxArray(vector<int>& arr) {
     return ans;
 }
 
+
 int main()
 {
     vector<int> arr = {6,1,2,3,4,6};
@@ -49,3 +50,4 @@ int main()
     }
     return 0;
 }
+
