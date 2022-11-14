@@ -12,10 +12,7 @@ import numpy
 from collections import deque
 
 
-a = deque([1])
-a.appendleft(2)
-print(a[1])
+a = 1
+a = a +1
+print(a)
 
-
-def uniquePaths(n: int) -> int:
-    

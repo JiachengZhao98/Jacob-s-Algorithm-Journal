@@ -5,8 +5,7 @@ import math
 from numpy import product
 import sympy
 from collections import deque
-
-from symbol import return_stmt
+import queue
 
 
 
@@ -49,8 +48,7 @@ class Solution:
             "L": 50,
             "C": 100,
             "D": 500,
-            "M": 1000,
-                }
+        }
         num = 0
         for i in range(len(s) - 1, -1, -1):
             num += values[s[i]]
@@ -109,9 +107,32 @@ class Solution:
             return 0
         return self.ans_1352[-1] // self.ans_1352[-k - 1]
 
+    # LC 268. Missing Number
+    def missingNumber(self, nums: List[int]) -> int:
+        expetct_num = len(nums) * (len(nums) + 1) // 2
+        real_sum = sum(nums)
+        return real_sum - expetct_num
 
-
-
+    # LC 207. Course Schedule
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        courseDependency = [0] * numCourses
+        courseList = [[] for i in range(numCourses)]
+        for after, before in prerequisites:
+            courseList[before].append(after)
+            courseDependency[after] += 1
+        q = deque()
+        for i in range(numCourses):
+            if courseDependency[i] == 0:
+                q.append(i)
+        nodesPopped = 0
+        while len(q):
+            temp = q.pop()
+            nodesPopped += 1
+            for i in courseList[temp]:
+                courseDependency[i] -= 1
+                if courseDependency[i] == 0:
+                    q.append(i)
+        return nodesPopped == numCourses
 
 
 sol = Solution()
