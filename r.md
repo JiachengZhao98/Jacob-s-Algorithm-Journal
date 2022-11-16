@@ -41,3 +41,8 @@ var mailList = [
 ];
 ```
 and put this ```mailList``` in the position of the function which is after ```to```.  
+
+
+## Google Signin/Signup
+
+- We can use ```passport.js```. [Check here](https://www.passportjs.org/)
