@@ -1,4 +1,3 @@
-from functools import lru_cache
 import imp
 from importlib.resources import path
 from mmap import mmap
@@ -9,6 +8,9 @@ from typing import List
 import numpy as np
 import sys
 import imp
+from queue import Queue
+from collections import deque
+
 
 
 class Solution:
@@ -34,8 +36,6 @@ class Solution:
         for r in range(m-1, -1, -1):
             for c in range(n-1, -1, -1):
                 presum[r][c] = presum[r][c + 1] + presum[r + 1][c] - presum[r + 1][c + 1] + (forest[r][c] == 2)
-
-        @lru_cache(None)
         def dp(k, r, c) -> int:
             if presum[r][c] == 0:
                 return 0
@@ -132,12 +132,6 @@ class Solution:
                     record = temp
                     ans = count
         return ans
-
-
-    # LC 993. Cousins in Binary Tree
-
-
-
 
 
 

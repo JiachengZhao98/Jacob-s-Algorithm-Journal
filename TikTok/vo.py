@@ -5,9 +5,13 @@ import math
 from numpy import product
 import sympy
 from collections import deque
-import queue
 
-
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 class Solution:
 
@@ -133,6 +137,76 @@ class Solution:
                 if courseDependency[i] == 0:
                     q.append(i)
         return nodesPopped == numCourses
+
+    # LC 127. Word Ladder
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        step = 0
+        wordLength = len(beginWord)
+        if endWord not in wordList: return 0
+        if beginWord in wordList:
+            wordList.remove(beginWord)
+        q = deque()
+        q.append(beginWord)
+        while len(q):
+            tempWord = q.popleft()
+            formerLen = len(q)
+            for i in range(len(wordList)):
+                diff = 0
+                for j in range(wordLength):
+                    if tempWord[j] != wordList[i][j]:
+                        diff += 1
+                if diff == 1:
+                    q.append(wordList[i])
+                    step += 1
+                    wordList.remove(wordList[i])
+                    i -= 1
+            if len(q) == formerLen: step -= 1
+        return step + 1
+
+    # LC 103. Binary Tree Zigzag Level Order Traversal
+    def zigzagLevelOrder(self, root) -> List[List[int]]:
+        res = []
+        if root is None:
+            return res
+        counter = 0
+        queue = deque()
+        queue.append(root)
+        while len(queue):
+            size = len(queue)
+            vec = []
+            for i in range(size):
+                node = queue.popleft()
+                vec.append(node.val)
+                if node.left:
+                    queue.append(node.left)
+                if node.right:
+                    queue.append(node.right)
+            if counter % 2:
+                vec.reverse()
+            res.append(vec)
+            counter += 1
+        return res
+
+    # LC 503. Next Greater Element II
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
+        stack = deque()
+        res = [-1] * len(nums)
+        for i in range(len(nums) - 2, -1, -1):
+            stack.append(nums[i])
+        for i in range(len(nums) - 1, -1, -1):
+            while len(stack):
+                if stack[-1] > nums[i]:
+                    break
+                stack.pop()
+            if (len(stack)): res[i] = stack[-1]
+            stack.append(nums[i])
+        return res
+
+
+
+
+
+
 
 
 sol = Solution()

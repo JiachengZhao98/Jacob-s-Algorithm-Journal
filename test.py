@@ -12,7 +12,10 @@ import numpy
 from collections import deque
 
 
-a = 1
-a = a +1
-print(a)
+a = "123"
+b = "321"
+if a == b:
+    print("same")
+else:
+    print("not same")
 
