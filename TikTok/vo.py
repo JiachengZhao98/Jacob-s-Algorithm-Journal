@@ -13,6 +13,12 @@ class TreeNode:
         self.left = left
         self.right = right
 
+# Definition for singly-linked list.
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
 class Solution:
 
     # LC 769. Max Chunks To Make Sorted
@@ -201,6 +207,36 @@ class Solution:
             if (len(stack)): res[i] = stack[-1]
             stack.append(nums[i])
         return res
+
+    # LC 19. Remove Nth Node From End of List
+    def removeNthFromEnd(self, head, n: int) ->ListNode:
+        stack = deque()
+        head_dul = head
+        while head_dul is not None:
+            stack.append(head_dul)
+            head_dul = head_dul.next
+        size = len(stack)
+        if n == size:
+            head = head.next
+            return head
+        else :
+            stack[size - n - 1].next = stack[size - n - 1].next.next
+            return head
+
+    # LC 141. Linked List Cycle
+    def hasCycle(self, head) -> bool:
+        oneStep = head
+        twoStep = head
+        while twoStep and twoStep.next:  # remember to make sure that both twoStep and twoStep are NOT null pointer
+            oneStep = oneStep.next
+            twoStep = twoStep.next.next
+            if oneStep == twoStep:
+                return True
+        return False
+
+
+
+
 
 
 
