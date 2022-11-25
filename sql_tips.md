@@ -26,7 +26,7 @@ WHERE
     AND p1.email = p2.email
 ```
 
-## LC -- 197. Rising Temperature
+## LC 197. Rising Temperature
 
 - Use ```DATEDIFF``` to calculate the the number of days between two dates. 
 
