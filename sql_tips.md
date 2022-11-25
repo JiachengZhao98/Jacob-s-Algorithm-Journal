@@ -25,3 +25,16 @@ WHERE
     p1.id != p2.id
     AND p1.email = p2.email
 ```
+
+## LC -- 197. Rising Temperature
+
+- Use ```DATEDIFF``` to calculate the the number of days between two dates. 
+
+	+ syntax:
+
+	
+```
+DATEDIFF(date1, date2)             -- (date1 - date2)
+```
+
+The results can be negative. 

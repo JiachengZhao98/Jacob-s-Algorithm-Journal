@@ -108,3 +108,12 @@ FROM
 WHERE
     p1.id != p2.id
     AND p1.email = p2.email
+
+-- 197. Rising Temperature
+SELECT
+    w2.id AS id
+FROM
+    Weather w1, Weather w2
+WHERE
+    w1.recordDate + 1 = w2.recordDate
+    AND w2.temperature > w1.temperature
