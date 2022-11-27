@@ -109,6 +109,7 @@ WHERE
     p1.id != p2.id
     AND p1.email = p2.email
 
+
 -- 197. Rising Temperature
 SELECT
     w2.id AS id
@@ -117,3 +118,34 @@ FROM
 WHERE
     w1.recordDate + 1 = w2.recordDate
     AND w2.temperature > w1.temperature
+
+
+-- 595. Big Countries
+SELECT
+    w1.name, w1.population, w1.area
+FROM
+    World w1
+WHERE
+    w1.area > 3000000
+    AND w1.population > 25000000
+
+
+-- 511. Game Play Analysis I
+
+-- this solution exceeds the time limit
+SELECT DISTINCT
+    a1.player_id, a1.event_date AS first_login
+FROM
+    Activity a1
+WHERE
+    a1.event_date = (SELECT min(a2.event_date) FROM Activity a2 WHERE a1.player_id = a2.player_id)
+
+
+-- another approach
+SELECT DISTINCT
+    a1.player_id, min(a1.event_date) AS first_login
+FROM
+    Activity a1
+GROUP BY
+    a1.player_id
+

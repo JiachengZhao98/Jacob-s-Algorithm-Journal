@@ -19,6 +19,12 @@ class ListNode:
         self.val = val
         self.next = next
 
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+
 class Solution:
 
     # LC 769. Max Chunks To Make Sorted
@@ -234,15 +240,39 @@ class Solution:
                 return True
         return False
 
-    
 
 
+    # LC 133. Clone Graph
+
+    # BFS approach
+    def cloneGraph(self, node):
+        if not node:
+            return node
+        visited = {}
+        visited[node] = Node(node.val, [])
+        que = deque([node])
+        while que:
+            front = que.popleft()
+            for neighbor in front.neighbors:
+                if neighbor not in visited:
+                    visited[neighbor] = Node(neighbor.val, [])
+                    que.append(neighbor)
+                visited[front].neighbors.append(visited[neighbor])
+        return visited[node]
 
 
-
-
-
-
+    # DFS approach
+    def __init__(self):
+        self.myMap = {}
+    def cloneGraph(self, node):
+        if not node:
+            return node
+        if node in self.myMap:
+            return self.myMap[node]
+        self.myMap[node] = Node(node.val, [])
+        for neighbor in node.neighbors:
+            self.myMap[node].neighbors.append(self.cloneGraph(neighbor))
+        return self.myMap[node]
 
 
 
