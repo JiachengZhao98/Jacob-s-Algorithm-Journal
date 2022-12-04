@@ -177,7 +177,7 @@ public:
 
     // approach: Dynamic programming
     // transition equation:
-    // totalcost[i] = totalCost[i - 1] + cost[0] + totalCost[i - 7] + cost[1] + totalCost[i - 1] + cost[2]
+    // totalcost[i] = totalCost[i - 1] + cost[0] + totalCost[i - 7] + cost[1] + totalCost[i - 30] + cost[2]
 
 
     int MIN_3(int a, int b, int c) {
@@ -199,7 +199,7 @@ public:
             else {
                 totalCost[i] = MIN_3(  // the cost for "travel and/or rest to day i" is decided by the 3 following costs
                 totalCost[max(0, i - 1)] + costs[0],    // if we buy one-day pass
-                totalCost[max(0, i - 7)] + costs[1],    // if we buy one-wek pass
+                totalCost[max(0, i - 7)] + costs[1],    // if we buy one-week pass
                 totalCost[max(0, i - 30)] + costs[2]);  // if we buy one-month pass
             }
         }
