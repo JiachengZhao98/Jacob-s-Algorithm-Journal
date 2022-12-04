@@ -275,6 +275,47 @@ class Solution:
         return self.myMap[node]
 
 
+    # LC 200. Number of Islands
+
+    # BFS approach
+    def dfs(self, grid, i, j) -> None:
+        if i >= len(grid) or j >= len(grid[0]) or i < 0 or j < 0 or grid[i][j] != '1':
+            return
+        grid[i][j] = '#'
+        self.dfs(grid, i + 1, j)
+        self.dfs(grid, i - 1, j)
+        self.dfs(grid, i, j + 1)
+        self.dfs(grid, i, j - 1)
+
+    def numIslands(self, grid: List[List[str]]) -> int:
+        result = 0
+        #visited = [[False] * len(grid[0])] * len(grid)
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == '1':
+                    self.dfs(grid, i, j)
+                    result += 1
+        return result
+
+
+    #  LC 386. Lexicographical Numbers
+    def lexicalOrder(self, n: int) -> List[int]:
+        order = [1]
+        while len(order) < n:
+            new = order[-1] * 10
+            while new > n:
+                new //= 10
+                new += 1
+                while new % 10 == 0:
+                    new //= 10
+            order.append(new)
+
+        return order
+
+    
+
+
+
 
 sol = Solution()
 print(sol.getFactors(12))

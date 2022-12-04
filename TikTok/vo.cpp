@@ -7,9 +7,8 @@
 #include "string"
 using namespace std;
 
-class Solution {
-public:
-    struct TreeNode {
+
+struct TreeNode {
     int val;
       TreeNode *left;
       TreeNode *right;
@@ -17,6 +16,8 @@ public:
       TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
       TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
   };
+class Solution {
+public:
     bool isCousins(TreeNode* root, int x, int y) {
         vector<int> rec(2, -1);
         if (root == nullptr){
@@ -113,4 +114,96 @@ public:
         }
         return res;
     }
+
+
+    // LC 200. Number of Islands
+
+    void dfs(vector<vector<char>>& grid, int i, int j, vector<vector<bool>>& visited) {
+        if (grid[i][j] == '0' || i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size() || visited[i][j]) {
+            return;
+        }
+        visited[i][j] = true;
+        dfs(grid, i + 1, j, visited);
+        dfs(grid, i - 1, j, visited);
+        dfs(grid, i, j + 1, visited);
+        dfs(grid, i, j - 1, visited);
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int result = 0;
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == '1' && visited[i][j] == false) {
+                    dfs(grid, i, j, visited);
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+
+    // LC 386. Lexicographical Numbers
+    vector<int> lexicalOrder(int n) {
+        vector<int> order = {1};
+        while (order.size() < n) {
+            int next = order[order.size() - 1] * 10;
+            while (next > n) {
+                next /= 10;
+                next++;
+                while (next % 10 == 0) {
+                    next /= 10;
+                }
+            }
+            order.push_back(next);
+        }
+        return order;
+    }
+
+    // DFS approach
+    void dfs_for_386(int target, int n, vector<int>& res) {
+        if (target > n) return;
+        res.push_back(target);
+        dfs_for_386(target * 10, n, res);
+        if (target % 10 != 9) dfs_for_386(target + 1, n, res);
+    }
+    vector<int> lexicalOrder_dfs(int n) {
+        vector<int> res;
+        dfs_for_386(1, n, res);
+        return res;
+    }
+
+
+    // LC 983. Minimum Cost For Tickets
+
+    // approach: Dynamic programming
+    // transition equation:
+    // totalcost[i] = totalCost[i - 1] + cost[0] + totalCost[i - 7] + cost[1] + totalCost[i - 1] + cost[2]
+
+
+    int MIN_3(int a, int b, int c) {
+        int res;
+        res = min(a, b);
+        res = min(res, c);
+        return res;
+    }
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        vector<int> totalCost(days[days.size() - 1] + 1, 0);
+        unordered_set<int> mySet;
+        for (auto a : days){
+            mySet.insert(a);
+        }
+        for (int i = 1; i <= days[days.size() - 1]; i++) {
+            if (mySet.find(i) == mySet.end()) {
+                totalCost[i] = totalCost[i - 1];   // the cost remains unchanged if we don't need to travel
+            }
+            else {
+                totalCost[i] = MIN_3(  // the cost for "travel and/or rest to day i" is decided by the 3 following costs
+                totalCost[max(0, i - 1)] + costs[0],    // if we buy one-day pass
+                totalCost[max(0, i - 7)] + costs[1],    // if we buy one-wek pass
+                totalCost[max(0, i - 30)] + costs[2]);  // if we buy one-month pass
+            }
+        }
+        return totalCost[days[days.size() - 1]];
+    }
+
 };
