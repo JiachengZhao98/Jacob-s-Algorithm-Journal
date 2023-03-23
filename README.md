@@ -204,8 +204,11 @@ max_size()	Returns the maximum number of elements that the set can hold.
 	2. ```it = next(map.begin());```
 	
 
-###### ```compile instructions```:
+##### compile instructions:
 ```$ g++ -std=c++11 your_file.cpp -o your_program```
+
+##### show current path in terminal:
+```pwd```(means: **p**rint **w**orking **d**irectory)
 
 ---
 
