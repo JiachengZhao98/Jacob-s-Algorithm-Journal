@@ -312,7 +312,65 @@ class Solution:
 
         return order
 
-    
+    #LC 79. Word Search
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        def dfs(board, word, i, j, visited, count):
+            if count == len(word):
+                return True
+            if (i < 0 or j < 0 or i >= len(board) or j >= len(board[0]) or visited[i][j]):
+                return 0
+            if board[i][j] != word[count]:
+                return 0
+            visited[i][j] = True
+            b1 = dfs(board, word, i + 1, j, visited, count + 1)
+            b2 = dfs(board, word, i - 1, j, visited, count + 1)
+            b3 = dfs(board, word, i, j + 1, visited, count + 1)
+            b4 = dfs(board, word, i, j - 1, visited, count + 1)
+            if b1 or b2 or b3 or b4:
+                return True
+            visited[i][j] = 0
+            return False
+
+        visited = [[False] * len(board[0]) for _ in range(len(board))]
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == word[0]:
+                    if dfs(board, word, i, j, visited, 0):
+                        return True
+        return False
+
+
+    # LC 490. The Maze
+    def hasPath(self, maze: List[List[int]], start: List[int], destination: List[int]) -> bool:
+        visited = []
+        def dfs_for_maze(maze, start: List[int], destination, visited):  # make some modifications to the original DFS
+            if start in visited:
+                return False
+            if start == destination:
+                return True
+            visited.append(start)
+            r, l, u, d = start[1] + 1, start[1] - 1, start[0] - 1, start[0] + 1
+            while r < len(maze[0]) and maze[start[0]][r] == 0:  # do not stop until hitting a wall. The following is similiar
+                                                                # to this approach
+                r += 1
+            if dfs_for_maze(maze, [start[0], r - 1], destination, visited):
+                return True
+            while l >= 0 and maze[start[0]][l] == 0:
+                l -= 1
+            if dfs_for_maze(maze, [start[0], l + 1], destination, visited):
+                return True
+            while u >= 0 and maze[u][start[1]] == 0:
+                u -= 1
+            if dfs_for_maze(maze, [u + 1, start[1]], destination, visited):
+                return True
+            while d < len(maze) and maze[d][start[1]] == 0:
+                d += 1
+            if dfs_for_maze(maze, [d - 1, start[1]], destination, visited):
+                return True
+            return False
+        return dfs_for_maze(maze, start, destination, visited)
+
+
 
 
 

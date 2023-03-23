@@ -202,6 +202,10 @@ max_size()	Returns the maximum number of elements that the set can hold.
 + Two ways to make iterator point to the second element of map:
 	1. ```it = ++map.begin();``` 
 	2. ```it = next(map.begin());```
+	
+
+###### ```compile instructions```:
+```$ g++ -std=c++11 your_file.cpp -o your_program```
 
 ---
 

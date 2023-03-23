@@ -5,6 +5,7 @@
 #include "map"
 #include "unordered_map"
 #include "string"
+#include "iostream"
 using namespace std;
 
 
@@ -18,37 +19,37 @@ struct TreeNode {
   };
 class Solution {
 public:
-    bool isCousins(TreeNode* root, int x, int y) {
-        vector<int> rec(2, -1);
-        if (root == nullptr){
-            return false;
-        }
-        int depth = 0;
-        queue<pair<TreeNode*, int>> que;
-        que.push({root, depth});
-        while (!que.empty()) {
-            auto temp = que.front();
-            que.pop();
-            if (temp.first->val == x) {
-                rec[0] = temp.second;
-            }
-            if (temp.first->val == y) {
-                rec[1] = temp.second;
-            }
-            if (rec[0] != -1 && rec[1] != -1) break;
-            if (temp.first->left) {
-                int de = temp.second;
-                de++;
-                que.push(pair<temp.first->left, de>);
-            }
-            if (temp.first->right) {
-                int fe = temp.second;
-                fe++;
-                que.push(pair<temp.first->right, fe>);
-            }
-        }
-        return (rec[0] == rec[1]);
-    }
+    // bool isCousins(TreeNode* root, int x, int y) {
+    //     vector<int> rec(2, -1);
+    //     if (root == nullptr){
+    //         return false;
+    //     }
+    //     int depth = 0;
+    //     queue<pair<TreeNode*, int>> que;
+    //     que.push({root, depth});
+    //     while (!que.empty()) {
+    //         auto temp = que.front();
+    //         que.pop();
+    //         if (temp.first->val == x) {
+    //             rec[0] = temp.second;
+    //         }
+    //         if (temp.first->val == y) {
+    //             rec[1] = temp.second;
+    //         }
+    //         if (rec[0] != -1 && rec[1] != -1) break;
+    //         if (temp.first->left) {
+    //             int de = temp.second;
+    //             de++;
+    //             que.push(pair<temp.first->left, de>);
+    //         }
+    //         if (temp.first->right) {
+    //             int fe = temp.second;
+    //             fe++;
+    //             que.push(pair<temp.first->right, fe>);
+    //         }
+    //     }
+    //     return (rec[0] == rec[1]);
+    // }
 
     // LC 127. Word Ladder
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
@@ -119,9 +120,11 @@ public:
     // LC 200. Number of Islands
 
     void dfs(vector<vector<char>>& grid, int i, int j, vector<vector<bool>>& visited) {
-        if (grid[i][j] == '0' || i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size() || visited[i][j]) {
+        if (i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size()) {
             return;
         }
+        if (visited[i][j]) return;
+        if (grid[i][j] == '0') return;
         visited[i][j] = true;
         dfs(grid, i + 1, j, visited);
         dfs(grid, i - 1, j, visited);
@@ -189,7 +192,7 @@ public:
     int mincostTickets(vector<int>& days, vector<int>& costs) {
         vector<int> totalCost(days[days.size() - 1] + 1, 0);
         unordered_set<int> mySet;
-        for (auto a : days){
+        for (auto a : days) {
             mySet.insert(a);
         }
         for (int i = 1; i <= days[days.size() - 1]; i++) {
@@ -206,4 +209,43 @@ public:
         return totalCost[days[days.size() - 1]];
     }
 
+
+    // LC 694. Number of Distinct Islands
+    void dfs_for_694(vector<vector<int>>& grid, int i, int j,vector<vector<bool>>& visited, string& ds, string dir) {
+        if (i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size()) {
+            return;
+        }
+        if (visited[i][j]) return;
+        if (grid[i][j] == 0) return;
+        visited[i][j] = true;
+        ds += dir;
+        dfs_for_694(grid, i + 1, j, visited, ds, "E");
+        dfs_for_694(grid, i - 1, j, visited, ds, "W");
+        dfs_for_694(grid, i, j + 1, visited, ds, "N");
+        dfs_for_694(grid, i, j - 1, visited, ds, "S");
+        ds += "B";
+    }
+    int numDistinctIslands(vector<vector<int>>& grid) {
+        set<string> mySet;
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid[0].size(), false));
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == 1 && visited[i][j] == false) {
+                    string ds = "";
+                    dfs_for_694(grid, i, j, visited, ds, "o");
+                    cout<<ds<<endl;
+                    mySet.insert(ds);
+                }
+            }
+        }
+        return mySet.size();
+    }
+
 };
+
+int main() {
+    Solution sol;
+    vector<vector<int>> grid{{1,1,0,0,0},{1,1,0,0,0},{0,0,0,1,1},{0,0,0,1,1}};
+    int ans = sol.numDistinctIslands(grid);
+    cout<<ans<<endl;
+}

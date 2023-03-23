@@ -87,3 +87,20 @@ class Solution:
                 dfs(adj, visited, i)
                 count += 1
         return count
+
+    # LC 2279. Maximum Bags With Full Capacity of Rocks
+    def maximumBags(self, capacity: List[int], rocks: List[int], additionalRocks: int) -> int:
+        remain = []
+        for i in range(len(rocks)):
+            remain.append(capacity[i] - rocks[i])
+        remain.sort()
+        i = 0
+        ans = 0
+        while (i < len(remain)):
+            additionalRocks -= remain[i]
+            ans += 1
+            i += 1
+            if additionalRocks < 0:
+                ans -= 1
+                break
+        return ans
