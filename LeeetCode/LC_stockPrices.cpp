@@ -18,13 +18,13 @@ using namespace std;
 
 // dynamic programming framework for stock prices problems
 
-//base case：
-//dp[-1][...][0] = dp[...][0][0] = 0
-//dp[-1][...][1] = dp[...][0][1] = -infinity
+// base case：
+// dp[-1][...][0] = dp[...][0][0] = 0
+// dp[-1][...][1] = dp[...][0][1] = -infinity
 //
-//state transfer formula：
-//dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
-//dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+// state transfer formula：
+// dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+// dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
 
 
 
@@ -50,7 +50,7 @@ public:
 
 // dynamic programming
 class Solution_121_2 {
-    
+
 public:
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
@@ -64,7 +64,7 @@ public:
             dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
             dp[i][1] = max(-prices[i], dp[i - 1][1]); // In this case, dp[i - 1][0][0] - prices[i] = -prices[i] because when on day 0 and we don't buy any stocks yet
                                                      //, of course our profit is -prices[i] since dp[i - 1][0][0] = 0;
-            
+
                                                      // In this two state transfer formulas k in all equations is 1, so we simplify the formula by removing the k from
                                                      // the formula.
         }
@@ -117,7 +117,7 @@ public:
 };
 
 
- 
+
 // LC_123  Best Time to Buy and Sell Stock III : HARD
 
 //dynamic programming

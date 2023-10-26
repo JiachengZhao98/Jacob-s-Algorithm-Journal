@@ -210,6 +210,8 @@ max_size()	Returns the maximum number of elements that the set can hold.
 ##### show current path in terminal:
 ```pwd```(means: **p**rint **w**orking **d**irectory)
 
+zip a file: ```zip -r archive_name.zip folder_to_compress```
+
 ---
 
 ### Java <a name="Java"></a>
@@ -233,3 +235,63 @@ max_size()	Returns the maximum number of elements that the set can hold.
 + Python ```List_name.sort()``` Method: ➡️ [check here](https://www.w3schools.com/python/ref_list_sort.asp)
 
 + Python ```List``` methods: ➡️ [check here](https://www.w3schools.com/python/python_ref_list.asp) , pay attention to the difference between the ```.append()``` and ```.extend()```. 
+
+
+In Python, a ```set``` is a collection of **unique** items. Here's how you can define and use sets:
+
+1. **Defining a Set Using Curly Braces**:
+   
+   ```python
+   fruits = {"apple", "banana", "cherry"}
+   
+   print(fruits)  # Outputs: {'apple', 'cherry', 'banana'}
+   ```
+
+2. **Defining a Set Using the `set()` Constructor**:
+
+   ```python
+   fruits = set(["apple", "banana", "cherry"])
+   
+   print(fruits)  # Outputs: {'apple', 'cherry', 'banana'}
+   ```
+
+   Note: Using the `set()` constructor is especially useful when converting other data types (like lists or tuples) to sets.
+
+3. **Adding an Element to a Set**:
+
+   ```python
+   fruits.add("orange")
+   print(fruits)  # Outputs: {'apple', 'cherry', 'banana', 'orange'}
+   ```
+
+4. **Removing an Element from a Set**:
+
+   ```python
+   fruits.remove("apple")  # Raises an error if "apple" is not found
+   fruits.discard("apple")  # Does not raise an error if "apple" is not found
+   ```
+
+5. **Checking if an Element is in a Set**:
+
+   ```python
+   if "banana" in fruits:
+       print("Banana is in the set")
+   ```
+
+6. **Union of Two Sets**:
+
+   ```python
+   fruits1 = {"apple", "banana", "cherry"}
+   fruits2 = {"grape", "orange", "apple"}  # Note: "apple" is common
+   union_set = fruits1 | fruits2
+   print(union_set)  # Outputs: {'grape', 'apple', 'cherry', 'orange', 'banana'}
+   ```
+
+7. **Intersection of Two Sets**:
+
+   ```python
+   common_fruits = fruits1 & fruits2
+   print(common_fruits)  # Outputs: {'apple'}
+   ```
+
+Remember, sets are unordered, so the items might not appear in the order you expect when you print or iterate over a set. Also, sets are mutable, but the elements themselves need to be of a type that is hashable (which means you can't have lists or dictionaries as set elements).
