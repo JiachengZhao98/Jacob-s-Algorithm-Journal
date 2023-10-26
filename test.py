@@ -103,12 +103,12 @@ def check(data, mid, k):
 
 def minimumCost(data, k):
     data.sort()
-    c = 0
+    capacity = 0
     n = len(data)
     for i in range(n // 2):
-        c += data[n - i - 1]
+        capacity += data[n - i - 1]
 
-    if c < k:
+    if capacity < k:
         return -1
 
     l = 0
