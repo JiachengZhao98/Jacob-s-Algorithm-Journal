@@ -86,6 +86,28 @@ def minTotalCost(n, price):
 
     return original_cost - max_reduction
 
+
+def minimumTotalCost (price):
+    sum_val = 0
+    for i in range(1, len(price)):
+        sum_val = abs(price[i] - price[i - 1])
+    res = sum_val
+    for i in range(len(price)):
+        ss = sum_val
+        if i >= 1:
+            ss -= abs(price[i] - price[i - 1])
+        if i + 1 < len(price):
+            ss -= abs(price[i + 1] - price[i])
+        p = price[i]
+        price[i] //= 2
+        if i >= 1:
+            ss += abs(price[i] - price[i - 1])
+        if i + 1 < len(price):
+            ss += abs(price[i + 1] - price[i])
+        price[i] = p
+        res = min(res, ss)
+    return res
+
 # # Example
 # n = 3
 # price = [1,4,1]
@@ -115,11 +137,30 @@ def minimumCost(data, k):
     r = n // 2
 
     while l < r:
-        mid = (l + r) //2
+        mid = (l + r) // 2
         if check(data, mid, k):
             r = mid
         else:
-            l= mid + 1
+            l = mid + 1
     return l
 
+# def minCost(data, k):
+#     data.sort()
+#     cap_large = 0
+#     n = len(data)
+#     for i in range(n // 2):
+#         cap_large += data[n - 1 - i]
+#     if cap_large < k:
+#         return -1
 
+#     res = 0
+#     for i in range(n // 2):
+#         cap_samll += data[n - 1 - i]- data[i]
+#         res += 1
+#         if cap_samll >= k:
+#             break
+#     return res
+
+data = [1,2,3,5,7,8]
+k = 14
+print(minCost(data, k))
