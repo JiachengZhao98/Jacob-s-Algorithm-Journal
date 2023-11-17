@@ -34,133 +34,143 @@ import numpy
 # result = sol.numIslands([["0","1","0"],["1","0","1"],["0","1","0"]])
 # print(result)
 
-from collections import defaultdict, deque
-# class Solution:
-#     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-#         courseDependency = [0] * numCourses
-#         adjCourse = defaultdict(list)
+# from collections import defaultdict, deque
+# # class Solution:
+# #     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+# #         courseDependency = [0] * numCourses
+# #         adjCourse = defaultdict(list)
 
-#         for prereq in prerequisites:
-#             courseDependency[prereq[0]] += 1
-#             adjCourse[prereq[1]].append(prereq[0])
+# #         for prereq in prerequisites:
+# #             courseDependency[prereq[0]] += 1
+# #             adjCourse[prereq[1]].append(prereq[0])
 
-#         res = []
-#         visited = [False] * numCourses
-#         q = deque()
+# #         res = []
+# #         visited = [False] * numCourses
+# #         q = deque()
 
-#         for i in range(numCourses):
-#             if courseDependency[i] == 0:
-#                 q.append(i)
-#                 visited[i] = True
+# #         for i in range(numCourses):
+# #             if courseDependency[i] == 0:
+# #                 q.append(i)
+# #                 visited[i] = True
 
-#         while q:
-#             course = q.popleft()
-#             res.append(course)
-#             for dependentCourse in adjCourse[course]:
-#                 if visited[dependentCourse] == False:
-#                     courseDependency[dependentCourse] -= 1
-#                     if courseDependency[dependentCourse] == 0:
-#                         visited[dependentCourse] = True
-#                         q.append(dependentCourse)
+# #         while q:
+# #             course = q.popleft()
+# #             res.append(course)
+# #             for dependentCourse in adjCourse[course]:
+# #                 if visited[dependentCourse] == False:
+# #                     courseDependency[dependentCourse] -= 1
+# #                     if courseDependency[dependentCourse] == 0:
+# #                         visited[dependentCourse] = True
+# #                         q.append(dependentCourse)
 
-#         for visit in visited:
-#             if visit == False:
-#                 return []
+# #         for visit in visited:
+# #             if visit == False:
+# #                 return []
 
-#         return res
+# #         return res
 
-def minTotalCost(n, price):
-    # Calculate the total cost without using the special offer
-    original_cost = sum(abs(price[i] - price[i+1]) for i in range(n-1))
+# def minTotalCost(n, price):
+#     # Calculate the total cost without using the special offer
+#     original_cost = sum(abs(price[i] - price[i+1]) for i in range(n-1))
 
-    max_reduction = 0
-    for i in range(n):
-        reduction = 0
-        # Calculate the reduction in cost for the left neighbor
-        if i > 0:
-            reduction += abs(price[i] - price[i-1]) - abs(price[i] // 2 - price[i-1])
-        # Calculate the reduction in cost for the right neighbor
-        if i < n-1:
-            reduction += abs(price[i] - price[i+1]) - abs(price[i] // 2 - price[i+1])
-        max_reduction = max(max_reduction, reduction)
+#     max_reduction = 0
+#     for i in range(n):
+#         reduction = 0
+#         # Calculate the reduction in cost for the left neighbor
+#         if i > 0:
+#             reduction += abs(price[i] - price[i-1]) - abs(price[i] // 2 - price[i-1])
+#         # Calculate the reduction in cost for the right neighbor
+#         if i < n-1:
+#             reduction += abs(price[i] - price[i+1]) - abs(price[i] // 2 - price[i+1])
+#         max_reduction = max(max_reduction, reduction)
 
-    return original_cost - max_reduction
+#     return original_cost - max_reduction
 
 
-def minimumTotalCost (price):
-    sum_val = 0
-    for i in range(1, len(price)):
-        sum_val = abs(price[i] - price[i - 1])
-    res = sum_val
-    for i in range(len(price)):
-        ss = sum_val
-        if i >= 1:
-            ss -= abs(price[i] - price[i - 1])
-        if i + 1 < len(price):
-            ss -= abs(price[i + 1] - price[i])
-        p = price[i]
-        price[i] //= 2
-        if i >= 1:
-            ss += abs(price[i] - price[i - 1])
-        if i + 1 < len(price):
-            ss += abs(price[i + 1] - price[i])
-        price[i] = p
-        res = min(res, ss)
-    return res
-
-# # Example
-# n = 3
-# price = [1,4,1]
-# print(minTotalCost(n, price))
-
-def check(data, mid, k):
-    s = 0
-    n = len(data)
-    for i in range(mid):
-        s += data[n - i - 1]
-
-    for i in range(mid, n - mid, 2):
-        s += data[i]
-    return s >= k
-
-def minimumCost(data, k):
-    data.sort()
-    capacity = 0
-    n = len(data)
-    for i in range(n // 2):
-        capacity += data[n - i - 1]
-
-    if capacity < k:
-        return -1
-
-    l = 0
-    r = n // 2
-
-    while l < r:
-        mid = (l + r) // 2
-        if check(data, mid, k):
-            r = mid
-        else:
-            l = mid + 1
-    return l
-
-# def minCost(data, k):
-#     data.sort()
-#     cap_large = 0
-#     n = len(data)
-#     for i in range(n // 2):
-#         cap_large += data[n - 1 - i]
-#     if cap_large < k:
-#         return -1
-
-#     res = 0
-#     for i in range(n // 2):
-#         cap_samll += data[n - 1 - i]- data[i]
-#         res += 1
-#         if cap_samll >= k:
-#             break
+# def minimumTotalCost (price):
+#     sum_val = 0
+#     for i in range(1, len(price)):
+#         sum_val = abs(price[i] - price[i - 1])
+#     res = sum_val
+#     for i in range(len(price)):
+#         ss = sum_val
+#         if i >= 1:
+#             ss -= abs(price[i] - price[i - 1])
+#         if i + 1 < len(price):
+#             ss -= abs(price[i + 1] - price[i])
+#         p = price[i]
+#         price[i] //= 2
+#         if i >= 1:
+#             ss += abs(price[i] - price[i - 1])
+#         if i + 1 < len(price):
+#             ss += abs(price[i + 1] - price[i])
+#         price[i] = p
+#         res = min(res, ss)
 #     return res
 
-data = [1,2,3,5,7,8]
-k = 14
-print(minCost(data, k))
+# # # Example
+# # n = 3
+# # price = [1,4,1]
+# # print(minTotalCost(n, price))
+
+# def check(data, mid, k):
+#     s = 0
+#     n = len(data)
+#     for i in range(mid):
+#         s += data[n - i - 1]
+
+#     for i in range(mid, n - mid, 2):
+#         s += data[i]
+#     return s >= k
+
+# def minimumCost(data, k):
+#     data.sort()
+#     capacity = 0
+#     n = len(data)
+#     for i in range(n // 2):
+#         capacity += data[n - i - 1]
+
+#     if capacity < k:
+#         return -1
+
+#     l = 0
+#     r = n // 2
+
+#     while l < r:
+#         mid = (l + r) // 2
+#         if check(data, mid, k):
+#             r = mid
+#         else:
+#             l = mid + 1
+#     return l
+
+# # def minCost(data, k):
+# #     data.sort()
+# #     cap_large = 0
+# #     n = len(data)
+# #     for i in range(n // 2):
+# #         cap_large += data[n - 1 - i]
+# #     if cap_large < k:
+# #         return -1
+
+# #     res = 0
+# #     for i in range(n // 2):
+# #         cap_samll += data[n - 1 - i]- data[i]
+# #         res += 1
+# #         if cap_samll >= k:
+# #             break
+# #     return res
+
+# data = [1,2,3,5,7,8]
+# k = 14
+# print(minCost(data, k))
+import os
+
+# Get the process ID of
+# the current process
+pid = os.getpid()
+
+
+# Print the process ID of
+# the current process
+print(pid)  

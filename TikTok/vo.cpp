@@ -6,6 +6,7 @@
 #include "unordered_map"
 #include "string"
 #include "iostream"
+#include "algorithm"
 using namespace std;
 
 
@@ -241,11 +242,161 @@ public:
         return mySet.size();
     }
 
+
+    // LC 33. Search in Rotated Sorted Array
+
+    int search(vector<int>& nums, int target) {
+        if (nums.size() == 1) {
+            if (target == nums[0]) {
+                return 0;
+            }
+            else return -1;
+        }
+        int left = 0, right = nums.size() - 1;
+
+        // use the double pointer and figure out all the possible situations
+
+        while (left < right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] < target) {
+                if (nums[mid] < nums[nums.size() - 1]) {
+                    if (target <= nums[nums.size() - 1]) {
+                        left = mid + 1;
+                    }
+                    else right = mid - 1;
+                }
+                else left = mid + 1;
+            }
+            else {
+                if (nums[mid] > nums[nums.size() - 1]) {
+                    if (target <= nums[nums.size() - 1]) {
+                        left = mid + 1;
+                    }
+                    else right = mid - 1;
+                }
+                else right = mid - 1;
+            }
+        }
+        if (nums[left] == target) {
+            return left;
+        }
+        return -1;
+    }
+
+    // LC 1235. Maximum Profit in Job Scheduling
+    int memo[500001];
+    int maxProfit(vector<int>& startTime, map<int, vector<int>>& myMap) {
+        int n = startTime.size();
+        for (int position = n - 1; position >= 0; position--) {
+            int currProfit = 0;
+            int nextIndex = lower_bound(startTime.begin(), startTime.end(), myMap.find(position)->second[0]) -
+                            startTime.begin();
+            if (nextIndex != n ) {
+                currProfit = myMap.find(position)->second[1] + memo[nextIndex];
+            }
+            else {
+                currProfit = myMap.find(position)->second[1];
+            }
+            if (position == n - 1) {
+                memo[position] = currProfit;
+            }
+            else {
+                memo[position] = max(currProfit, memo[position + 1]);
+            }
+        }
+        return memo[0];
+    }
+
+    int jobScheduling(vector<int>& startTime, vector<int>& endTime, vector<int>& profit) {
+        map<int, vector<int>> myMap;
+        for (int i = 0; i < startTime.size(); i++) {
+            myMap.insert(pair<int, vector<int>>(startTime[i], {endTime[i], profit[i]}));
+        }
+        int i = 0;
+        for (auto it : myMap) {
+            startTime[i] = it.first;
+            i++;
+        }
+        return maxProfit(startTime, myMap);
+    }
+
+    // LC 55. Jump Game
+    bool canJump(vector<int>& nums) {
+        if (nums.size() == 1) {
+            return true;
+        }
+        int cover = nums[0];
+        for (int i = 1; i <= cover; i++) {
+            if (cover >= nums.size() - 1) {
+                return true;
+            }
+            cover = max(cover, i + nums[i]);
+        }
+        return false;
+    }
+
+    // LC 1227. Airplane Seat Assignment Probability
+    double nthPersonGetsNthSeat(int n) {
+        return n == 1 ? 1.0 : 0.5;
+    }
+
+    // LC 165. Compare Version Numbers
+    int compareVersion(string version1, string version2) {
+        int length1 = version1.size();
+        int length2 = version2.size();
+        vector<int> num1;
+        vector<int> num2;
+        string temp1 = "", temp2 = "";
+        for (int i = 0; i < max(length1, length2); i++) {
+            if (i < version1.size()) {
+                if (version1[i] != '.') {
+                    temp1 += version1[i];
+                }
+                else {
+                    num1.push_back(stoi(temp1));
+                    temp1 = "";
+                }
+            }
+            if (i < version2.size()) {
+                if (version2[i] != '.') {
+                    temp2 += version2[i];
+                }
+                else {
+                    num2.push_back(stoi(temp2));
+                    temp2 = "";
+                }
+            }
+        }
+        int index = 0;
+        for (;index < min(num1.size(), num2.size()); index++) {
+            if (num1[index] > num2[index]) return 1;
+            if (num1[index] < num2[index]) return -1;
+        }
+        if (num1.size() == num2.size()) return 0;
+        else if (num1.size() > num2.size()) {
+            while (index < num1.size()) {
+                if (num1[index] > 0) return 1;
+                index++;
+            }
+            return 0;
+        }
+        else {
+            while (index < num2.size()) {
+                if (num2[index] > 0) return -1;
+                index++;
+            }
+            return 0;
+        }
+    }
+
 };
+
+
 
 int main() {
     Solution sol;
-    vector<vector<int>> grid{{1,1,0,0,0},{1,1,0,0,0},{0,0,0,1,1},{0,0,0,1,1}};
-    int ans = sol.numDistinctIslands(grid);
+    string version1 = "7.5.2.4", version2 = "7.5.3";
+    int ans = sol.compareVersion(version1, version2);
     cout<<ans<<endl;
 }
