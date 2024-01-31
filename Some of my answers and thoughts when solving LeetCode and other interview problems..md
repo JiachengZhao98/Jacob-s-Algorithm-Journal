@@ -36,6 +36,7 @@
 + [CPP](#CPP)
 + [Java](#Java)
 + [Python](#Python)
++ [Linux Command](#Linux)
 
 
 ---
@@ -492,11 +493,345 @@ In this example, `std::next_permutation` is used to generate and print all permu
 
 ---
 
-#### use ```sort()``` to sort a container in descending order:
+In C++, a priority queue is a container adaptor that provides constant time lookup of the largest (by default) element, at the expense of logarithmic insertion and extraction. A user-provided `Compare` function determines the priority of elements. By default, this is a max heap (where the largest element is given the highest priority), but it can be made into a min heap (where the smallest element is given the highest priority) by providing a custom comparison function.
 
-take vector as an example:
+Here are some key points about priority queues in C++:
 
-```sort(vector.rbegin(), vector.rend())```
+1. **Underlying Container:** The `std::priority_queue` is implemented using a container, usually a vector or a deque, and organizes its elements in a heap structure. The element at the "top" of the heap is the one with the highest priority.
+
+2. **Default Behavior:** By default, the C++ priority queue uses the `std::less` comparator, creating a max heap where the element with the greatest value is always at the top.
+
+3. **Custom Comparator:** You can provide a custom comparator to change the ordering. For instance, using `std::greater` would turn it into a min heap.
+
+4. **Main Operations:**
+   - `push`: Insert an element into the queue. The insertion is logarithmic in complexity.
+   - `pop`: Remove the top element from the queue. This operation is also logarithmic in complexity.
+   - `top`: Access the top element in the queue. This operation is constant in complexity.
+
+5. **No Direct Access to Elements:** Unlike a standard queue, you can't iterate through the elements of a priority queue. You only have access to the top element.
+
+6. **Usage:** Priority queues are often used in algorithms where the order of processing elements is critical, such as Dijkstra's algorithm for shortest paths, or in systems where tasks are prioritized (like an operating system's task scheduler).
+
+Here's a simple example of using a priority queue in C++:
+
+```cpp
+#include <iostream>
+#include <queue>
+
+int main() {
+    std::priority_queue<int> pq;
+
+    // Adding elements
+    pq.push(10);
+    pq.push(30);
+    pq.push(20);
+
+    // This will print elements in descending order
+    while (!pq.empty()) {
+        std::cout << pq.top() << " ";
+        pq.pop();
+    }
+
+    return 0;
+}
+```
+
+This code snippet creates a max heap priority queue, adds some elements, and then removes them in descending order.
+
+---
+
+In C++, `sum()` and `accumulate()` are two different functions used for calculating the sum of elements in a range, but they belong to different parts of the standard library and have some key differences:
+
+1. **Library and Availability:**
+   - `accumulate()`: It's part of the `<numeric>` header. This function has been available since C++98.
+   - `sum()`: This function is introduced in C++20 as part of the `<numeric>` header. It's a newer addition to the standard library.
+
+2. **Syntax and Usage:**
+   - `accumulate()`:
+     ```cpp
+     accumulate(InputIterator first, InputIterator last, T init, BinaryOperation op);
+     ```
+     - `first`, `last`: Iterators specifying the range.
+     - `init`: Initial value for the accumulation.
+     - `op`: Binary operation function that will be applied. It's optional and defaults to addition.
+   - `sum()`:
+     ```cpp
+     sum(InputIterator first, InputIterator last);
+     ```
+     - `first`, `last`: Iterators specifying the range.
+     - Note: There's no initial value or custom operation; it's purely for summing the elements.
+
+3. **Functionality:**
+   - `accumulate()` is more flexible. It not only sums the elements but can also perform other operations if a custom binary operation is provided. It can start from an initial value other than zero.
+   - `sum()`, on the other hand, is designed specifically for summing up elements. It always starts from zero and does not support custom operations.
+
+4. **Performance:**
+   - `sum()` might offer better performance for summing elements, especially in C++20 and later, as it is specifically optimized for this operation.
+   - `accumulate()`, being more generic and versatile, might have slight overhead when used for complex custom operations.
+
+5. **Use Cases:**
+   - Use `accumulate()` when you need a generalized reduction (like products, logical AND/OR, etc.) or when working with versions of C++ before C++20.
+   - Use `sum()` when you specifically need to sum elements and are using C++20 or later.
+
+In summary, `accumulate()` is a versatile function suitable for various accumulation operations, including but not limited to summing, while `sum()` is a specialized function introduced in C++20 specifically optimized for summing the elements of a range.
+
+---
+
+If you're working with a 2D vector in C++ and want to extract a part of it, the approach is similar to working with a 1D vector, but you need to consider both dimensions. Here's how you can do it:
+
+### Extracting a Sub-2D-Vector
+
+Suppose you have a 2D vector (a vector of vectors) and you want to extract a sub-2D-vector defined by specific row and column ranges. You would iterate through the selected rows and columns to create this new sub-2D-vector.
+
+Here's an example to illustrate this:
+
+```cpp
+#include <iostream>
+#include <vector>
+
+int main() {
+    // Example 2D vector
+    std::vector<std::vector<int>> vec2D = {
+        {1, 2, 3, 4},
+        {5, 6, 7, 8},
+        {9, 10, 11, 12},
+        {13, 14, 15, 16}
+    };
+
+    // Define row and column ranges for the sub-vector
+    int startRow = 1, endRow = 3; // Selecting rows 1 to 2 (0-based index, end exclusive)
+    int startCol = 1, endCol = 3; // Selecting columns 1 to 2 (0-based index, end exclusive)
+
+    // Create the sub-2D-vector
+    std::vector<std::vector<int>> subVec2D;
+    for (int i = startRow; i < endRow; ++i) {
+        std::vector<int> subRow(vec2D[i].begin() + startCol, vec2D[i].begin() + endCol);
+        subVec2D.push_back(subRow);
+    }
+
+    // Displaying the sub-2D-vector
+    for (const auto &row : subVec2D) {
+        for (int elem : row) {
+            std::cout << elem << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
+```
+
+In this example:
+- `vec2D` is your original 2D vector.
+- `subVec2D` is the extracted sub-2D-vector.
+- The row range is from `startRow` to `endRow-1` and the column range is from `startCol` to `endCol-1`.
+
+### Points to Note
+
+- Ensure that the specified row and column ranges are within the bounds of the original 2D vector to avoid undefined behavior.
+- This method copies the selected parts of the original 2D vector into a new 2D vector. If your 2D vector is large, consider the implications on memory usage and performance.
+
+---
+
+In C++, you can access a specific character in a string based on its index using the subscript operator (`[]`). If you want to get a substring from a string starting at a particular index, you can use the `substr` method. Here's how to use both:
+
+1. **Accessing a Specific Character by Index:**
+   ```cpp
+   std::string str = "Hello, World!";
+   char ch = str[index]; // Replace 'index' with the position you want.
+   ```
+
+2. **Getting a Substring Starting at a Specific Index:**
+   To get a substring from a string starting at a particular index, you can use the `substr` function. The `substr` function takes two parameters: the starting index and the length of the substring. If the length is not specified, it takes the rest of the string by default.
+   
+   ```cpp
+   std::string str = "Hello, World!";
+   std::string substring = str.substr(startIndex); // Takes the rest of the string from startIndex.
+   std::string anotherSubstring = str.substr(startIndex, length); // Takes 'length' characters from startIndex.
+   ```
+
+   In the above example, replace `startIndex` with the starting index of the substring and `length` with the number of characters you want in the substring.
+
+Remember, string indexing in C++ starts at 0, so the first character is at index 0, the second character is at index 1, and so on. If you use an index that is out of the bounds of the string (either negative or greater than or equal to the string's length), it will result in undefined behavior.
+
+---
+
+### `Heap`
+
+A heap is a specialized **tree-based** data structure that satisfies the heap property. In the context of computer science, there are two types of heaps: a max heap and a min heap.
+
+1. **Max Heap**: In a max heap, for any given node I, the value of I is greater than or equal to the values of its children. The highest (maximum) value is at the root.
+
+2. **Min Heap**: In a min heap, for any given node I, the value of I is less than or equal to the values of its children. The lowest (minimum) value is at the root.
+
+Here are some key characteristics of heaps:
+
+- **Complete Binary Tree**: A heap is a complete binary tree, which means all levels of the tree are fully filled except possibly the last level, which is filled from left to right.
+
+- **Heap Property**: This is the property that defines the order of the nodes. As mentioned, in a max heap, parent nodes have values greater than or equal to their children, while in a min heap, they have values less than or equal to their children.
+
+- **Implementation**: Heaps are usually implemented using arrays. The array representation is possible because heaps are complete binary trees. If the parent is at index `i`, the left child can be calculated by `2 * i + 1` and the right child by `2 * i + 2`.
+
+- **Efficiency**: Heaps provide efficient implementation of priority queues. Operations like insertion, deletion, and accessing the top element (maximum or minimum) are performed in O(log n) time, where n is the number of elements in the heap.
+
+- **Heap Operations**: The basic operations include `insertion` (adding a new key), `heapify` (regaining heap properties after insertion or deletion), `deletion` (removing the root, in max heaps this is the maximum element and in min heaps this is the minimum element), and `peek` (accessing the top element without removing it).
+
+- **Usage**: Heaps are used in various algorithms like heap sort, and for creating priority queues. They are also useful in applications like implementing Dijkstra's algorithm for shortest path, in Huffman coding for data compression algorithms, etc.
+
+In programming languages like C++, the Standard Library provides a heap functionality through the `priority_queue` container adapter, where by default it acts as a max heap, but can be customized to work as a min heap. Python provides a `heapq` module for implementing heaps, which by default creates a min heap.
+
+---
+
+### `std::priority_queue`
+
+In C++, `std::priority_queue` is a container adapter that **provides constant time lookup of the largest (by default) element**, at the expense of logarithmic insertion and extraction. A specific property of this container is that it's not a sequence container like `vector` or `list`, but rather a container adapter that uses an underlying container to provide a specific set of operations.
+
+Here's a basic overview of how to use `std::priority_queue`:
+
+1. **Header File**: To use `std::priority_queue`, you need to include the header file `queue`.
+
+   ```cpp
+   #include <queue>
+   ```
+
+2. **Declaration**: You can declare a `priority_queue` like this:
+   ```cpp
+   std::priority_queue<int> pq;
+   ```
+   This declares a max-heap `priority_queue` of integers.
+
+3. **Custom Comparator**: If you want a min-heap or a custom order, you need to declare it with a custom comparator.
+   ```cpp
+   std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+   ```
+   This creates a min-heap for integers.
+
+4. **Inserting Elements**: Use `push` to insert elements.
+   ```cpp
+   pq.push(10);
+   pq.push(5);
+   pq.push(20);
+   ```
+
+5. **Accessing the Top Element**: The top of the priority queue (the largest element in a max-heap or the smallest in a min-heap) can be accessed using `top`.
+   ```cpp
+   int topElement = pq.top();
+   ```
+
+6. **Removing Elements**: To remove the top element, use `pop`. This removes the element but does not return it.
+   ```cpp
+   pq.pop();
+   ```
+
+7. **Size and Empty Check**: Like other standard containers, `priority_queue` supports `empty()` and `size()` methods.
+   ```cpp
+   bool isEmpty = pq.empty();
+   size_t size = pq.size();
+   ```
+
+8. **Underlying Container Customization**: `std::priority_queue` allows you to specify an underlying container. By default, it uses `std::vector`. You can specify a different container like `std::deque` if needed.
+
+Here is a simple example:
+
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+
+int main() {
+    std::priority_queue<int> pq;
+
+    // Inserting elements
+    pq.push(30);
+    pq.push(20);
+    pq.push(50);
+    pq.push(40);
+
+    // Printing and removing elements
+    while (!pq.empty()) {
+        std::cout << pq.top() << " ";
+        pq.pop();
+    }
+
+    return 0;
+}
+```
+
+In this example, the output will be in descending order (50, 40, 30, 20), as the default behavior of `std::priority_queue` is to create a max-heap.
+
+The `std::priority_queue` in C++ is a container adapter, which means it provides a specific interface on top of an underlying container. The key characteristics of `std::priority_queue`'s implementation are:
+
+1. **Underlying Container**: By default, `std::priority_queue` uses a `std::vector` as its underlying container, but it can be configured to use other containers like `std::deque`. The requirement for the underlying container is that it must support random access iterators, `front()`, `push_back()`, and `pop_back()` operations.
+
+2. **Heap Structure**: The elements in the `priority_queue` are internally organized in a heap structure. For a max heap (default behavior), the largest element is kept at the top (beginning of the underlying container), and for a min heap (when using a custom comparator), the smallest element is at the top.
+
+3. **Operations**:
+   - **Insertion (`push`)**: When a new element is added, it is initially inserted at the end of the underlying container (like a regular vector insertion). Then, a heap adjustment is performed by "bubbling up" the element to its correct position in the heap. This is typically done using the `std::push_heap` algorithm and takes O(log n) time.
+   - **Removal (`pop`)**: To remove the top element (the largest for max heap, or smallest for min heap), the heap algorithm swaps the first element with the last one in the underlying container, then it removes the last element (actual removal from the container). After this, the heap property is restored by "sifting down" the new first element. This uses the `std::pop_heap` algorithm and also takes O(log n) time.
+   - **Accessing Top Element (`top`)**: This operation simply returns the first element in the underlying container, which is the largest (or smallest) element due to the heap property. This operation is O(1).
+
+4. **Custom Comparator**: You can change the ordering by providing a custom comparator while declaring the `priority_queue`. For example, using `std::greater<T>` will create a min heap.
+
+5. **No Direct Access to Elements**: Unlike `std::vector` or `std::deque`, you cannot directly access elements in a `priority_queue` other than the top element. The `priority_queue` interface intentionally hides the underlying container's operations that could potentially violate the heap property.
+
+Here's a simple illustrative example:
+
+```cpp
+#include <queue>
+#include <vector>
+#include <functional> // for std::greater
+
+int main() {
+    // Max heap (default)
+    std::priority_queue<int> maxHeap;
+
+    // Min heap using std::greater
+    std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+    
+    // ... Operations like push, pop, top
+}
+```
+
+In practice, this means that `std::priority_queue` is a very efficient way to implement a max-heap or min-heap without needing to manually maintain the heap property, as the standard library algorithms do this automatically.
+
+---
+
+Yes, there are alternative methods to sort elements in descending order in C++ without explicitly defining a custom comparator like a lambda function. One common approach is to use the `std::greater<>` comparator from the `<functional>` header. This is a predefined function object that applies the greater-than operator (`>`) to two values.
+
+Here's an example using `std::sort` with `std::greater<>` to sort a vector of integers in descending order:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional> // For std::greater
+
+int main() {
+    std::vector<int> vec = {4, 1, 3, 5, 2};
+
+    // Sorting in descending order using std::greater<>
+    std::sort(vec.begin(), vec.end(), std::greater<int>());
+
+    // Printing the sorted vector
+    for(int i : vec) {
+        std::cout << i << " ";
+    }
+
+    return 0;
+}
+```
+
+In this example, `std::greater<int>()` is used as the comparator for `std::sort`. It automatically applies the greater-than operator to pairs of elements in the vector, resulting in a sorted vector in descending order. This method is cleaner and more readable, especially when dealing with primitive data types like integers, floats, or strings.
+
+Additionally, if you're working with C++14 or later, you can use `std::greater<>` without specifying the template argument, as it will be deduced automatically:
+
+```cpp
+std::sort(vec.begin(), vec.end(), std::greater<>());
+```
+
+This feature is known as template argument deduction for function templates (introduced in C++14), which makes the code even more concise.
+
+---
 
 ### Java <a name="Java"></a>
 
@@ -1134,45 +1469,348 @@ In this example, `bisect_right` will return `4`. This means that the number `4` 
 Remember, for `bisect_right` to work correctly, the input list `a` must already be sorted.
 
 ---
+In Python, a heap is a specialized tree-based data structure that satisfies the heap property. In a heap, for any given node `i`, the value of `i` is greater than or equal to the values of its children (in a max heap) or less than or equal to the values of its children (in a min heap). The most common type of heap is a binary heap, where each node has at most two children.
 
-Python offers several built-in methods related to letters and the alphabet, primarily as part of its string methods. Here's a list of some of the most commonly used string methods that are directly relevant to handling letters and the alphabet:
+Python's standard library provides the `heapq` module, which implements a min heap on top of a regular list with functions to maintain the heap property. Here's a brief overview of how to use the `heapq` module:
 
-1. **`isalpha()`**: Returns `True` if all characters in the string are alphabetic (a-z, A-Z) and there is at least one character, otherwise `False`.
+1. **Creating a Heap**: A heap is created by using a list. The `heapq` module provides functions like `heapify`, which converts a list into a heap.
 
-2. **`isalnum()`**: Returns `True` if all characters in the string are alphanumeric (a combination of alphabets and numbers).
+   ```python
+   import heapq
 
-3. **`isdigit()`**: Returns `True` if all characters in the string are digits, otherwise `False`.
+   # Creating a heap
+   my_heap = [3, 1, 4, 1, 5, 9, 2, 6, 5]
+   heapq.heapify(my_heap)  # Transforms the list into a heap
+   ```
 
-4. **`islower()`**: Returns `True` if all cased characters in the string are lowercase and there is at least one cased character, otherwise `False`.
+2. **Adding Elements**: Use `heapq.heappush()` to add elements to the heap. This function maintains the heap property.
 
-5. **`isupper()`**: Returns `True` if all cased characters in the string are uppercase and there is at least one cased character, otherwise `False`.
+   ```python
+   heapq.heappush(my_heap, 7)
+   ```
 
-6. **`istitle()`**: Returns `True` if the string is a titlecased string (where each word starts with an uppercase letter followed by lowercase letters).
+3. **Removing Elements**: The `heapq.heappop()` function removes and returns the smallest element from the heap.
 
-7. **`lower()`**: Returns a copy of the string converted to lowercase.
+   ```python
+   smallest_element = heapq.heappop(my_heap)
+   ```
 
-8. **`upper()`**: Returns a copy of the string converted to uppercase.
+4. **Accessing the Smallest Element**: The smallest element in the heap can be accessed as `my_heap[0]`. This does not remove the element from the heap.
 
-9. **`capitalize()`**: Returns a copy of the string with its first character capitalized and the rest lowercased.
+5. **Converting to Max Heap**: Python's `heapq` implements a min heap. To create a max heap, you can invert the values during the push and pop operations.
 
-10. **`title()`**: Returns a titlecased version of the string where words start with an uppercase character and the remaining characters are lowercase.
+   ```python
+   # For max heap, insert negative values
+   heapq.heappush(my_heap, -element)
 
-11. **`swapcase()`**: Returns a string where all the lowercase letters are converted to uppercase, and the uppercase letters are converted to lowercase.
+   # Retrieve the values by negating again
+   largest_element = -heapq.heappop(my_heap)
+   ```
 
-12. **`startswith()`**: Returns `True` if the string starts with the specified prefix (which can be a letter or group of letters), otherwise `False`.
+6. **Other Functions**: `heapq` also provides `heapreplace`, `nlargest`, `nsmallest`, and more, offering additional functionality for working with heaps.
 
-13. **`endswith()`**: Returns `True` if the string ends with the specified suffix (which can be a letter or group of letters), otherwise `False`.
-
-14. **`find()` / `rfind()`**: Returns the lowest index (or highest index in the case of `rfind`) in the string where the specified substring is found. This can be used to locate letters or sequences of letters within a string.
-
-15. **`index()` / `rindex()`**: Similar to `find()` / `rfind()`, but raise a `ValueError` when the substring is not found.
-
-16. **`replace()`**: Returns a string where a specified value is replaced with a specified value, which can be used to replace letters or groups of letters.
-
-17. **`count()`**: Returns the number of times a specified value (which can be a letter or group of letters) occurs in the string.
-
-18. **`strip()` / `rstrip()` / `lstrip()`**: These methods are used to remove whitespaces or specified characters from the beginning and/or end of a string. They can be used to remove letters from the ends of a string.
-
-These methods are part of the standard string class in Python and are used for various operations involving text manipulation and inspection. Remember, these methods are case-sensitive, and they only operate on strings.
+Heaps are commonly used in algorithms that require frequent retrieval of the smallest (or largest) element, such as in sorting algorithms (Heap Sort), and for implementing priority queues.
 
 ---
+
+Reversing the order of all elements in a list in Python can be done in several ways:
+
+1. **Using the `reverse()` method**: This method modifies the list in place and reverses the elements of the list.
+
+   ```python
+   my_list = [1, 2, 3, 4, 5]
+   my_list.reverse()
+   print(my_list)  # Output: [5, 4, 3, 2, 1]
+   ```
+
+2. **Using slicing**: This method creates a new list that is a reversed copy of the original list.
+
+   ```python
+   my_list = [1, 2, 3, 4, 5]
+   reversed_list = my_list[::-1]
+   print(reversed_list)  # Output: [5, 4, 3, 2, 1]
+   ```
+
+   The `[::-1]` slicing works by starting at the end of the list and stepping backwards.
+
+3. **Using the `reversed()` function**: This function returns an iterator that accesses the given sequence in the reverse order. You can convert this iterator to a list if you need a list object.
+
+   ```python
+   my_list = [1, 2, 3, 4, 5]
+   reversed_list = list(reversed(my_list))
+   print(reversed_list)  # Output: [5, 4, 3, 2, 1]
+   ```
+
+Each of these methods can be used depending on whether you need to reverse the list in place or create a reversed copy of it.
+
+---
+
+In Python, which is an interpreted language, the concepts of run-time and compile-time can be a bit different compared to traditional compiled languages like C or Java. Here's a brief overview of both terms in the context of Python:
+
+1. **Compile-Time**:
+   - **Bytecode Compilation**: Python code is first compiled into bytecode, which is a lower-level, platform-independent representation of your source code. This happens before the code is run. The Python interpreter compiles the code to bytecode, and this is typically when syntax errors are caught.
+   - **Early Error Checking**: During this phase, Python performs some basic checks, such as syntax parsing, checking for indents, and interpreting the structure of the code. If there are syntax errors, the script will fail to compile to bytecode and the execution will stop.
+   - **Optimizations**: Some minor optimizations are also done during this phase, but they are not as extensive as in languages like C++ or Java.
+   
+   Python's compile-time phase is relatively simpler compared to compiled languages because a lot of checks (like type checking) are deferred to the run-time phase.
+
+2. **Run-Time**:
+   - **Bytecode Execution**: After the code is compiled into bytecode, it is then executed by the Python Virtual Machine (PVM). This is the run-time phase.
+   - **Type Checking and Error Handling**: Python is dynamically typed, so type checking is done at run-time. This means that errors like type errors or name errors (referencing a variable that has not been defined) are detected during run-time.
+   - **Memory Management**: Python handles memory allocation and garbage collection during run-time.
+   - **Late Binding**: Functions and variables are bound at run-time, providing flexibility but also meaning that certain errors are not caught until the program is actually running.
+   - **Execution of Code**: Finally, this is the phase where your code actually performs its operations – calculations, I/O operations, data manipulation, etc.
+
+In summary, compile-time in Python is about converting source code to bytecode and catching syntax-related errors, while run-time encompasses type checking, memory management, and the actual execution of the compiled bytecode. The distinction between compile-time and run-time in Python is less pronounced than in strictly compiled languages, due to its dynamic and interpreted nature.
+
+---
+
+### List comprehension
+
+List comprehension is a concise and efficient way to create lists in Python. It provides a more readable and expressive way to create lists compared to traditional loops and list-building techniques. The basic structure of a list comprehension is:
+
+```python
+[expression for item in iterable if condition]
+```
+
+Here's a breakdown of the components:
+
+1. **`expression`**: This is the value to be added to the resulting list. It is usually a function of `item`.
+
+2. **`for item in iterable`**: This is a `for` loop over an iterable (like a list, tuple, range, string, etc.). `item` takes on each value in the iterable.
+
+3. **`if condition`** (optional): A condition to filter items from the iterable. Only items for which the condition evaluates to `True` are included in the new list.
+
+### Examples
+
+1. **Basic List Comprehension**:
+   - Create a list of squares for numbers 0 through 9.
+     ```python
+     squares = [x**2 for x in range(10)]
+     print(squares)  # Output: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+     ```
+
+2. **List Comprehension with `if` Condition**:
+   - Create a list of even numbers from 0 to 9.
+     ```python
+     evens = [x for x in range(10) if x % 2 == 0]
+     print(evens)  # Output: [0, 2, 4, 6, 8]
+     ```
+
+3. **Nested List Comprehension**:
+   - Create a flattened list from a list of lists.
+     ```python
+     matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+     flat = [num for row in matrix for num in row]
+     print(flat)  # Output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+     ```
+
+4. **List Comprehension with Complex Expressions**:
+   - Convert a list of temperatures in Celsius to Fahrenheit.
+     ```python
+     celsius = [0, 10, 20, 30]
+     fahrenheit = [((9/5) * temp + 32) for temp in celsius]
+     print(fahrenheit)  # Output: [32.0, 50.0, 68.0, 86.0]
+     ```
+
+List comprehensions are not only about creating lists; they embody the functional programming style often found in Python, encouraging you to think in terms of sequences, transformations, and filters. However, it's important to use them judiciously; very complex list comprehensions can become difficult to read and understand, defeating their purpose of simplifying code.
+
+---
+
+A lambda function in Python is a small, anonymous function defined using the keyword `lambda`. Lambda functions can take any number of arguments but can only have one expression. They are often used in situations where a simple function is required for a short duration, without the need to formally define a function using the standard `def` keyword.
+
+The general syntax of a lambda function is:
+
+```python
+lambda arguments: expression
+```
+
+Here, `arguments` is a list of parameters (like `x`, `y`), and `expression` is an expression that is evaluated and returned. This expression is executed when the lambda function is called.
+
+### Key Characteristics:
+
+1. **Anonymous**: They are not declared in the standard manner by using the `def` keyword. You can use them without having to assign a name.
+
+2. **Inline**: Lambda functions are typically used where they are needed, often as an argument to a higher-order function (a function that takes in other functions as arguments).
+
+3. **Single Expression**: Unlike a regular function, they can only have a single expression, which is evaluated and returned.
+
+### Examples:
+
+1. **Simple Lambda Function**:
+   ```python
+   add = lambda x, y: x + y
+   print(add(5, 3))  # Output: 8
+   ```
+
+2. **Lambda Function as an Argument**:
+   - Using a lambda function with the `sorted` function.
+     ```python
+     points = [(1, 2), (3, 3), (5, 1)]
+     points_sorted = sorted(points, key=lambda point: point[1])
+     print(points_sorted)  # Output: [(5, 1), (1, 2), (3, 3)]
+     ```
+
+3. **Lambda Function in `map()`**:
+   - Using a lambda function to square each number in a list.
+     ```python
+     nums = [1, 2, 3, 4]
+     squared = list(map(lambda x: x**2, nums))
+     print(squared)  # Output: [1, 4, 9, 16]
+     ```
+
+4. **Lambda Function in `filter()`**:
+   - Using a lambda function to filter out even numbers.
+     ```python
+     nums = [1, 2, 3, 4, 5, 6]
+     evens = list(filter(lambda x: x % 2 == 0, nums))
+     print(evens)  # Output: [2, 4, 6]
+     ```
+
+Lambda functions are a convenient feature of Python, particularly useful for short, throwaway functions that are not reused elsewhere in your code. However, they are limited by their simplicity and should be used sparingly for the sake of code readability. For more complex functionalities, a regular function defined with `def` is preferred.
+
+---
+
+Exception handling in Python is done using the `try`, `except`, `else`, and `finally` blocks. These blocks allow you to gracefully handle errors and exceptions that occur during the execution of a program, preventing the program from crashing and providing a user-friendly way to deal with unexpected issues.
+
+Here's a brief overview of each of these blocks:
+
+1. **`try` Block**: 
+   - This is where you write the code that you think might raise an exception. The code inside the `try` block is executed first.
+
+2. **`except` Block**:
+   - If an exception occurs in the `try` block, the flow of control immediately passes to the `except` block.
+   - You can specify the type of exception you want to catch. If you don't specify any exception, it catches all exceptions, which is not recommended due to potential unintended side effects.
+   - You can have multiple `except` blocks to handle different exceptions differently.
+
+3. **`else` Block** (optional):
+   - The `else` block is executed if no exception is raised in the `try` block.
+   - This is useful for code that should only run if the `try` block did not throw an exception.
+
+4. **`finally` Block** (optional):
+   - This block is executed no matter what, whether an exception is raised or not. It's typically used for cleanup actions, such as closing files or releasing resources.
+
+### Example:
+
+```python
+try:
+    # Code that might raise an exception
+    result = 10 / 0
+except ZeroDivisionError:
+    # Handling a specific exception
+    print("You can't divide by zero!")
+except Exception as e:
+    # Catching any other exceptions
+    print(f"An error occurred: {e}")
+else:
+    # Runs if the try block is successful
+    print("Operation successful")
+finally:
+    # Always runs
+    print("Execution complete")
+```
+
+In this example, the `ZeroDivisionError` is specifically caught and handled. The generic `except` block catches any other exceptions that might occur. The `else` block would run if there was no exception, and the `finally` block runs in any case, ensuring that the message "Execution complete" is printed whether an exception occurs or not.
+
+Proper exception handling is essential for writing robust and error-tolerant programs in Python. It helps to ensure that your program can deal with unexpected situations gracefully without crashing abruptly.
+
+---
+
+## Linux Command <a name="Linux"></a>
+
+### Basic Linux Command Cheat Sheet
+
+#### File Operations
+- `ls`: List directory contents.
+- `cd [directory]`: Change the current directory.
+- `pwd`: Display the current directory path.
+- `cp [source] [destination]`: Copy files or directories.
+- `mv [source] [destination]`: Move/rename files or directories.
+- `rm [file]`: Remove files (use `-r` for directories).
+- `touch [file]`: Create a new empty file.
+- `mkdir [directory]`: Create a new directory.
+- `rmdir [directory]`: Delete an empty directory.
+
+#### File Viewing & Editing
+- `cat [file]`: Display file content.
+- `less [file]`: View file content in an interactive mode.
+- `nano [file]`: Edit file using the Nano editor.
+- `vi [file]`: Edit file using the Vi editor.
+
+#### System Information & Management
+- `top`: Display system processes and resource usage.
+- `df`: Show disk usage.
+- `free`: Display memory usage.
+- `uptime`: Show system uptime.
+- `uname -a`: Display system information.
+
+#### Networking
+- `ping [address]`: Check the network connection to an address.
+- `ifconfig`: Display network interfaces and IP addresses.
+- `netstat`: Display network connections, routing tables, etc.
+
+#### File Permissions
+- `chmod [permissions] [file]`: Change file permission.
+- `chown [owner] [file]`: Change file owner.
+- `chgrp [group] [file]`: Change file group.
+
+#### Package Management (Debian-based systems)
+- `sudo apt-get update`: Update package list.
+- `sudo apt-get upgrade`: Upgrade all packages.
+- `sudo apt-get install [package]`: Install a new package.
+- `sudo apt-get remove [package]`: Remove an installed package.
+
+#### Archiving and Compression
+- `tar -cvf [archive.tar] [file]`: Create a tar archive.
+- `tar -xvf [archive.tar]`: Extract a tar archive.
+- `gzip [file]`: Compress a file.
+- `gunzip [file.gz]`: Decompress a file.
+
+#### Searching Files and Directories
+- `find [directory] -name [filename]`: Find files by name.
+- `grep [text] [file]`: Search for text within a file.
+
+#### Process Management
+- `ps`: Display current processes.
+- `kill [pid]`: Terminate a process by its PID.
+- `killall [processname]`: Terminate all processes with the given name.
+
+#### System Shutdown & Reboot
+- `shutdown now`: Shutdown the system immediately.
+- `reboot`: Reboot the system.
+
+This cheat sheet covers basic operations and is suitable for beginners. For advanced operations and more detailed options, you may want to refer to the man pages (`man [command]`) or online resources dedicated to specific commands.
+
+### Searching for a specific keyword or partial argument in the history of commands
+
+1. **Using the `history` command with `grep`:**
+   - The `history` command in Linux shows you a list of the commands you've entered in the past.
+   - You can combine `history` with `grep` to search for a specific keyword. For example, if you remember a part of the command was `file.txt`, you would use:
+     ```bash
+     history | grep file.txt
+     ```
+   - This command will display all instances in your command history where `file.txt` was mentioned.
+
+2. **Incremental Search in the Terminal:**
+   - Most Linux terminals support incremental search. You can initiate this by pressing `Ctrl` + `R` and then start typing the part of the command you remember.
+   - As you type, the terminal will dynamically search your command history and show the most recent command that matches the text you've entered.
+   - You can press `Ctrl` + `R` repeatedly to cycle through older matching commands.
+
+3. **Using `!` to Recall Commands:**
+   - If you remember the first few characters of a command, you can use the `!` feature. For example, if your command started with `ls`, you can type `!ls`, and it will execute the most recent command that started with `ls`.
+   - Note that this method directly executes the command, so use it with caution, especially if the command could potentially be destructive.
+
+4. **Checking Your Shell's History File:**
+   - The commands you enter are typically stored in a history file in your home directory. For bash, this is usually `.bash_history`.
+   - You can view this file using a text editor or by using commands like `cat` or `less` to see your command history. For example:
+     ```bash
+     less ~/.bash_history
+     ```
+
+5. **Extending History Size:**
+   - If you find your history isn't going back far enough, you might need to increase the size of your command history. This can be done by setting the `HISTSIZE` and `HISTFILESIZE` variables in your shell's configuration file (like `.bashrc` for bash).
+
+These methods should help you locate and recall previously used commands in Linux, even if you only remember a part of them.
+
+---
+

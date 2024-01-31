@@ -656,6 +656,201 @@ Remember, string indexing in C++ starts at 0, so the first character is at index
 
 ---
 
+### `Heap`
+
+A heap is a specialized **tree-based** data structure that satisfies the heap property. In the context of computer science, there are two types of heaps: a max heap and a min heap.
+
+1. **Max Heap**: In a max heap, for any given node I, the value of I is greater than or equal to the values of its children. The highest (maximum) value is at the root.
+
+2. **Min Heap**: In a min heap, for any given node I, the value of I is less than or equal to the values of its children. The lowest (minimum) value is at the root.
+
+Here are some key characteristics of heaps:
+
+- **Complete Binary Tree**: A heap is a complete binary tree, which means all levels of the tree are fully filled except possibly the last level, which is filled from left to right.
+
+- **Heap Property**: This is the property that defines the order of the nodes. As mentioned, in a max heap, parent nodes have values greater than or equal to their children, while in a min heap, they have values less than or equal to their children.
+
+- **Implementation**: Heaps are usually implemented using arrays. The array representation is possible because heaps are complete binary trees. If the parent is at index `i`, the left child can be calculated by `2 * i + 1` and the right child by `2 * i + 2`.
+
+- **Efficiency**: Heaps provide efficient implementation of priority queues. Operations like insertion, deletion, and accessing the top element (maximum or minimum) are performed in O(log n) time, where n is the number of elements in the heap.
+
+- **Heap Operations**: The basic operations include `insertion` (adding a new key), `heapify` (regaining heap properties after insertion or deletion), `deletion` (removing the root, in max heaps this is the maximum element and in min heaps this is the minimum element), and `peek` (accessing the top element without removing it).
+
+- **Usage**: Heaps are used in various algorithms like heap sort, and for creating priority queues. They are also useful in applications like implementing Dijkstra's algorithm for shortest path, in Huffman coding for data compression algorithms, etc.
+
+In programming languages like C++, the Standard Library provides a heap functionality through the `priority_queue` container adapter, where by default it acts as a max heap, but can be customized to work as a min heap. Python provides a `heapq` module for implementing heaps, which by default creates a min heap.
+
+---
+
+### `std::priority_queue`
+
+In C++, `std::priority_queue` is a container adapter that **provides constant time lookup of the largest (by default) element**, at the expense of logarithmic insertion and extraction. A specific property of this container is that it's not a sequence container like `vector` or `list`, but rather a container adapter that uses an underlying container to provide a specific set of operations.
+
+Here's a basic overview of how to use `std::priority_queue`:
+
+1. **Header File**: To use `std::priority_queue`, you need to include the header file `queue`.
+
+   ```cpp
+   #include <queue>
+   ```
+
+2. **Declaration**: You can declare a `priority_queue` like this:
+   ```cpp
+   std::priority_queue<int> pq;
+   ```
+   This declares a max-heap `priority_queue` of integers.
+
+3. **Custom Comparator**: If you want a min-heap or a custom order, you need to declare it with a custom comparator.
+   ```cpp
+   std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+   ```
+   This creates a min-heap for integers.
+
+4. **Inserting Elements**: Use `push` to insert elements.
+   ```cpp
+   pq.push(10);
+   pq.push(5);
+   pq.push(20);
+   ```
+
+5. **Accessing the Top Element**: The top of the priority queue (the largest element in a max-heap or the smallest in a min-heap) can be accessed using `top`.
+   ```cpp
+   int topElement = pq.top();
+   ```
+
+6. **Removing Elements**: To remove the top element, use `pop`. This removes the element but does not return it.
+   ```cpp
+   pq.pop();
+   ```
+
+7. **Size and Empty Check**: Like other standard containers, `priority_queue` supports `empty()` and `size()` methods.
+   ```cpp
+   bool isEmpty = pq.empty();
+   size_t size = pq.size();
+   ```
+
+8. **Underlying Container Customization**: `std::priority_queue` allows you to specify an underlying container. By default, it uses `std::vector`. You can specify a different container like `std::deque` if needed.
+
+Here is a simple example:
+
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+
+int main() {
+    std::priority_queue<int> pq;
+
+    // Inserting elements
+    pq.push(30);
+    pq.push(20);
+    pq.push(50);
+    pq.push(40);
+
+    // Printing and removing elements
+    while (!pq.empty()) {
+        std::cout << pq.top() << " ";
+        pq.pop();
+    }
+
+    return 0;
+}
+```
+
+In this example, the output will be in descending order (50, 40, 30, 20), as the default behavior of `std::priority_queue` is to create a max-heap.
+
+The `std::priority_queue` in C++ is a container adapter, which means it provides a specific interface on top of an underlying container. The key characteristics of `std::priority_queue`'s implementation are:
+
+1. **Underlying Container**: By default, `std::priority_queue` uses a `std::vector` as its underlying container, but it can be configured to use other containers like `std::deque`. The requirement for the underlying container is that it must support random access iterators, `front()`, `push_back()`, and `pop_back()` operations.
+
+2. **Heap Structure**: The elements in the `priority_queue` are internally organized in a heap structure. For a max heap (default behavior), the largest element is kept at the top (beginning of the underlying container), and for a min heap (when using a custom comparator), the smallest element is at the top.
+
+3. **Operations**:
+   - **Insertion (`push`)**: When a new element is added, it is initially inserted at the end of the underlying container (like a regular vector insertion). Then, a heap adjustment is performed by "bubbling up" the element to its correct position in the heap. This is typically done using the `std::push_heap` algorithm and takes O(log n) time.
+   - **Removal (`pop`)**: To remove the top element (the largest for max heap, or smallest for min heap), the heap algorithm swaps the first element with the last one in the underlying container, then it removes the last element (actual removal from the container). After this, the heap property is restored by "sifting down" the new first element. This uses the `std::pop_heap` algorithm and also takes O(log n) time.
+   - **Accessing Top Element (`top`)**: This operation simply returns the first element in the underlying container, which is the largest (or smallest) element due to the heap property. This operation is O(1).
+
+4. **Custom Comparator**: You can change the ordering by providing a custom comparator while declaring the `priority_queue`. For example, using `std::greater<T>` will create a min heap.
+
+5. **No Direct Access to Elements**: Unlike `std::vector` or `std::deque`, you cannot directly access elements in a `priority_queue` other than the top element. The `priority_queue` interface intentionally hides the underlying container's operations that could potentially violate the heap property.
+
+Here's a simple illustrative example:
+
+```cpp
+#include <queue>
+#include <vector>
+#include <functional> // for std::greater
+
+int main() {
+    // Max heap (default)
+    std::priority_queue<int> maxHeap;
+
+    // Min heap using std::greater
+    std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+    
+    // ... Operations like push, pop, top
+}
+```
+
+In practice, this means that `std::priority_queue` is a very efficient way to implement a max-heap or min-heap without needing to manually maintain the heap property, as the standard library algorithms do this automatically.
+
+---
+
+There are alternative methods to sort elements in descending order in C++ without explicitly defining a custom comparator like a lambda function. One common approach is to use the `std::greater<>` comparator from the `<functional>` header. This is a predefined function object that applies the greater-than operator (`>`) to two values.
+
+Here's an example using `std::sort` with `std::greater<>` to sort a vector of integers in descending order:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional> // For std::greater
+
+int main() {
+    std::vector<int> vec = {4, 1, 3, 5, 2};
+
+    // Sorting in descending order using std::greater<>
+    std::sort(vec.begin(), vec.end(), std::greater<int>());
+
+    // Printing the sorted vector
+    for(int i : vec) {
+        std::cout << i << " ";
+    }
+
+    return 0;
+}
+```
+
+In this example, `std::greater<int>()` is used as the comparator for `std::sort`. It automatically applies the greater-than operator to pairs of elements in the vector, resulting in a sorted vector in descending order. This method is cleaner and more readable, especially when dealing with primitive data types like integers, floats, or strings.
+
+Additionally, if you're working with C++14 or later, you can use `std::greater<>` without specifying the template argument, as it will be deduced automatically:
+
+```cpp
+std::sort(vec.begin(), vec.end(), std::greater<>());
+```
+
+This feature is known as template argument deduction for function templates (introduced in C++14), which makes the code even more concise.
+
+---
+
+In C++, the difference between `void dfs(string& num, TreeNode* root)` and `void dfs(string num, TreeNode* root)` lies in how the `num` argument is passed to the `dfs` function. These differences have implications for performance and function behavior:
+
+1. **Pass by Reference (`void dfs(string& num, TreeNode* root)`)**:
+   - `num` is passed by reference.
+   - This means that the function receives a reference to the original `num` string. **Any modifications to `num` inside the `dfs` function WILL affect the original string outside the function**.
+   - Passing by reference does not involve copying the actual string data, so it can be more efficient, especially for large strings, as it saves the overhead of copying.
+   - It's generally a good choice when you need to modify the original argument or want to avoid copying for performance reasons.
+
+2. **Pass by Value (`void dfs(string num, TreeNode* root)`)**:
+   - `num` is passed by value.
+   - In this case, the function receives a copy of the `num` string. **Modifications to `num` inside the function do NOT affect the original string outside the function**.
+   - Passing by value involves copying the entire string, which can be less efficient for large strings.
+   - This approach is typically used when you don't need to modify the original argument or when the function should work on its own copy of the argument to prevent any side effects outside the function.
+
+In summary, the choice between passing by reference and passing by value depends on whether you need to modify the original argument and on performance considerations. Pass by reference when you need to make changes to the original object or when dealing with large objects to avoid the overhead of copying. Pass by value when you want to work with a copy and avoid any unintended modifications to the original object.
+
+---
+
 ### Java <a name="Java"></a>
 
 ---
@@ -1365,6 +1560,177 @@ Reversing the order of all elements in a list in Python can be done in several w
    ```
 
 Each of these methods can be used depending on whether you need to reverse the list in place or create a reversed copy of it.
+
+---
+
+In Python, which is an interpreted language, the concepts of run-time and compile-time can be a bit different compared to traditional compiled languages like C or Java. Here's a brief overview of both terms in the context of Python:
+
+1. **Compile-Time**:
+   - **Bytecode Compilation**: Python code is first compiled into bytecode, which is a lower-level, platform-independent representation of your source code. This happens before the code is run. The Python interpreter compiles the code to bytecode, and this is typically when syntax errors are caught.
+   - **Early Error Checking**: During this phase, Python performs some basic checks, such as syntax parsing, checking for indents, and interpreting the structure of the code. If there are syntax errors, the script will fail to compile to bytecode and the execution will stop.
+   - **Optimizations**: Some minor optimizations are also done during this phase, but they are not as extensive as in languages like C++ or Java.
+   
+   Python's compile-time phase is relatively simpler compared to compiled languages because a lot of checks (like type checking) are deferred to the run-time phase.
+
+2. **Run-Time**:
+   - **Bytecode Execution**: After the code is compiled into bytecode, it is then executed by the Python Virtual Machine (PVM). This is the run-time phase.
+   - **Type Checking and Error Handling**: Python is dynamically typed, so type checking is done at run-time. This means that errors like type errors or name errors (referencing a variable that has not been defined) are detected during run-time.
+   - **Memory Management**: Python handles memory allocation and garbage collection during run-time.
+   - **Late Binding**: Functions and variables are bound at run-time, providing flexibility but also meaning that certain errors are not caught until the program is actually running.
+   - **Execution of Code**: Finally, this is the phase where your code actually performs its operations – calculations, I/O operations, data manipulation, etc.
+
+In summary, compile-time in Python is about converting source code to bytecode and catching syntax-related errors, while run-time encompasses type checking, memory management, and the actual execution of the compiled bytecode. The distinction between compile-time and run-time in Python is less pronounced than in strictly compiled languages, due to its dynamic and interpreted nature.
+
+---
+
+### List comprehension
+
+List comprehension is a concise and efficient way to create lists in Python. It provides a more readable and expressive way to create lists compared to traditional loops and list-building techniques. The basic structure of a list comprehension is:
+
+```python
+[expression for item in iterable if condition]
+```
+
+Here's a breakdown of the components:
+
+1. **`expression`**: This is the value to be added to the resulting list. It is usually a function of `item`.
+
+2. **`for item in iterable`**: This is a `for` loop over an iterable (like a list, tuple, range, string, etc.). `item` takes on each value in the iterable.
+
+3. **`if condition`** (optional): A condition to filter items from the iterable. Only items for which the condition evaluates to `True` are included in the new list.
+
+### Examples
+
+1. **Basic List Comprehension**:
+   - Create a list of squares for numbers 0 through 9.
+     ```python
+     squares = [x**2 for x in range(10)]
+     print(squares)  # Output: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+     ```
+
+2. **List Comprehension with `if` Condition**:
+   - Create a list of even numbers from 0 to 9.
+     ```python
+     evens = [x for x in range(10) if x % 2 == 0]
+     print(evens)  # Output: [0, 2, 4, 6, 8]
+     ```
+
+3. **Nested List Comprehension**:
+   - Create a flattened list from a list of lists.
+     ```python
+     matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+     flat = [num for row in matrix for num in row]
+     print(flat)  # Output: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+     ```
+
+4. **List Comprehension with Complex Expressions**:
+   - Convert a list of temperatures in Celsius to Fahrenheit.
+     ```python
+     celsius = [0, 10, 20, 30]
+     fahrenheit = [((9/5) * temp + 32) for temp in celsius]
+     print(fahrenheit)  # Output: [32.0, 50.0, 68.0, 86.0]
+     ```
+
+List comprehensions are not only about creating lists; they embody the functional programming style often found in Python, encouraging you to think in terms of sequences, transformations, and filters. However, it's important to use them judiciously; very complex list comprehensions can become difficult to read and understand, defeating their purpose of simplifying code.
+
+---
+
+A lambda function in Python is a small, anonymous function defined using the keyword `lambda`. Lambda functions can take any number of arguments but can only have one expression. They are often used in situations where a simple function is required for a short duration, without the need to formally define a function using the standard `def` keyword.
+
+The general syntax of a lambda function is:
+
+```python
+lambda arguments: expression
+```
+
+Here, `arguments` is a list of parameters (like `x`, `y`), and `expression` is an expression that is evaluated and returned. This expression is executed when the lambda function is called.
+
+### Key Characteristics:
+
+1. **Anonymous**: They are not declared in the standard manner by using the `def` keyword. You can use them without having to assign a name.
+
+2. **Inline**: Lambda functions are typically used where they are needed, often as an argument to a higher-order function (a function that takes in other functions as arguments).
+
+3. **Single Expression**: Unlike a regular function, they can only have a single expression, which is evaluated and returned.
+
+### Examples:
+
+1. **Simple Lambda Function**:
+   ```python
+   add = lambda x, y: x + y
+   print(add(5, 3))  # Output: 8
+   ```
+
+2. **Lambda Function as an Argument**:
+   - Using a lambda function with the `sorted` function.
+     ```python
+     points = [(1, 2), (3, 3), (5, 1)]
+     points_sorted = sorted(points, key=lambda point: point[1])
+     print(points_sorted)  # Output: [(5, 1), (1, 2), (3, 3)]
+     ```
+
+3. **Lambda Function in `map()`**:
+   - Using a lambda function to square each number in a list.
+     ```python
+     nums = [1, 2, 3, 4]
+     squared = list(map(lambda x: x**2, nums))
+     print(squared)  # Output: [1, 4, 9, 16]
+     ```
+
+4. **Lambda Function in `filter()`**:
+   - Using a lambda function to filter out even numbers.
+     ```python
+     nums = [1, 2, 3, 4, 5, 6]
+     evens = list(filter(lambda x: x % 2 == 0, nums))
+     print(evens)  # Output: [2, 4, 6]
+     ```
+
+Lambda functions are a convenient feature of Python, particularly useful for short, throwaway functions that are not reused elsewhere in your code. However, they are limited by their simplicity and should be used sparingly for the sake of code readability. For more complex functionalities, a regular function defined with `def` is preferred.
+
+---
+
+Exception handling in Python is done using the `try`, `except`, `else`, and `finally` blocks. These blocks allow you to gracefully handle errors and exceptions that occur during the execution of a program, preventing the program from crashing and providing a user-friendly way to deal with unexpected issues.
+
+Here's a brief overview of each of these blocks:
+
+1. **`try` Block**: 
+   - This is where you write the code that you think might raise an exception. The code inside the `try` block is executed first.
+
+2. **`except` Block**:
+   - If an exception occurs in the `try` block, the flow of control immediately passes to the `except` block.
+   - You can specify the type of exception you want to catch. If you don't specify any exception, it catches all exceptions, which is not recommended due to potential unintended side effects.
+   - You can have multiple `except` blocks to handle different exceptions differently.
+
+3. **`else` Block** (optional):
+   - The `else` block is executed if no exception is raised in the `try` block.
+   - This is useful for code that should only run if the `try` block did not throw an exception.
+
+4. **`finally` Block** (optional):
+   - This block is executed no matter what, whether an exception is raised or not. It's typically used for cleanup actions, such as closing files or releasing resources.
+
+### Example:
+
+```python
+try:
+    # Code that might raise an exception
+    result = 10 / 0
+except ZeroDivisionError:
+    # Handling a specific exception
+    print("You can't divide by zero!")
+except Exception as e:
+    # Catching any other exceptions
+    print(f"An error occurred: {e}")
+else:
+    # Runs if the try block is successful
+    print("Operation successful")
+finally:
+    # Always runs
+    print("Execution complete")
+```
+
+In this example, the `ZeroDivisionError` is specifically caught and handled. The generic `except` block catches any other exceptions that might occur. The `else` block would run if there was no exception, and the `finally` block runs in any case, ensuring that the message "Execution complete" is printed whether an exception occurs or not.
+
+Proper exception handling is essential for writing robust and error-tolerant programs in Python. It helps to ensure that your program can deal with unexpected situations gracefully without crashing abruptly.
 
 ---
 
