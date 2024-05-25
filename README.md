@@ -680,6 +680,26 @@ Here are some key characteristics of heaps:
 
 In programming languages like C++, the Standard Library provides a heap functionality through the `priority_queue` container adapter, where by default it acts as a max heap, but can be customized to work as a min heap. Python provides a `heapq` module for implementing heaps, which by default creates a min heap.
 
+### Why Heaps are Used in Task Schedulers
+
+Heaps, particularly binary heaps, are widely used in implementing priority queues, which are an essential component in task schedulers. Here are several reasons why heaps are chosen for this purpose:
+
+1. **Efficient Insertions**: Inserting a new task (or element) into a heap can be done in O(log n) time, where n is the number of tasks in the queue. This efficiency is crucial for schedulers that handle a dynamically changing set of tasks.
+
+2. **Efficient Access to the Highest (or Lowest) Priority Task**: The heap property ensures that the highest (for max heaps) or lowest (for min heaps) priority element is always at the root of the tree. This allows for constant-time access to the task with the highest priority, which is critical for a scheduler that needs to quickly determine the next task to execute.
+
+3. **Efficient Removal of the Highest (or Lowest) Priority Task**: Removing the highest (or lowest) priority task from a heap is an O(log n) operation. After removing the root, the heap property is restored in logarithmic time, ensuring that the scheduler can quickly update the set of tasks after executing the highest-priority task.
+
+4. **No Need for Full Sorting**: A heap keeps the elements partially sorted in a way that's beneficial for a priority queue. Unlike a fully sorted array or a balanced binary search tree (BST), a heap does not provide fast access to the "next" element in order, but it does ensure the fastest access to the "maximum" or "minimum" element, which is exactly what is needed for priority-based scheduling.
+
+5. **Flexibility**: Heaps can easily adapt to changes in task priorities. If a task's priority changes, adjusting the heap to maintain the heap property can be done efficiently.
+
+6. **Simple Implementation**: Binary heaps can be efficiently implemented using arrays, which makes the data structure relatively simple to code and manage while still providing excellent performance characteristics.
+
+### Conclusion
+
+In task scheduling scenarios, where tasks must be executed based on their priorities, and new tasks can be added or existing tasks can be updated or removed at any time, the heap provides a balance of efficiency, simplicity, and flexibility. This makes it an ideal underlying data structure for priority queues, which in turn are central to the design of effective task schedulers.
+
 ---
 
 ### `std::priority_queue`
@@ -848,6 +868,597 @@ In C++, the difference between `void dfs(string& num, TreeNode* root)` and `void
    - This approach is typically used when you don't need to modify the original argument or when the function should work on its own copy of the argument to prevent any side effects outside the function.
 
 In summary, the choice between passing by reference and passing by value depends on whether you need to modify the original argument and on performance considerations. Pass by reference when you need to make changes to the original object or when dealing with large objects to avoid the overhead of copying. Pass by value when you want to work with a copy and avoid any unintended modifications to the original object.
+
+---
+
+In C++, the `std::prev` function is a part of the `<iterator>` header and is used to obtain an iterator pointing to the element that precedes the one referred to by a given iterator. This function can be particularly useful when working with associative containers such as `std::map`, which maintain sorted order of their elements based on key values. Associative containers provide bidirectional iterators, making them compatible with `std::prev`.
+
+### Using `std::prev` with `std::map`
+
+When you use `std::prev` with a `std::map` iterator, you can move backwards through the map. This can be useful for a variety of reasons, such as finding the element just before a certain position in the map. Keep in mind that attempting to use `std::prev` on the `.begin()` iterator of a map (or any container) is undefined behavior, as there is no element before the first element.
+
+Here's a simple example to demonstrate how to use `std::prev` with a `std::map`:
+
+```cpp
+#include <iostream>
+#include <map>
+#include <iterator> // For std::prev
+
+using namespace std;
+
+int main() {
+    map<int, string> myMap = {{1, "Apple"}, {2, "Banana"}, {3, "Cherry"}};
+
+    // Let's say we have an iterator to the element with key 3
+    auto it = myMap.find(3);
+
+    if (it != myMap.begin()) { // Ensure it's not the first element
+        auto prevIt = prev(it); // Get the iterator to the preceding element
+        cout << "Key: " << prevIt->first << ", Value: " << prevIt->second << endl;
+    } else {
+        cout << "The iterator points to the first element, no previous element." << endl;
+    }
+
+    return 0;
+}
+```
+
+In this example, we find an element in the map with the key `3` and then use `std::prev` to obtain an iterator to the preceding element. We then print the key and value of this preceding element. It's important to check that the iterator is not pointing to the beginning of the map before using `std::prev`, to avoid undefined behavior.
+
+Remember, `std::prev` is templated, so it works with any container that provides bidirectional (or stronger) iterators, including `std::list`, `std::deque`, `std::set`, and more.
+
+In C++ there are several functions and techniques similar to `std::prev` that allow you to navigate through containers, especially those that support bidirectional or random access iterators. Here are some notable ones:
+
+### 1. `std::next`
+
+- **Usage**: Similar to `std::prev`, but instead of moving backwards, `std::next` advances the iterator forward by a specified number of positions.
+- **Header**: `<iterator>`
+- **Example**: `auto nextIt = std::next(it, 1);` moves the iterator `it` forward by one position.
+
+### 2. Iterator Increment and Decrement
+
+- **Bidirectional Iterators**: For containers like `std::list`, `std::map`, `std::set`, you can use `++` and `--` to move iterators forward or backward by one position, respectively.
+- **Random Access Iterators**: For containers like `std::vector`, `std::deque`, you can also add or subtract integers to/from iterators to move them by more than one position.
+- **Example**: `++it;` moves `it` forward by one, and `--it;` moves `it` backward by one.
+
+### 3. Reverse Iterators
+
+- **Usage**: Containers like `std::vector`, `std::string`, `std::map`, etc., offer reverse iterators (`rbegin()`, `rend()`) that iterate over the container in the reverse direction. Using `++` on a reverse iterator moves backward in the container.
+- **Example**: `for(auto rit = container.rbegin(); rit != container.rend(); ++rit)` iterates backwards.
+
+### 4. `std::advance`
+
+- **Usage**: Moves an iterator forward or backward by a given number of positions, depending on the sign of the second argument.
+- **Header**: `<iterator>`
+- **Example**: `std::advance(it, -2);` moves `it` backward by two positions if the iterator supports bidirectional iteration.
+
+### Choosing the Right Function
+
+- Use **`std::next`** and **`std::prev`** when you need to obtain a new iterator at a certain offset from the current one without modifying the original iterator.
+- Use **iterator increment (`++it`) and decrement (`--it`)** for simple forward or backward movement by one step.
+- Use **reverse iterators (`rbegin()`, `rend()`)** when you need to iterate through a container in reverse order.
+- Use **`std::advance`** when you need to move an iterator by more than one position in either direction and the exact distance is known at runtime.
+
+Each of these functions and techniques serves different use cases, depending on whether you need to iterate forwards, backwards, by a single step, or by multiple steps.
+
+---
+
+In C++, you can decide if a string contains only numbers by using several methods, depending on the features of the C++ standard library you wish to utilize and the level of validation required. Here are some common methods:
+
+### 1. Using `std::all_of` with Lambdas (C++11 and later)
+
+This method checks if all characters in the string are digits by using the `std::all_of` algorithm from the `<algorithm>` header, combined with a lambda function that uses `std::isdigit` from `<cctype>`.
+
+```cpp
+#include <algorithm>
+#include <cctype>
+#include <string>
+#include <iostream>
+
+bool isNumber(const std::string& str) {
+    return !str.empty() && std::all_of(str.begin(), str.end(), [](unsigned char c) { return std::isdigit(c); });
+}
+
+int main() {
+    std::string str = "12345";
+    if (isNumber(str)) {
+        std::cout << "The string contains only numbers." << std::endl;
+    } else {
+        std::cout << "The string does not contain only numbers." << std::endl;
+    }
+    return 0;
+}
+```
+
+### 2. Using `std::isdigit` in a Loop
+
+Iterate through each character of the string and check if it is a digit using `std::isdigit` function.
+
+```cpp
+#include <cctype>
+#include <string>
+#include <iostream>
+
+bool isNumber(const std::string& str) {
+    for (char const &c : str) {
+        if (!std::isdigit(c)) return false;
+    }
+    return !str.empty();
+}
+
+int main() {
+    std::string str = "12345";
+    if (isNumber(str)) {
+        std::cout << "The string contains only numbers." << std::endl;
+    } else {
+        std::cout << "The string does not contain only numbers." << std::endl;
+    }
+    return 0;
+}
+```
+
+### 3. Using Regular Expressions (C++11 and later)
+
+For more complex rules (e.g., allowing decimal points, signs), you can use regular expressions with the `<regex>` header. Here's a basic example to match only integers:
+
+```cpp
+#include <regex>
+#include <string>
+#include <iostream>
+
+bool isNumber(const std::string& str) {
+    std::regex pattern("^\\d+$"); // ^ and $ ensure the entire string is checked
+    return std::regex_match(str, pattern);
+}
+
+int main() {
+    std::string str = "12345";
+    if (isNumber(str)) {
+        std::cout << "The string contains only numbers." << std::endl;
+    } else {
+        std::cout << "The string does not contain only numbers." << std::endl;
+    }
+    return 0;
+}
+```
+
+### Choosing the Right Method
+
+- Use **`std::all_of`** and **`std::isdigit`** for simple checks (e.g., ensuring a string is composed of digits only).
+- Use **regular expressions** for more complex patterns (e.g., floating-point numbers, numbers with sign).
+
+Remember to include the appropriate headers (`<cctype>` for `std::isdigit`, `<algorithm>` for `std::all_of`, and `<regex>` for regular expressions) in your code.
+
+## Example of `std::all_of()`
+
+The `std::all_of` algorithm in C++ checks if all elements in a range satisfy a specific condition. It's part of the `<algorithm>` header. The lambda function within this method must return a **bool** value. Here are more examples demonstrating different uses of `std::all_of`:
+
+### Example 1: Check if All Elements are Positive
+
+```cpp
+#include <algorithm>
+#include <vector>
+#include <iostream>
+
+int main() {
+    std::vector<int> vec = {1, 2, 3, 4, 5};
+
+    bool allPositive = std::all_of(vec.begin(), vec.end(), [](int i) { return i > 0; });
+
+    std::cout << (allPositive ? "All are positive" : "Not all are positive") << std::endl;
+
+    return 0;
+}
+```
+
+### Example 2: Check if All Strings are of a Certain Length
+
+```cpp
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <iostream>
+
+int main() {
+    std::vector<std::string> words = {"hello", "world", "example", "all_of"};
+
+    bool allLengthFive = std::all_of(words.begin(), words.end(),
+                                     [](const std::string& s) { return s.length() == 5; });
+
+    std::cout << (allLengthFive ? "All strings have length 5" : "Not all strings have length 5") << std::endl;
+
+    return 0;
+}
+```
+
+### Example 3: Using `std::all_of` with Arrays
+
+```cpp
+#include <algorithm>
+#include <iostream>
+
+int main() {
+    int arr[] = {2, 4, 6, 8, 10};
+
+    bool allEven = std::all_of(std::begin(arr), std::end(arr), [](int i) { return i % 2 == 0; });
+
+    std::cout << (allEven ? "All are even" : "Not all are even") << std::endl;
+
+    return 0;
+}
+```
+
+### Example 4: Combining `std::all_of` with Other Conditions
+
+```cpp
+#include <algorithm>
+#include <vector>
+#include <iostream>
+
+int main() {
+    std::vector<int> vec = {-1, -2, -3, -4, -5};
+
+    // Check if all elements are negative and less than -3
+    bool complexCondition = std::all_of(vec.begin(), vec.end(),
+                                        [](int i) { return i < 0 && i < -3; });
+
+    std::cout << (complexCondition ? "All elements meet the condition" : "Not all elements meet the condition") << std::endl;
+
+    return 0;
+}
+```
+
+### Example 5: Using `std::all_of` with Custom Objects
+
+```cpp
+#include <algorithm>
+#include <vector>
+#include <iostream>
+
+class Person {
+public:
+    std::string name;
+    int age;
+    Person(std::string name, int age) : name(name), age(age) {}
+};
+
+int main() {
+    std::vector<Person> people = {
+        {"Alice", 30},
+        {"Bob", 25},
+        {"Charlie", 35}
+    };
+
+    bool allOver20 = std::all_of(people.begin(), people.end(),
+                                 [](const Person& p) { return p.age > 20; });
+
+    std::cout << (allOver20 ? "All people are over 20 years old" : "Not all people are over 20") << std::endl;
+
+    return 0;
+}
+```
+
+These examples illustrate the flexibility of `std::all_of` in checking conditions across a range of elements. Whether you're working with simple data types, strings, or custom objects, `std::all_of` provides a concise and expressive way to validate every element against a given predicate.
+
+---
+
+To convert a character representing a digit (like `'6'`) into its integer value (like `6`), you can subtract the character `'0'` from it. This works because the characters `'0'` to `'9'` are consecutively placed in the ASCII table, so their integer values are also consecutive. Subtracting the ASCII value of `'0'` from the ASCII value of any digit character gives the numeric value of that digit.
+
+Here's how you can do it in C++:
+
+```cpp
+char ch = '6';
+int num = ch - '0';
+```
+
+After this operation, `num` will contain the integer `6`.
+
+This method is straightforward and does not require any library functions, making it efficient for simple conversions of single digit characters.
+
+---
+
+In C++, the `static` keyword has several uses depending on the context in which it's used. It can be applied to variables and functions inside or outside of a class. Here's a breakdown of its main uses:
+
+### 1. Static Variables in Functions
+
+When `static` is used with variables inside functions, it changes the duration of the variable's storage from automatic duration to static duration. This means the variable is only initialized once, and its value persists between function calls.
+
+```cpp
+void function() {
+    static int counter = 0; // Initialized only once
+    counter++;
+    std::cout << "Counter: " << counter << std::endl;
+}
+```
+Each time `function()` is called, `counter` retains its value from the previous call, allowing it to act as a cumulative counter.
+
+### 2. Static Global Variables
+
+When `static` is applied to a global variable or function, it restricts the scope of that variable or function to the file in which it's declared, making it "file-local." This means the static global variable or function cannot be accessed or used from other files in the program.
+
+```cpp
+static int globalVar = 0; // Only accessible in this file
+```
+
+### 3. Static Class Members
+
+When used in a class, `static` can be applied to both member variables and member functions. Static class members have the following characteristics:
+
+- **Static Member Variables:** Shared among all instances of the class. They are not tied to any specific instance of the class and can be accessed directly using the class name.
+
+```cpp
+class MyClass {
+public:
+    static int staticVar;
+};
+
+int MyClass::staticVar = 0; // Definition outside the class
+```
+
+- **Static Member Functions:** Can be called on the class itself, without needing an instance of the class. They can only access static member variables or other static member functions.
+
+```cpp
+class MyClass {
+public:
+    static void staticFunction() {
+        // Can access staticVar
+    }
+};
+```
+
+### Summary
+
+- **Function scope with static duration:** Variable retains its value between function calls.
+- **File scope, but with internal linkage:** Global variables and functions are accessible only within the file they're declared in.
+- **Class level:** Shared across all instances of the class. Static member variables hold a single piece of data shared by all instances of the class, and static member functions can operate without an instance of the class.
+
+
+### Non-static Member Functions
+Non-static member functions operate on instances of a class. To call a non-static member function, you need an object (an instance of a class). Each object has its own set of non-static data members, and non-static member functions operate on these individual sets of data. Here's a brief illustration:
+
+```cpp
+class Example {
+public:
+    void nonStaticFunction() { /* ... */ }
+};
+
+Example obj;
+obj.nonStaticFunction(); // Called on an instance of the class
+```
+
+In this case, `nonStaticFunction()` can access both static and non-static member variables because it's implicitly passed a `this` pointer pointing to the object it's called on, allowing it to know which specific instance's data to operate on.
+
+### Static Member Functions
+Static member functions, on the other hand, are not tied to any particular instance of a class. They belong to the class itself, rather than any object. This means you can call a static member function without creating an instance of the class. Instead, you use the class name to access the static member function. Here's how that looks:
+
+```cpp
+class Example {
+public:
+    static void staticFunction() { /* ... */ }
+};
+
+Example::staticFunction(); // Called on the class itself, not an instance
+```
+
+Static member functions do not have access to a `this` pointer because there's no object instance involved when they're called. This restricts them from accessing non-static members (variables or functions) of the class directly since non-static members belong to specific instances of the class.
+
+### Implications
+The ability to call static member functions on the class itself makes them suitable for tasks that are related to the class as a whole rather than to individual objects. Examples include:
+
+- Factory methods that create instances of the class.
+- Accessor methods for static data members, which are shared across all instances of the class.
+- Utility functions that perform operations not dependent on the state of a specific object instance.
+
+In essence, static member functions provide a way to organize functions related to a class but that do not need to interact with the state of individual objects of that class.
+
+---
+
+Sorting a `vector<string>` in lexicographic (dictionary) order in C++ can be easily done using the `std::sort` function from the `<algorithm>` library. By default, `std::sort` will sort the strings in ascending lexicographic order because the `string` class overloads the `<` operator to perform lexicographic comparison.
+
+Here's a simple example:
+
+```cpp
+#include <algorithm> // For std::sort
+#include <vector>
+#include <string>
+#include <iostream>
+
+int main() {
+    std::vector<std::string> vec = {"banana", "apple", "cherry", "date"};
+
+    // Sort the vector in lexicographic order
+    std::sort(vec.begin(), vec.end());
+
+    // Print the sorted vector
+    for(const auto& str : vec) {
+        std::cout << str << std::endl;
+    }
+
+    return 0;
+}
+```
+
+In this example, `std::sort` compares the strings using their natural lexicographic ordering, resulting in the vector being sorted as `apple`, `banana`, `cherry`, `date`.
+
+### Custom Sorting Criteria
+
+If you need a different sorting criterion (e.g., sorting in reverse lexicographic order), you can provide a custom comparison function as the third argument to `std::sort`:
+
+```cpp
+std::sort(vec.begin(), vec.end(), [](const std::string& a, const std::string& b) {
+    return a > b; // Sort in reverse lexicographic order
+});
+```
+
+### Sorting with Case Insensitivity
+
+Sorting strings in a case-insensitive manner requires a custom comparison function, as the default behavior is case-sensitive. Here's how you might implement case-insensitive sorting:
+
+```cpp
+#include <algorithm>
+#include <cctype> // For std::tolower
+
+// A case-insensitive comparison function
+bool caseInsensitiveCompare(const std::string& a, const std::string& b) {
+    return std::lexicographical_compare(
+        a.begin(), a.end(), b.begin(), b.end(),
+        [](unsigned char ac, unsigned char bc) { return std::tolower(ac) < std::tolower(bc); });
+}
+
+int main() {
+    std::vector<std::string> vec = {"banana", "Apple", "cherry", "Date"};
+
+    // Sort the vector in case-insensitive lexicographic order
+    std::sort(vec.begin(), vec.end(), caseInsensitiveCompare);
+
+    // Print the sorted vector
+    for(const auto& str : vec) {
+        std::cout << str << std::endl;
+    }
+
+    return 0;
+}
+```
+
+This approach uses `std::lexicographical_compare` with a custom comparator that converts each character to lowercase before comparing, effectively sorting the strings in a case-insensitive manner.
+
+---
+
+In C++, the `static` keyword can be used in various contexts, but when referring to class members, `static` plays a specific role. It is used to declare and define static data members and static member functions that belong to the class rather than to any particular object of the class.
+
+### Static Data Members
+
+**Static data members** are shared among all instances of a class. They have a single storage location in memory, and the same value of a static data member is accessible from all instances of the class. Unlike normal data members, which are created and destroyed with each object instance, static data members exist independently of any object instances.
+
+#### Characteristics:
+- **Class Scope**: They are associated with the class rather than with any object.
+- **Initialization**: Static members must be explicitly initialized outside the class, typically in a source file.
+- **Access**: They can be accessed directly using the class name and the scope resolution operator (`::`), regardless of whether any objects of that class exist.
+
+#### Example:
+```cpp
+#include <iostream>
+
+class MyClass {
+public:
+    static int staticValue;  // Declaration of a static data member.
+
+    MyClass() {
+        staticValue++;  // Each object creation increments the static value.
+    }
+};
+
+int MyClass::staticValue = 0;  // Definition and initialization of the static data member.
+
+int main() {
+    MyClass obj1, obj2, obj3;
+    std::cout << "Static Value: " << MyClass::staticValue << std::endl;  // Outputs: Static Value: 3
+    return 0;
+}
+```
+
+### Static Member Functions
+
+**Static member functions** are functions that can be called on the class itself, rather than on instances of the class. They do not have access to `this` pointer and, therefore, cannot access non-static members directly.
+
+#### Characteristics:
+- **Class Scope**: Like static data members, static functions are tied to the class rather than to any object.
+- **Access**: They can be invoked using the class name along with the scope resolution operator, without needing an object.
+- **Limitations**: Cannot access non-static members directly because they do not operate on an instance of the class.
+
+#### Example:
+```cpp
+#include <iostream>
+
+class Util {
+public:
+    static int multiply(int a, int b) {
+        return a * b;  // A simple static function that multiplies two numbers.
+    }
+};
+
+int main() {
+    int result = Util::multiply(4, 5);  // Calling a static function using the class name.
+    std::cout << "Result: " << result << std::endl;  // Outputs: Result: 20
+    return 0;
+}
+```
+
+### Use Cases and Benefits
+- **Utility Classes**: Static members are often used in utility classes that provide functions and variables which do not require an instance of the class.
+- **Shared Resources**: Static data can be useful for managing shared resources, such as configuration settings or counters that should be shared across all instances.
+- **Constants**: Static const members can be used to define class-specific constants.
+
+### Conclusion
+Static members, both functions, and data, provide functionality that is independent of any instance of a class. They are used when a behavior or data element is to be shared across all instances of a class, or when a function needs to be accessible without necessarily creating an instance of the class. Understanding how to use these features effectively is crucial for designing efficient and modular C++ programs.
+
+---
+
+In C++'s multithreaded synchronization using `std::condition_variable` and `std::unique_lock<std::mutex>`, the lock behavior in conjunction with the condition variable plays a crucial role in ensuring that access to shared resources is managed safely across multiple threads. Here’s how the process unfolds, specifically focusing on when the lock is released:
+
+### Sequence of Events
+
+1. **Acquisition and Wait**:
+    - A thread acquires the mutex using a `std::unique_lock`. This lock ensures exclusive access to the shared resource.
+    - The thread calls `cv.wait(lock, predicate)`. Here’s what happens:
+        - The `cv.wait()` method checks the predicate:
+            - If the predicate returns `false`, `cv.wait()` automatically releases the mutex and puts the thread into a wait state.
+            - If the predicate returns `true`, `cv.wait()` does not put the thread into a wait state, and the thread continues execution without releasing the mutex.
+        - If the thread was put into a wait state and is later awakened (either due to a `notify_one()`/`notify_all()` call or a spurious wakeup), it re-acquires the mutex automatically before re-checking the predicate or exiting the wait.
+
+2. **Mutex Held During Critical Section**:
+    - After returning from `cv.wait()`, the thread still holds the mutex if the predicate is `true`. This ensures that the thread can safely enter and execute the critical section code without interference from other threads.
+
+3. **Release of Mutex**:
+    - The mutex is automatically released when the `std::unique_lock` goes out of scope. This is the key aspect of RAII (Resource Acquisition Is Initialization) in C++, where resource management (like mutex locking) is tied to the lifespan of an object (`std::unique_lock` in this case).
+    - Explicitly, the lock can be released by calling `lock.unlock()` if needed before the end of the scope, but typically it's left to the automatic mechanism provided by `std::unique_lock`.
+
+4. **Notification**:
+    - Once the thread completes the critical section, it typically calls `cv.notify_one()` or `cv.notify_all()` to inform other threads waiting on the same condition variable that they may proceed to check their predicates.
+    - Importantly, `cv.notify_*()` does not affect the mutex state. Whether the mutex is locked or not at the time of this call depends solely on whether `lock.unlock()` was called explicitly before the notify call or if the `std::unique_lock` is still in scope and holding the lock.
+
+### Example Code Review
+
+Here’s a brief code snippet to illustrate the flow:
+
+```cpp
+#include <mutex>
+#include <condition_variable>
+#include <iostream>
+#include <thread>
+
+std::mutex mtx;
+std::condition_variable cv;
+bool ready = false;
+
+void process_data() {
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, []{ return ready; });  // Thread waits here until 'ready' is true
+    // Critical section starts here
+    std::cout << "Processing shared data." << std::endl;
+    // Critical section ends here
+    // lock.unlock(); // Optional: Explicit unlock before notification
+    cv.notify_all();  // Notify other threads
+    // lock goes out of scope here, automatically releasing the mutex
+}
+
+int main() {
+    std::thread worker(process_data);
+    {
+        std::lock_guard<std::mutex> lk(mtx);
+        ready = true;  // Set the condition
+        cv.notify_one();  // Notify waiting thread
+    }
+    worker.join();
+    return 0;
+}
+```
+
+In this example:
+- The mutex is automatically released when the `std::unique_lock` object (`lock`) goes out of scope after the end of the `process_data` function. This is the typical point where the lock is released unless explicitly unlocked earlier.
+- The `cv.notify_all()` call happens while the mutex is still potentially held if not explicitly unlocked, which is safe but might delay other threads from entering their critical sections immediately after waking up until the mutex is finally released when the `std::unique_lock` goes out of scope.
+
+This behavior underscores the importance of understanding lock scopes and how condition variables interact with mutexes to properly design thread-safe operations in concurrent C++ applications.
 
 ---
 
@@ -1731,6 +2342,44 @@ finally:
 In this example, the `ZeroDivisionError` is specifically caught and handled. The generic `except` block catches any other exceptions that might occur. The `else` block would run if there was no exception, and the `finally` block runs in any case, ensuring that the message "Execution complete" is printed whether an exception occurs or not.
 
 Proper exception handling is essential for writing robust and error-tolerant programs in Python. It helps to ensure that your program can deal with unexpected situations gracefully without crashing abruptly.
+
+---
+
+The `@cache` decorator in Python, introduced in Python 3.9 as part of the `functools` module, is a simple way to cache the return values of a function based on its arguments. It stores the results of expensive function calls and returns the cached result when the same inputs occur again. This can significantly improve performance for functions with time-consuming computations that are called repeatedly with the same arguments.
+
+Here's a basic example to illustrate how `@cache` works:
+
+```python
+from functools import cache
+
+@cache
+def fibonacci(n):
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# The first call with a particular argument will compute the value
+print(fibonacci(10))  # 55
+
+# Subsequent calls with the same argument will fetch the result from the cache
+print(fibonacci(10))  # 55, but much faster
+```
+
+In this example, the `fibonacci` function is decorated with `@cache`, so the results of `fibonacci(n)` are cached for each value of `n`. When you call `fibonacci(10)`, the function computes the result and stores it in the cache. If you call `fibonacci(10)` again, the function retrieves the result from the cache instead of recomputing it, saving time.
+
+### Key Points:
+
+- **Improves Performance**: Especially beneficial for recursive functions or functions that perform heavy computations.
+  
+- **Automatic Handling**: The cache is managed automatically, and there's no need for manual intervention.
+  
+- **Cache Persistence**: The cache persists only for the lifetime of the program. It does not persist between program runs.
+  
+- **Function Requirements**: The function arguments must be hashable since they are used as keys in the cache.
+
+- **No Arguments for Cache Management**: Unlike `lru_cache`, `@cache` does not expose arguments for managing the cache size or other properties. If you need more control over the cache, such as limiting its size, consider using `@functools.lru_cache(maxsize=None)` (setting `maxsize` to `None` behaves similarly to `@cache` but with additional options).
+
+Using `@cache` is a simple and effective way to optimize functions that are called repeatedly with the same arguments, making it a useful tool in the Python programmer's toolbox.
 
 ---
 

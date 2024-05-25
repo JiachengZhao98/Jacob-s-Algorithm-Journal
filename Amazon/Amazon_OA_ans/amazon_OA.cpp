@@ -1,8 +1,8 @@
-#include  "../stdc++.h"
+#include  "../../stdc++.h"
 using namespace::std;
 
 
- // Definition for a binary tree node.
+ Definition for a binary tree node.
   struct TreeNode {
       int val;
       TreeNode *left;
@@ -32,8 +32,6 @@ public:
         neighbors = _neighbors;
     }
 };
-
-
 
 class Solution {
 public:
@@ -1272,5 +1270,8 @@ int kthFactor(int n, int k) {
         return -1;
     }
 
-};
+    // problem url: https://leetcode.com/discuss/interview-question/5043451/Amazon-OA/
 
+
+
+};
