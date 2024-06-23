@@ -1462,6 +1462,115 @@ This behavior underscores the importance of understanding lock scopes and how co
 
 ---
 
+Using `unordered_map<vector<double>, int>` in C++ is possible, but it comes with specific challenges and considerations that need to be addressed:
+
+1. **Default Hash Function**: `unordered_map` requires a hash function to determine how keys (in this case, vectors of doubles) are stored and searched. **By default, `std::unordered_map` does not have a hash function defined for the type `std::vector<double>`**. Therefore, you can't directly use `std::vector<double>` as keys without defining a custom hash function.
+
+2. **Custom Hash Function**: To use a `vector<double>` as a key, you would need to provide a hash function that can adequately generate unique hashes based on the contents of the vector. This could involve hashing each element of the vector and combining these hashes in a way that minimizes collisions.
+
+3. **Precision and Stability**: Using doubles in vectors as keys in hash tables introduces issues related to floating-point precision. Small variations in floating-point calculations could result in different hash values for what should theoretically be identical keys, leading to inconsistencies and errors in data retrieval.
+
+4. **Complexity and Performance**: Even with a custom hash function, using vectors as keys could lead to performance issues, especially if the vectors can be of variable size or if the hash computation is complex.
+
+Here’s how you could theoretically implement an `unordered_map` with `vector<double>` as keys by defining a custom hash function:
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <functional>
+#include <numeric>
+
+using namespace std;
+
+struct vector_hash {
+    size_t operator()(const vector<double>& v) const {
+        size_t seed = 0;
+        for (double i : v) {
+            seed ^= hash<double>{}(i) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+        }
+        return seed;
+    }
+};
+
+int main() {
+    unordered_map<vector<double>, int, vector_hash> example;
+
+    vector<double> key1 = {0.5, 1.5};
+    vector<double> key2 = {0.5, 1.5};
+
+    example[key1] = 1;
+    cout << "Value at key1: " << example[key1] << endl; // Outputs 1
+
+    if (example.find(key2) != example.end()) {
+        cout << "Key2 found, value: " << example[key2] << endl; // Should output 1
+    } else {
+        cout << "Key2 not found." << endl;
+    }
+
+    return 0;
+}
+```
+
+**Why Use Pairs Instead?**
+In the specific case of calculating midpoints for rectangles, a more practical approach is using pairs of doubles (representing X and Y coordinates) rather than vectors. This simplifies the problem:
+- Only two dimensions are involved, so using a pair is more natural and efficient.
+- Using pairs simplifies the hash function since you only need to hash two values.
+
+Defining a hash function for a pair (as shown in previous examples) is more straightforward and less error-prone than doing so for vectors, especially when only two values are needed per key. This approach reduces the risk of floating-point precision errors affecting your hash values and ultimately, your algorithm's correctness.
+
+---
+
+# Multithread
+
+## Choice between `std::lock_guard` and `std::unique_lock`
+
+The choice between using `std::lock_guard` and `std::unique_lock` in C++ often depends on the specific requirements of the synchronization task at hand. Here's a breakdown of why `std::lock_guard` might be preferred in certain cases and why `std::unique_lock` was used in specific parts of the ThreadSafeStack implementation:
+
+### `std::lock_guard`:
+- **Simpler and Lighter**: `std::lock_guard` is a simpler mutex wrapper that locks the mutex when it is constructed and unlocks it when it is destructed. It's meant for scenarios where you simply need to lock a mutex for the duration of a scope and do not need to manually control when to lock or unlock, or do not need to conditionally lock or unlock within that scope.
+- **Use Case**: In the `push`, `try_pop`, and `empty` methods, the operations within the critical section are straightforward and do not require unlocking the mutex prematurely or locking it multiple times conditionally. Therefore, `std::lock_guard` is ideal due to its simplicity and efficiency in these cases.
+
+### `std::unique_lock`:
+- **Flexibility**: `std::unique_lock` is more flexible than `std::lock_guard`. It allows you to lock and unlock the mutex multiple times and is movable, which is not the case with `std::lock_guard`.
+- **Conditional Waiting**: `std::unique_lock` is necessary when you need to use condition variables, as it allows unlocking the mutex while waiting and re-locking it automatically when the wait is over.
+- **Use Case**: In the `pop` method, `std::unique_lock` is used because it needs to interact with a condition variable. The `cond_var.wait()` call requires unlocking the mutex during the wait and then re-locking it when the condition is met and the thread is awakened. `std::unique_lock` facilitates this behavior.
+
+### Decision Factors:
+- **Lock Duration and Control**: If you do not need to control the lock duration beyond the scope where the lock is applied, or if there's no need for conditional waiting, then `std::lock_guard` is preferred because it is more lightweight and less complex.
+- **Need for Condition Variables**: When you need to wait on a condition variable, `std::unique_lock` is required because of its ability to unlock and re-lock the mutex as part of waiting on a condition.
+
+In summary, the choice of mutex wrapper (`std::lock_guard` vs. `std::unique_lock`) in the ThreadSafeStack implementation is guided by the need for simplicity and minimal overhead where possible (`std::lock_guard`), and flexibility and the ability to interact with condition variables where necessary (`std::unique_lock`). This approach helps in achieving optimal performance while maintaining clarity and correctness in thread synchronization.
+
+## `.notify_one()` and `.notify_all()`
+
+In the `ThreadSafeStack` implementation, the choice of when to use `cond_var.notify_one()` and why to use `notify_one()` instead of `notify_all()` is driven by the specific synchronization needs and the expected behavior of the stack operations. Here’s a detailed explanation:
+
+### Use of `cond_var.notify_one()` in `push()`
+- **Purpose of Notification**: The notification is used in `push()` to wake up one thread that is waiting on the condition variable due to the `pop()` operation being blocked on an empty stack. When an item is pushed onto the stack, it's essential to notify a waiting thread (if any) that there is now an item available to be popped.
+- **Efficiency**: Using `notify_one()` is generally more efficient than `notify_all()` in this scenario. When an item is pushed, only one waiting thread needs to be woken up to handle the newly available item. Waking up more than one thread (which `notify_all()` would do) might lead to unnecessary context switches and CPU cycles, as the additional woken threads would check the condition, find it false (because the stack may become empty again), and go back to waiting.
+
+### Non-use of `cond_var.notify_one()` in Other Functions
+- **`pop()` Operation**: The `pop()` method uses `cond_var.wait()` to wait for the stack to have items. There's no need to call `notify_one()` here because it's a consumer operation, not a producer. It doesn’t make other threads' conditions true; rather, it potentially makes them false by removing an item.
+- **`try_pop()`, `empty()`, `clear()`, etc.**: In operations like `try_pop()` and `empty()`, there’s no interaction with the condition variable because these operations do not block. They either perform an action immediately or check a condition and return. The `clear()` operation removes all items, and typically there would be no need to wake threads since the stack state after `clear()` would still not satisfy the pop condition (the stack is empty).
+
+### Choice of `notify_one()` vs. `notify_all()`
+- **Granularity of Notification**: Using `notify_one()` is usually preferred when only one thread can make progress as a result of a change in state. In the case of pushing to an empty stack, only one thread that was potentially waiting for an item to be available can proceed with its `pop()`. Hence, `notify_one()` is sufficient and more efficient.
+- **Use of `notify_all()`**: Would be considered if multiple waiting threads could proceed with their operations independently after a change in state. For example, if multiple threads were waiting for a certain condition that becomes true for all of them simultaneously, `notify_all()` would be necessary. In a stack context, such a scenario is rare since the operation typically only affects one item at a time.
+
+Using `notify_one()` in the context of a stack where operations typically affect one item at a time (one item pushed or popped) minimizes overhead and maximizes efficiency. Each notification allows exactly one thread to proceed, which aligns well with the operation’s effect on the stack’s state.
+
+---
+
+## THIS IS `.substr()` SYNTAX !!!
+
+`string substr(size_t pos = 0, size_t **len** = npos) const;`
+
+The second prarmeter is the **length** of the substring you want.
+
+
+
+
 ### Java <a name="Java"></a>
 
 ---
