@@ -14,6 +14,11 @@ private:
     unordered_map<string, string> filename_size;
     map<int, set<string>> size_filename;
     map<string, pair<int, set<string>>> user_filename;
+    struct backup {
+      map<string, pair<int, set<string>>> user_filename;
+      unordered_map<string, string> filename_size;
+      map<int, set<string>> size_filename;
+    };
 
 public:
 
@@ -100,13 +105,13 @@ class bankSystem {
 
 private:
 
-public:
-
     unordered_map<string, string> accountId_balance;
     map<int, set<string>> amount_accountId;
     unordered_map<string, int> accountId_amount;
     unordered_map<string, vector<string>> transferId_timeAndAmountAndSourceId;
     int transferCount;
+
+public:
 
     bankSystem() {
         this->transferCount = 0;
