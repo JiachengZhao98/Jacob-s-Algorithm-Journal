@@ -22,6 +22,7 @@ using namespace std;
 
 // Q2
 // 在代码中定义了一颗自定义的树，给出制定的起点和终点，求从起点到终点会遍历的所有节点。
+// should be dfs
 
 
 // Q3
@@ -33,7 +34,10 @@ using namespace std;
 // Q5
 // 一个页面内需要呈现4款数据，包括：页面状态，页面索引、访问模式和进程ID。这4款数据又有各自的取值范围，比如说3，100，45000。现在求装载这4个状态所需要的最小字节数
 
-// To find the minimum number of bytes required to represent the four types of data—page status, page index, access mode, and process ID—we first need to understand the range of values each type of data can hold. This will help us determine how many bits are needed to represent each type. From the information you provided, we have the following maximum values for each type:
+// To find the minimum number of bytes required to represent the four types of data—page status, page index, access mode,
+// and process ID—we first need to understand the range of values each type of data can hold.
+// This will help us determine how many bits are needed to represent each type. From the information you provided,
+// we have the following maximum values for each type:
 
 // 1. Page status: Assuming 3 distinct states, needing at least \(\log_2(3) \approx 2\) bits.
 // 2. Page index: With a maximum value of 100, requiring \(\log_2(101) \approx 7\) bits.
