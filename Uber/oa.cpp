@@ -160,6 +160,12 @@ public:
 
 int countPairs(const std::vector<std::string>& strings) {
     Trie trie;
+
+    // vector<string> strings2;
+    // for (auto a : strings) {
+    //     reverse(a.begin(), a.end());
+    //     strings2.push_back(a);
+    // }
     for (const std::string& str : strings) {
         trie.insert(str);
     }
@@ -338,6 +344,53 @@ int minNumOfCells(int n, vector<vector<int>>& cells) {
     return res;
 }
 
+// meeting schedule
+
+vector<vector<int>> meet(vector<vector<int>>& slot1, vector<vector<int>>& slot2, int duration) {
+    int m = slot1.size(), n = slot2.size();
+    int i = 0, j = 0;
+    vector<vector<int>> res;
+    while (i < m and j < n) {
+        int s = max(slot1[i][0], slot2[j][0]);
+        int e = min(slot1[i][1], slot2[j][1]);
+        if (e - s >= duration) {
+            res.push_back({s,e});
+        }
+        if (slot1[i][1] < slot2[j][1]) {
+            i++;
+        }
+        else j++;
+    }
+    return res;
+}
+
+vector<vector<int>> mergeInterval(vector<vector<int>>& interval) {
+    sort(interval.begin(), interval.end());
+    vector<vector<int>> res;
+    for (int i = 0; i < interval.size() - 1; i++) {
+        if (interval[i+1][0] <= interval[i][1]) {
+            interval[i + 1][0] = min(interval[i + 1][0], interval[i][0]);
+            interval[i + 1][1] = max(interval[i + 1][1], interval[i][1]);
+        }
+        else res.push_back({interval[i][0], interval[i][1]});
+    }
+    res.push_back(interval.back());
+    return res;
+}
+
+vector<int> meetingSchedule(vector<vector<vector<int>>>& freeTime, int k) {
+    // vector<vector<vector<int>>> free;
+    // for (auto employee : freeTime) {
+    //     free.push_back(mergeInterval(employee));
+    // }
+    vector<vector<int>> time;
+    time = meet(freeTime[0], freeTime[1], k);
+    for (int i = 2; i < freeTime.size(); i++) {
+        vector<vector<int>> temp = meet(time, freeTime[i], k);
+        time = temp;
+    }
+    return {time[0][0], time[0][0] + k};
+}
 
 
 int main() {
