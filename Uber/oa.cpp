@@ -232,6 +232,26 @@ i = 4, nums[i] = 321, j = 6, nums[j] = 231, you can get 321 by swaping 3 and 2 p
 
 */
 
+bool checkS(string str1, string str2) {
+    if (str1.size() != str2.size()) return false;
+
+    std::vector<int> diffIndices;
+    for (int i = 0; i < str1.size(); ++i) {
+        if (str1[i] != str2[i]) {
+            diffIndices.push_back(i);
+        }
+    }
+
+    // There must be exactly 2 differences for one swap to be possible
+    if (diffIndices.size() == 2) {
+        int i = diffIndices[0];
+        int j = diffIndices[1];
+        return (str1[i] == str2[j] && str1[j] == str2[i]);
+    }
+
+    return false;
+}
+
 int numOfDistinctPairs(vector<int>& nums) {
     unordered_map<string, vector<string>> myMap;
     for (auto a : nums) {
@@ -245,8 +265,18 @@ int numOfDistinctPairs(vector<int>& nums) {
     }
     int res = 0;
     for (auto pair : myMap) {
-
+        if (pair.first.size() == 2) {
+            res += pair.second.size() * (pair.second.size() - 1) / 2;
+        }
+        for (int i = 0; i < pair.second.size(); i++) {
+            for (int j = i + 1; j < pair.second.size(); j++) {
+                if (checkS(pair.second[i], pair.second[j])) {
+                    res++;
+                }
+            }
+        }
     }
+    return res;
 }
 
 
