@@ -4,6 +4,7 @@
 #include "map"
 #include "string"
 #include "algorithm"
+#include "set"
 
 using namespace std;
 // Function to find cycles in the permutation
@@ -298,6 +299,44 @@ public:
         return res;
     }
 };
+
+
+// create Y in a matrix
+
+int minNumOfCells(int n, vector<vector<int>>& cells) {
+    int mid = n / 2;
+    unordered_map<int, int> y;
+    unordered_map<int, int> others;
+    set<pair<int, int>> yCell;
+    for (int i = 0; i < n; i++) {
+        if (i <= mid) {
+            yCell.insert({i,i});
+            yCell.insert({i, n - 1 - i});
+        }
+        else {
+            yCell.insert({i, mid});
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (yCell.count({i, j}) != 0) {
+                y[cells[i][j]]++;
+            }
+            else others[cells[i][j]]++;
+        }
+    }
+    int res = INT_MAX;
+    int sum = y[0] + y[1] + y[2] + others[0] + others[1] + others[2];
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (i != j) {
+                res = min(res, sum - y[i] - others[j]);
+            }
+        }
+    }
+    return res;
+}
 
 
 
