@@ -347,6 +347,8 @@ int minNumOfCells(int n, vector<vector<int>>& cells) {
 // meeting schedule
 
 vector<vector<int>> meet(vector<vector<int>>& slot1, vector<vector<int>>& slot2, int duration) {
+    sort(slot1.begin(), slot1.end());
+    sort(slot2.begin(), slot2.end());
     int m = slot1.size(), n = slot2.size();
     int i = 0, j = 0;
     vector<vector<int>> res;
