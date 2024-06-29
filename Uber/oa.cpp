@@ -238,10 +238,66 @@ int numOfDistinctPairs(vector<int>& nums) {
     }
     int res = 0;
     for (auto pair : myMap) {
-        
+
     }
 }
 
+
+// 3043. Find the Length of the Longest Common Prefix
+
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> children;
+    //int length;
+    TrieNode(){}
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    void insert(string word) {
+        TrieNode* node = root;
+        for (auto ch : word) {
+            if (node->children.find(ch) == node->children.end()) {
+                node->children[ch] = new TrieNode();
+            }
+            node = node->children[ch];
+        }
+    }
+
+    int startsWith(string prefix) {
+        int res = 0;
+        TrieNode* node = root;
+        for (auto ch : prefix) {
+            if (node->children.find(ch) == node->children.end()) {
+                break;
+            }
+            res++;
+            node = node->children[ch];
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
+        Trie trie;
+        int res = 0;
+        for (auto num : arr1) {
+            trie.insert(to_string(num));
+        }
+        for (auto num : arr2) {
+            res = max(res, trie.startsWith(to_string(num)));
+        }
+        return res;
+    }
+};
 
 
 
