@@ -217,68 +217,6 @@ public:
     }
 };
 
-/*
-
-Given an array with intergers nums, count the number of distinct pairs where 0 <= i < j < length of array
-and nums[i] == nums[j] where you're allowed to swap two positions of nums[j] to make it equal to nums[i].
-
-Example:
-[1, 23, 156, 4738, 321, 72992, 231, 651, 32]
-Result = 3
-Explanation:
-i = 1, nums[i] = 23, j = 8, nums[j] = 32, you can get 23 by swaping 3 and 2 postions in 32 (remeber only two swaps allowed)
-i = 2, nums[i] = 156, j = 7, nums[j] = 651, you can get 156 by swaping 1 and 6 postions in 651(remeber only two swaps allowed)
-i = 4, nums[i] = 321, j = 6, nums[j] = 231, you can get 321 by swaping 3 and 2 postions in 231(remeber only two swaps allowed)
-
-*/
-
-bool checkS(string str1, string str2) {
-    if (str1.size() != str2.size()) return false;
-
-    std::vector<int> diffIndices;
-    for (int i = 0; i < str1.size(); ++i) {
-        if (str1[i] != str2[i]) {
-            diffIndices.push_back(i);
-        }
-    }
-
-    // There must be exactly 2 differences for one swap to be possible
-    if (diffIndices.size() == 2) {
-        int i = diffIndices[0];
-        int j = diffIndices[1];
-        return (str1[i] == str2[j] && str1[j] == str2[i]);
-    }
-
-    return false;
-}
-
-int numOfDistinctPairs(vector<int>& nums) {
-    unordered_map<string, vector<string>> myMap;
-    for (auto a : nums) {
-        string num = to_string(a);
-        if (num.size() == 1) {
-            num = '0' + num;
-        }
-        string dul_num = num;
-        sort(dul_num.begin(), dul_num.end());
-        myMap[dul_num].push_back(num);
-    }
-    int res = 0;
-    for (auto pair : myMap) {
-        if (pair.first.size() == 2) {
-            res += pair.second.size() * (pair.second.size() - 1) / 2;
-        }
-        for (int i = 0; i < pair.second.size(); i++) {
-            for (int j = i + 1; j < pair.second.size(); j++) {
-                if (checkS(pair.second[i], pair.second[j])) {
-                    res++;
-                }
-            }
-        }
-    }
-    return res;
-}
-
 
 // 3043. Find the Length of the Longest Common Prefix
 
@@ -423,6 +361,103 @@ vector<int> meetingSchedule(vector<vector<vector<int>>>& freeTime, int k) {
     }
     return {time[0][0], time[0][0] + k};
 }
+
+
+
+// Actual Uber OA
+
+// finished on Jun 29, 2024
+// full score (all tests passed)
+
+// OA No. 1
+// too easy, don't remember
+
+
+// OA No. 2
+
+/*
+给定一个整数数组 numbers，将其分配到两个数组 first 和 second 中
+第一个元素放入 first
+第二个元素放入 second
+对于之后的每个元素：
+如果 first 中比当前元素大的数量多，放入 first
+如果 second 中比当前元素大的数量多，放入second
+*/
+
+// OA No. 3
+
+/*
+blur image with radius，image是一个图像color matrix
+对于每个像素点，计算(周围radius内的格子(不包含本身)的平均值 + 本身像素点的值) / 2, 更新为当前的像素点值
+返回新的 matrix
+*/
+
+
+//  OA No.4
+
+/*
+Given an array with intergers nums, count the number of distinct pairs where 0 <= i < j < length of array
+and nums[i] == nums[j] where you're allowed to swap two positions of nums[j] to make it equal to nums[i].
+
+Example:
+[1, 23, 156, 4738, 321, 72992, 231, 651, 32]
+Result = 3
+Explanation:
+i = 1, nums[i] = 23, j = 8, nums[j] = 32, you can get 23 by swaping 3 and 2 postions in 32 (remeber only two swaps allowed)
+i = 2, nums[i] = 156, j = 7, nums[j] = 651, you can get 156 by swaping 1 and 6 postions in 651(remeber only two swaps allowed)
+i = 4, nums[i] = 321, j = 6, nums[j] = 231, you can get 321 by swaping 3 and 2 postions in 231(remeber only two swaps allowed)
+*/
+
+
+// answer for No4. passed by CodeSignal
+
+bool checkS(string str1, string str2) {
+    if (str1.size() != str2.size()) return false;
+
+    std::vector<int> diffIndices;
+    for (int i = 0; i < str1.size(); ++i) {
+        if (str1[i] != str2[i]) {
+            diffIndices.push_back(i);
+        }
+    }
+
+    // There must be exactly 2 differences for one swap to be possible
+    if (diffIndices.size() == 2) {
+        int i = diffIndices[0];
+        int j = diffIndices[1];
+        return (str1[i] == str2[j] && str1[j] == str2[i]);
+    }
+
+    return false;
+}
+
+int numOfDistinctPairs(vector<int>& nums) {
+    unordered_map<string, vector<string>> myMap;
+    for (auto a : nums) {
+        string num = to_string(a);
+        if (num.size() == 1) {
+            num = '0' + num;
+        }
+        string dul_num = num;
+        sort(dul_num.begin(), dul_num.end());
+        myMap[dul_num].push_back(num);
+    }
+    int res = 0;
+    for (auto pair : myMap) {
+        if (pair.first.size() == 2) {
+            res += pair.second.size() * (pair.second.size() - 1) / 2;
+        }
+        for (int i = 0; i < pair.second.size(); i++) {
+            for (int j = i + 1; j < pair.second.size(); j++) {
+                if (checkS(pair.second[i], pair.second[j])) {
+                    res++;
+                }
+            }
+        }
+    }
+    return res;
+}
+
 
 
 int main() {

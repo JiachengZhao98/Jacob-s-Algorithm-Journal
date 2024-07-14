@@ -1568,9 +1568,28 @@ Using `notify_one()` in the context of a stack where operations typically affect
 
 The second prarmeter is the **length** of the substring you want.
 
+---
+
+## `std::upper_bound()` and `std::lower_bound()`
+
+The `upper_bound()` function is **NOT** a member function of `vector` or other standard containers. Instead, it's a function in the `<algorithm>` header that operates on iterators. You should use it with the beginning and end iterators of the container, like so:
+
+```
+    auto it = std::upper_bound(vec.begin(), vec.end(), random_number);
+```
+
+However, in `std::set` and `std::map`, `std::upper_bound()` and `std::lower_bound()` are provided as built-in methods, so the function can be called as follows:
+
+```
+	// the following syntax is illegal for vectors
+	
+	map.upper_bound(random_number);
+	set.lower_bound(random_number); 
+```
 
 
 
+---
 ### Java <a name="Java"></a>
 
 ---
