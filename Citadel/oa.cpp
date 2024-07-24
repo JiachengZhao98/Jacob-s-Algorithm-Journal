@@ -19,44 +19,6 @@ vector<int> socialMedia(vector<vector<int>>& friends) {
 
 }
 
-/*
-def friend_recommendations(n, friendships):
-    from collections import defaultdict
-
-    # Create a graph from the friendships
-    graph = defaultdict(set)
-    for u, v in friendships:
-        graph[u].add(v)
-        graph[v].add(u)
-
-    # Function to find recommendations for a given user
-    def get_recommendation(user):
-        non_friends = set(range(n)) - graph[user]
-        max_common = -1
-        recommendation = -1
-
-        for non_friend in non_friends:
-            # Calculate common friends with the user
-            common_friends = len(graph[user].intersection(graph[non_friend]))
-
-            # Update the recommendation based on the number of common friends
-            if common_friends > max_common:
-                max_common = common_friends
-                recommendation = non_friend
-            elif common_friends == max_common:
-                if non_friend < recommendation:
-                    recommendation = non_friend
-
-        return recommendation
-
-    # Collect recommendations for all users
-    results = []
-    for user in range(n):
-        results.append(get_recommendation(user))
-
-    return results
-*/
-
 int userBehavior(int n, vector<int>& user) {
     unordered_map<int, int> user_freq, sub;
     for (auto a : user) {
@@ -161,31 +123,6 @@ int servers2(int n, vector<int>& cap) {
 
     return result;
 }
-
-/*
-def getDistinctGoodnessValues(arr):
-    from itertools import combinations
-
-    def bitwise_or(subsequence):
-        result = 0
-        for num in subsequence:
-            result |= num
-        return result
-
-    goodness_values = set()
-    goodness_values.add(0)
-
-
-    # Generate all possible strictly increasing subsequences
-    for length in range(1, len(arr) + 1):
-        for subseq in combinations(arr, length):
-            if all(subseq[i] < subseq[i+1] for i in range(len(subseq) - 1)):  # Ensure it's strictly increasing
-                goodness_values.add(bitwise_or(subseq))
-
-    # Convert set to a sorted list
-    return sorted(goodness_values)
-*/
-
 
 int main() {
     vector<int> time = {9,3,3,3,9};
