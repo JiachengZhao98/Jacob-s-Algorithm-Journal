@@ -643,7 +643,7 @@ In C++, you can access a specific character in a string based on its index using
 
 2. **Getting a Substring Starting at a Specific Index:**
    To get a substring from a string starting at a particular index, you can use the `substr` function. The `substr` function takes two parameters: the starting index and the length of the substring. If the length is not specified, it takes the rest of the string by default.
-   
+
    ```cpp
    std::string str = "Hello, World!";
    std::string substring = str.substr(startIndex); // Takes the rest of the string from startIndex.
@@ -807,7 +807,7 @@ int main() {
 
     // Min heap using std::greater
     std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
-    
+
     // ... Operations like push, pop, top
 }
 ```
@@ -1582,11 +1582,155 @@ However, in `std::set` and `std::map`, `std::upper_bound()` and `std::lower_boun
 
 ```
 	// the following syntax is illegal for vectors
-	
+
 	map.upper_bound(random_number);
-	set.lower_bound(random_number); 
+	set.lower_bound(random_number);
 ```
 
+---
+
+The time complexity of various operations in `std::list` in C++ is an important aspect to consider, especially when performance is critical. Here’s a breakdown of the time complexity for common methods:
+
+### Time Complexity of `std::list` Operations
+
+#### Insertion and Deletion
+- **`push_back`**: O(1)
+- **`push_front`**: O(1)
+- **`pop_back`**: O(1)
+- **`pop_front`**: O(1)
+- **`insert` (at a specific position)**: O(1) for insertion itself, but finding the position takes O(n)
+- **`erase` (from a specific position)**: O(1) for the deletion itself, but finding the position takes O(n)
+- **`remove` (all occurrences of a value)**: O(n)
+
+#### Access
+- **`front`**: O(1)
+- **`back`**: O(1)
+- **`begin`**: O(1)
+- **`end`**: O(1)
+
+#### Size and Emptiness
+- **`empty`**: O(1)
+- **`size`**: O(1) in most modern implementations (since C++11, it's typically maintained as a member variable). However, in some implementations, it could be O(n) if size is not maintained as a member variable.
+
+#### Iteration
+- **Iteration using iterators**: O(n)
+- **`advance`** (moving an iterator forward): O(n) in the worst case (for `std::list::iterator`)
+
+#### Modifying List
+- **`sort`**: O(n log n)
+- **`reverse`**: O(n)
+- **`merge`**: O(n) (assuming both lists are already sorted)
+- **`splice`** (moving elements from one list to another): O(1) for the actual splicing, but finding the position takes O(n)
+- **`clear`**: O(n)
+
+### Detailed Examples
+
+#### Insertion and Deletion
+```cpp
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> myList;
+
+    // O(1) time complexity
+    myList.push_back(10);
+    myList.push_front(5);
+
+    std::list<int>::iterator it = myList.begin();
+    std::advance(it, 1); // O(n) to find the position
+    myList.insert(it, 7); // O(1) to insert at the position
+
+    myList.pop_back(); // O(1)
+    myList.pop_front(); // O(1)
+
+    it = myList.begin();
+    std::advance(it, 0); // O(n)
+    myList.erase(it); // O(1) to erase at the position
+
+    myList.remove(7); // O(n)
+
+    return 0;
+}
+```
+
+#### Access
+```cpp
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> myList = {1, 2, 3};
+
+    int frontElement = myList.front(); // O(1)
+    int backElement = myList.back();   // O(1)
+
+    std::list<int>::iterator it = myList.begin(); // O(1)
+
+    return 0;
+}
+```
+
+#### Size and Emptiness
+```cpp
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> myList = {1, 2, 3};
+
+    bool isEmpty = myList.empty(); // O(1)
+    size_t listSize = myList.size(); // O(1) in most implementations
+
+    return 0;
+}
+```
+
+#### Iteration
+```cpp
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> myList = {1, 2, 3, 4, 5};
+
+    // O(n) time complexity for iteration
+    for (std::list<int>::iterator it = myList.begin(); it != myList.end(); ++it) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+
+#### Modifying List
+```cpp
+#include <iostream>
+#include <list>
+
+int main() {
+    std::list<int> myList = {3, 1, 4, 2, 5};
+
+    // O(n log n) time complexity
+    myList.sort();
+
+    // O(n) time complexity
+    myList.reverse();
+
+    std::list<int> anotherList = {6, 7, 8};
+    myList.merge(anotherList); // O(n) if both lists are sorted
+
+    std::list<int> thirdList = {9, 10};
+    myList.splice(myList.end(), thirdList); // O(1) for the splice itself
+
+    myList.clear(); // O(n)
+
+    return 0;
+}
+```
+
+Understanding the time complexity of these operations helps in making efficient choices when manipulating lists in C++.
 
 
 ---
@@ -1856,7 +2000,7 @@ str.split(separator, maxsplit)
 #### Examples
 
 1. **Basic Splitting**
- 
+
    ```python
    text = "hello world"
    words = text.split()
@@ -1865,7 +2009,7 @@ str.split(separator, maxsplit)
    This splits the string at spaces.
 
 2. **Splitting with a Specific Separator**
- 
+
    ```python
    data = "apple,banana,orange"
    fruits = data.split(',')
@@ -1935,10 +2079,10 @@ else:
 
 #### Using `.get()` vs Square Brackets
 
-- **.get()**: 
+- **.get()**:
   - Returns `None` or a specified default value if the key is not found.
   - Prevents the program from raising a `KeyError`.
-- **Square Brackets (`dict[key]`)**: 
+- **Square Brackets (`dict[key]`)**:
   - Raises a `KeyError` if the key is not found in the dictionary.
 
 #### Conclusion
@@ -2308,7 +2452,7 @@ In Python, which is an interpreted language, the concepts of run-time and compil
    - **Bytecode Compilation**: Python code is first compiled into bytecode, which is a lower-level, platform-independent representation of your source code. This happens before the code is run. The Python interpreter compiles the code to bytecode, and this is typically when syntax errors are caught.
    - **Early Error Checking**: During this phase, Python performs some basic checks, such as syntax parsing, checking for indents, and interpreting the structure of the code. If there are syntax errors, the script will fail to compile to bytecode and the execution will stop.
    - **Optimizations**: Some minor optimizations are also done during this phase, but they are not as extensive as in languages like C++ or Java.
-   
+
    Python's compile-time phase is relatively simpler compared to compiled languages because a lot of checks (like type checking) are deferred to the run-time phase.
 
 2. **Run-Time**:
@@ -2432,7 +2576,7 @@ Exception handling in Python is done using the `try`, `except`, `else`, and `fin
 
 Here's a brief overview of each of these blocks:
 
-1. **`try` Block**: 
+1. **`try` Block**:
    - This is where you write the code that you think might raise an exception. The code inside the `try` block is executed first.
 
 2. **`except` Block**:
@@ -2498,11 +2642,11 @@ In this example, the `fibonacci` function is decorated with `@cache`, so the res
 ### Key Points:
 
 - **Improves Performance**: Especially beneficial for recursive functions or functions that perform heavy computations.
-  
+
 - **Automatic Handling**: The cache is managed automatically, and there's no need for manual intervention.
-  
+
 - **Cache Persistence**: The cache persists only for the lifetime of the program. It does not persist between program runs.
-  
+
 - **Function Requirements**: The function arguments must be hashable since they are used as keys in the cache.
 
 - **No Arguments for Cache Management**: Unlike `lru_cache`, `@cache` does not expose arguments for managing the cache size or other properties. If you need more control over the cache, such as limiting its size, consider using `@functools.lru_cache(maxsize=None)` (setting `maxsize` to `None` behaves similarly to `@cache` but with additional options).
